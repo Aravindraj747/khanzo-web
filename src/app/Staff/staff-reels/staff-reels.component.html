@@ -1,0 +1,39 @@
+<!-- <app-staff-side-nav></app-staff-side-nav> -->
+<app-side-nav></app-side-nav>
+<div class="container">
+    <div class="new">
+        <h1>Instagram Reels video</h1>
+    </div>
+    <div class="topic">
+        <p class="pasteLink">Video link</p>
+        <p></p>
+    </div>
+    <div class="value">
+        <form [class.spinnerOverlay]="spinnerActive">
+            <input type="text" id="input" [(ngModel)]="reels" [ngModelOptions]="{standalone: true}">
+            <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
+            <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+        </form>
+    </div>
+    <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+</div>
+
+<div class="table-wrapper">
+    <table class="fl-table">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>UploadDate</th>
+        <th>Video</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let reel of reelsArray">
+        <td>{{reel.reelsId}}</td>
+        <td>{{reel.uploadDate}}</td>
+        <td><a mat-raised-button href="{{reel.videoUrl}}" target="_blank">View</a></td>
+        <td><a class="delete" (click)="delete(reel.reelsId,'reels')">X</a></td>
+      </tr>
+      <tbody>
+    </table>
+  </div>

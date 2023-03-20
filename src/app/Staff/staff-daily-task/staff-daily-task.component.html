@@ -1,0 +1,73 @@
+<!-- <app-staff-side-nav></app-staff-side-nav> -->
+<app-side-nav></app-side-nav>
+<div class="container">
+    <div class="new">
+        <h1>Daily Task Video</h1>
+    </div>
+    <div class="topic">
+        <p class="pasteLink">Video URL</p>
+        <p class="ThumURL">Image URL</p>
+        <p class="ThumPic">Image Pic</p>
+        <p class="start">Date and Time</p>
+        <!-- <p class="StartTime">start time</p> -->
+        <!-- <p class="Expiry">Expiry Date and Time</p> -->
+        <p class="coupon">Coupon ID</p>
+        <p class="category">Category</p>
+        <!--dropdown shorts or video -->
+        <p></p>
+    </div>
+    <div class="value">
+        <form [class.spinnerOverlay]="spinnerActive" action="">
+            <input  [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.videoUrl" type="text" id="input" class="pasteLink">
+            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.imageUrl" id="input" type="text">
+            <input type="file" style="width:90px" (change)="chooseImage($event)" id="drop">
+            <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.startDate" id="drop" type="date"> -->
+            <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.expiryDate" id="drop" type="date"> -->
+            <mat-form-field style="width:50px;">
+              <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="dailyTask.startDate" id="drop" matInput type="datetime-local" placeholder="start Date">
+            </mat-form-field>
+            <mat-form-field style="width:70px">
+              <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="dailyTask.expiryDate" matInput type="datetime-local" placeholder="Expiry Date">
+            </mat-form-field>
+            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.couponId" id="input" type="text">
+            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.category" name="select" id="drop">
+                <option value="">Select Category</option>
+                <option *ngFor="let c of category">{{c}}</option>
+            </select>
+            <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+        </form>
+    </div>
+    <br>
+    <p class="note">Note* :Choose any one option to upload image.</p>
+    <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+</div>
+
+<div class="table-wrapper">
+    <table class="fl-table">
+      <thead>
+      <tr>
+        <th>TaskId</th>
+        <th>Category</th>
+        <th>Upload Date</th>
+        <th>Video Url</th>
+        <th>Start Date</th>
+        <th>expiryDate</th>
+        <th>CouponId</th>
+        <th>Image</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let daily of dailyTasks">
+        <td>{{daily.taskId}}</td>
+        <td>{{daily.category}}</td>
+        <td>{{daily.uploadDate}}</td>
+        <td><a mat-raised-button href="https://www.youtube.com/watch?v={{daily.videoUrl}}" target="_blank">View</a></td>
+        <td>{{daily.startDate.toDate() | date:'dd-MM-yyyy'}}</td>
+        <td>{{daily.expiryDate.toDate() | date:'dd-MM-yyyy'}}</td>
+        <td>{{daily.couponId}}</td>
+        <td><a mat-raised-button href="{{daily.imageUrl}}" target="_blank">View</a></td>
+        <td><a class="delete" (click)="delete(daily.taskId,'dailyTasks')">X</a></td>
+      </tr>
+      <tbody>
+    </table>
+  </div>

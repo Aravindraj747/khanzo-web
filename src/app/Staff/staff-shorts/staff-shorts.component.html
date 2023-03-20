@@ -1,0 +1,37 @@
+<!-- <app-staff-side-nav></app-staff-side-nav> -->
+<app-side-nav></app-side-nav>
+<div class="container">
+    <div class="new">
+        <h1>Youtube Shorts video</h1>
+    </div>
+    <div class="topic">
+        <p class="pasteLink">Video link</p>
+        <p></p>
+    </div>
+    <div class="value">
+        <form [class.spinnerOverlay]="spinnerActive">
+            <input type="text" class="" [(ngModel)]="shorts.shortsLink" [ngModelOptions]="{standalone: true}" id="input">
+            <a mat-raised-button (click)="submit()" color="primary">Save</a>
+        </form>
+        <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+    </div>
+</div>
+<div class="table-wrapper">
+    <table class="fl-table">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Upload Date</th>
+        <th>Video</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let shorts of shortsArrays">
+        <td>{{shorts.shortsId}}</td>
+        <td>{{shorts.uploadDate}}</td>
+        <td><a mat-raised-button href="{{shorts.shortsLink}}" target="_blank">View</a></td>
+        <td><a class="delete" (click)="delete(shorts.shortsId,'shorts')">X</a></td>
+      </tr>
+      <tbody>
+    </table>
+  </div>

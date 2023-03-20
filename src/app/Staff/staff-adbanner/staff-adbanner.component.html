@@ -1,0 +1,45 @@
+<!-- <app-staff-side-nav></app-staff-side-nav> -->
+<app-side-nav></app-side-nav>
+<div class="container">
+    <div class="new">
+        <h1>Add Banner</h1>
+    </div>
+    <br>
+    <br>
+    <div class="topic" style="justify-content: space-around;">
+        <p class="selectVideo">Select Video</p>
+        <p class="SelectImage">Select Image</p>
+        <p></p>
+    </div>
+    <div class="value">
+        <form action="">
+            <input type="file" (change)="chooseVideo($event)">
+            <input type="file" (change)="chooseImage($event)">
+            <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+            <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
+        </form>
+    </div>
+    <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+</div>
+
+<div class="table-wrapper">
+    <table class="fl-table">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>UploadDate</th>
+        <th>Video</th>
+        <th>Image</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let adbanner of adbannerArray">
+        <td>{{adbanner?.adBannerId}}</td>
+        <td>{{adbanner?.uploadDate}}</td>
+        <td><a mat-raised-button href="{{adbanner?.videoUrl}}" target="_blank">View</a></td>
+        <td><a mat-raised-button href="{{adbanner?.imageUrl}}" target="_blank">View</a></td>
+        <td><a class="delete" (click)="delete(adbanner.adBannerId,'adbanner')">X</a></td>
+      </tr>
+      <tbody>
+    </table>
+  </div>

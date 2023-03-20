@@ -1,0 +1,32 @@
+<div *ngIf="value == 'accept'">
+    <!-- <h3>RC Book Photo : <a [href]="insurance.rcImage">Download</a></h3>
+    <h3>Vehicle No : {{insurance.vehicleNumber}}</h3>
+    <h3>Address : {{insurance.address}}</h3> -->
+    <h3 style="margin-left: 110px;font-weight: bold;">Accept</h3>
+    <h3>Withdrawal Amount: {{withdrawal.withdrawalAmount}}</h3>
+    <h3>Do you want to accept the withdrawal?</h3>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close class="reject">Cancel</button>
+        <button mat-flat-button color="primary" class="accept" mat-dialog-close (click)="accept('accept')">Ok</button>
+    </mat-dialog-actions>
+</div>
+<div *ngIf="value == 'reject'">
+    <!-- <h3>RC Book Photo : <a [href]="insurance.rcImage">Download</a></h3>
+    <h3>Vehicle No : {{insurance.vehicleNumber}}</h3>
+    <h3>Address : {{insurance.address}}</h3> -->
+    <h3>Reject</h3>
+    <h3>Withdrawal Amount: {{withdrawal.withdrawalAmount}}</h3>
+    <h3>Do you want to reject the withdrawal?</h3>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close class="reject">Cancel</button>
+        <button mat-flat-button color="primary" class="accept" mat-dialog-close (click)="accept('reject')">Ok</button>
+    </mat-dialog-actions>
+</div>
+
+<div *ngIf="value == 'youtube' || value == 'shorts' || value == 'reels' || value == 'instagram' || value == 'dailyTasks' || value == 'adbanner' || value == 'coupon' || value == 'faceBook'">
+    <h3>Are you sure to delete?</h3>
+    <mat-dialog-actions>
+        <button mat-flat-button mat-dialog-close class="reject">Cancel</button>
+        <button mat-flat-button color="primary" class="accept" mat-dialog-close (click)="delete()">Ok</button>
+    </mat-dialog-actions>
+</div>

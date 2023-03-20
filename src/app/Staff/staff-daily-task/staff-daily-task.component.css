@@ -1,0 +1,160 @@
+.container {
+    margin-left: 250px;
+    margin-top: 50px;
+}
+
+.new h1 {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.topic {
+    display: flex;
+}
+
+.topic p {
+    font-weight: bold;
+}
+
+.topic .pasteLink {
+    margin-left: 100px;
+}
+
+.topic .ThumURL {
+    margin-left: 130px;
+}
+
+.topic .ThumPic {
+    margin-left: 110px;
+}
+.topic .start{
+    margin-left: 80px;
+}
+.topic .Expiry {
+    margin-left: 50px;
+}
+
+.topic .coupon {
+    margin-left: 140px;
+}
+
+.topic .category {
+    margin-left: 130px;
+}
+
+.value form {
+    display: flex;
+    justify-content: space-evenly;
+}
+.value #drop{
+    border: 0;
+    outline: 0;
+}
+.new {
+    display: flex;
+}
+
+/* .value input {
+    background-color: rgb(183, 193, 202);
+    border: none;
+} */
+.value a{
+    height: 30px;
+}
+.value #input {
+    /* background-color: rgb(183, 193, 202); */
+    /* border: 0;
+    outline: 0; */
+    border-bottom: 1px solid black;
+    height:30px;
+}
+.note {
+    color: red;
+    font-size: 13px;
+}
+
+/* Save button */
+button {
+    max-width: 65px;
+    background-color: deepskyblue;
+    border: none;
+    color: #080710;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.example-box.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-chip .cdk-drop-list-dragging {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.spinnerOverlay {
+    opacity: 0.4;
+}
+
+.mat-spinner {
+    position: absolute;
+    margin-left: 30%;
+}
+.delete{
+    cursor: pointer;
+}
+/*  */
+table{
+    margin-left: 350px;
+    width: 70%;
+  }
+  h2{
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    padding: 30px 0;
+  }
+  
+  /* Table Styles */
+  
+  /* .table-wrapper{
+    margin: 10px 70px 70px;
+    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+  } */
+  
+  .fl-table {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    /* width: 100%; */
+    /* max-width: 100%; */
+    white-space: nowrap;
+    /* background-color: white; */
+    box-shadow: 3px 3px 5px 6px #d8d2d2;
+  }
+  
+  .fl-table th{
+    font-weight: 800;
+    font-style: bold;
+  }
+  .fl-table td, .fl-table th {
+    text-align: center;
+    padding: 12px;
+    color: #565353;
+    font-family: 'Montserrat',sans-serif;
+  }
+  
+  .fl-table td {
+    border-right: 1px solid #f8f8f8;
+    font-size: 12px;
+  }
+  
+  .fl-table tr:nth-child(even) {
+    background: #F8F8F8;
+  }

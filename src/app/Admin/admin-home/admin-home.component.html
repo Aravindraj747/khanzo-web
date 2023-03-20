@@ -1,0 +1,108 @@
+<app-side-nav></app-side-nav>
+<div class="content">
+  <h2>Withdrawl Request</h2>
+  <div class="btn">
+    <!-- <button><span style="color:white ;">Export</span></button> -->
+  </div>
+  <div class="table-wrapper">
+    <table class="fl-table">
+      <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Withdrawal Amount</th>
+        <th>Request Date</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let withdrawal of withdrawals">
+        <td>{{withdrawal.userId}}</td>
+        <td>{{withdrawal.withdrawalAmount}}</td>
+        <td>{{withdrawal.requestedDate.toDate() | date:'dd-MM-yyyy'}}</td>
+        <td>
+          <ng-template [ngIf]="withdrawal.status == 'pending'">
+            <p style="color:black;">{{withdrawal.status}}</p>
+          </ng-template>
+          <ng-template [ngIf]="withdrawal.status == 'success'">
+            <p style="color:green;">{{withdrawal.status}}</p>
+          </ng-template>
+          <ng-template [ngIf]="withdrawal.status == 'reject'">
+            <p style="color:red;">{{withdrawal.status}}</p>
+          </ng-template>
+        </td>
+        <td>
+          <ng-template [ngIf]="withdrawal.status === 'pending'">
+        <td>
+          <a class="Accept" style="color:forestgreen" mat-raised-button (click)="openDialog('accept',withdrawal)">Accept</a>
+          <a class="Reject" style="color:red" mat-raised-button (click)="openDialog('reject',withdrawal)">Reject</a>
+          <!-- <button class="Accept" (click)="openDialog('accept',withdrawal)" value="accept">Accept</button> -->
+          <!-- <button class="Reject" (click)="openDialog('reject',withdrawal)" value="reject">Reject</button> -->
+        </td>
+        </ng-template>
+        <ng-template [ngIf]="withdrawal.status === 'success'">
+          <td>
+            <p style="color:green;border: none;">Accepted</p>
+          </td>
+        </ng-template>
+        <ng-template [ngIf]="withdrawal.status === 'reject'">
+          <td>
+            <p style="color:red;">Rejected</p>
+          </td>
+        </ng-template>
+        </td>
+        <!-- <td><a mat-raised-button href="{{youtube.youtubeUrl}}" target="_blank">View</a></td>
+        <td><a mat-raised-button href="{{youtube.imageUrl}}" target="_blank">View</a></td>
+        <td><a class="delete" (click)="delete(youtube.youtubeId,'youtube')">X</a></td> -->
+      </tr>
+      <tbody>
+    </table>
+  </div>
+  <!-- <div class="container">
+    <div class="row shadow-lg p-3 rounded">
+      <table border='1' id="excel-table">
+        <tr style="background-color:cyan">
+          <th>userID</th>
+          <th>Withdrawal Amount</th>
+          <th>Requested Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+        <tr *ngFor="let withdrawal of withdrawals">
+          <td>{{withdrawal.userId}}</td>
+          <td>{{withdrawal.withdrawalAmount}}</td>
+          <td>{{withdrawal.requestedDate.toDate() | date:'dd-MM-yyyy'}}</td>
+          <td>
+            <ng-template [ngIf]="withdrawal.status == 'pending'">
+              <p style="color:black;">{{withdrawal.status}}</p>
+            </ng-template>
+            <ng-template [ngIf]="withdrawal.status == 'success'">
+              <p style="color:green;">{{withdrawal.status}}</p>
+            </ng-template>
+            <ng-template [ngIf]="withdrawal.status == 'reject'">
+              <p style="color:red;">{{withdrawal.status}}</p>
+            </ng-template>
+          </td>
+          <td>
+            <ng-template [ngIf]="withdrawal.status === 'pending'">
+          <td style="border:none;">
+            <button class="Accept" (click)="openDialog('accept',withdrawal)" value="accept">Accept</button>
+            <button class="Reject" (click)="openDialog('reject',withdrawal)" value="reject">Reject</button>
+          </td>
+          </ng-template>
+          <ng-template [ngIf]="withdrawal.status === 'success'">
+            <td style="border:none;">
+              <p style="color:green;border: none;">Accepted</p>
+            </td>
+          </ng-template>
+          <ng-template [ngIf]="withdrawal.status === 'reject'">
+            <td style="border:none;">
+              <p style="color:red;">Rejected</p>
+            </td>
+          </ng-template>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div> -->
+</div>

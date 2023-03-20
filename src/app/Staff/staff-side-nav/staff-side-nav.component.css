@@ -1,0 +1,100 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+body {
+  background: #dfe9f5;
+}
+
+/* navbar */
+.navbar {
+  height: 50px;
+  width: 100%;
+  background: #d3d5d7;
+  /* background:#dfe9f5 ; */
+  justify-content: space-between;
+}
+
+.navbar .title ul {
+  margin-right: 20px;
+}
+
+.navbar .title ul li {
+  list-style: none;
+  display: inline-block;
+  line-height: 30px;
+  margin-top: 3px;
+}
+
+.navbar .title ul li a {
+  font-style: bold;
+  text-decoration: none;
+  color: black;
+  font-size: 35px;
+  padding: 6px 13px;
+  font-family: 'Roboto', sans-serif;
+  transition: .4s;
+}
+
+/* SideNav */
+.class {
+  position: fixed;
+  top: 45px;
+  bottom: 0;
+  height: 100vh;
+  /* background: #d3d5d7; */
+  width: 240px;
+  overflow: hidden;
+  transition: width 0.2s linear;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.class a {
+  position: relative;
+  color: rgb(85, 83, 83);
+  font-size: 15px;
+  display: table;
+  width: 300px;
+  padding: 10px;
+}
+
+.class ul li {
+  display: flex;
+  /* margin-left: 60px; */
+  margin-top: 20px;
+  position: relative;
+  height: 40px;
+  top: 14px;
+  font-size: 20px;
+  text-align: center;
+}
+
+ul li span {
+  color: black;
+}
+
+.class ul li a span {
+  margin-left: 50px;
+}
+
+ul li,
+i {
+  position: relative;
+  width: 100px;
+  height: 40px;
+  top: 14px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.class ul li .heads {
+  font-size: 20px;
+  margin-left: 20px;
+  font-weight: bold;
+}

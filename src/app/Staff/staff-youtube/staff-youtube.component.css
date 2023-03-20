@@ -1,0 +1,150 @@
+.container {
+    margin-left: 250px;
+    margin-top: 50px;
+}
+
+.topic p {
+    font-weight: bold;
+}
+
+.topic {
+    display: flex;
+}
+
+.topic .pasteLink {
+    margin-left: 110px;
+}
+
+.topic .ThumURL {
+    margin-left: 150px;
+}
+
+.topic .ThumPic {
+    margin-left: 190px;
+}
+
+.topic .category {
+    margin-left: 170px;
+}
+
+.topic .language {
+    margin-left: 120px;
+}
+
+.value form {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.new {
+    display: flex;
+}
+
+.delete{
+    cursor: pointer;
+}
+
+.value #input {
+    /* background-color: rgb(183, 193, 202); */
+    /* border: 0; */
+    /* outline: 0; */
+    border-bottom: 1px solid black;
+}
+
+.value #drop{
+    border: 0;
+    outline: 0;
+}
+
+.note {
+    color: red;
+    font-size: 13px;
+}
+
+button {
+    max-width: 75px;
+    background-color: deepskyblue;
+    color: #080710;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.example-box.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-chip .cdk-drop-list-dragging {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.new h1 {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.spinnerOverlay {
+    opacity: 0.4;
+}
+
+.mat-spinner {
+    position: absolute;
+    margin-left: 30%;
+}
+
+/*  */
+table{
+    margin-left: 350px;
+    width: 70%;
+  }
+  h2{
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    padding: 30px 0;
+  }
+  
+  /* Table Styles */
+  
+  /* .table-wrapper{
+    margin: 10px 70px 70px;
+    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+  } */
+  
+  .fl-table {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    /* width: 100%; */
+    /* max-width: 100%; */
+    white-space: nowrap;
+    /* background-color: white; */
+    box-shadow: 3px 3px 5px 6px #d8d2d2;
+  }
+  
+  .fl-table th{
+    font-weight: 800;
+    font-style: bold;
+  }
+  .fl-table td, .fl-table th {
+    text-align: center;
+    padding: 12px;
+    color: #565353;
+    font-family: 'Montserrat',sans-serif;
+  }
+  
+  .fl-table td {
+    border-right: 1px solid #f8f8f8;
+    font-size: 12px;
+  }
+  
+  .fl-table tr:nth-child(even) {
+    background: #F8F8F8;
+  }
