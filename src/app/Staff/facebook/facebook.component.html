@@ -11,7 +11,6 @@
     <div class="value">
         <form>
             <input type="text" class="" [(ngModel)]="facebook.videoUrl" id="input" [ngModelOptions]="{standalone: true}">
-            <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
             <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
         </form>
     </div>
@@ -23,16 +22,16 @@
       <thead>
       <tr>
         <th>Id</th>
-        <th>Video Url</th>
         <th>Upload Date</th>
+        <th>Video Url</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let faceBook of faceBookArray">
         <td>{{faceBook.facebookId}}</td>
-        <td>{{faceBook.uploadDate}}</td>
+        <td>{{faceBook.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{faceBook.videoUrl}}" target="_blank">View</a></td>
-        <td><a class="delete" (click)="delete(faceBook.facebookId,'faceBook')">X</a></td>
+        <td><a class="delete" (click)="delete(faceBook.facebookId,'facebook')">X</a></td>
       </tr>
       <tbody>
     </table>

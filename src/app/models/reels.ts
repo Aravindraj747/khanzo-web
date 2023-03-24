@@ -4,5 +4,5 @@ import Timestamp = firebase.firestore.Timestamp;
 export interface Reels{
     videoUrl: string;
     reelsId:string;
-    uploadDate:string;
+    uploadDate:Timestamp;
 }

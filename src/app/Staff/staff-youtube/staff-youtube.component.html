@@ -61,6 +61,7 @@
       <tr *ngFor="let youtube of youtubeArray">
         <td>{{youtube.id}}</td>
         <td>{{youtube.category}}</td>
+        <!-- <td>{{youtube.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td> -->
         <td>{{youtube.uploadDate}}</td>
         <td><a mat-raised-button href="https://www.youtube.com/watch?v={{youtube.videoUrl}}" target="_blank">View</a></td>
         <td><a mat-raised-button href="{{youtube.imageUrl}}" target="_blank">View</a></td>

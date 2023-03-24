@@ -26,15 +26,27 @@ export class DialogComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+// For Withdrawal
   accept(val:string){
     console.log(val)
+    console.log(this.withdrawal);
+    this.saveDetails(this.withdrawal);
   }
-
+  saveDetails(withdrawal:Withdrawal){
+    let data = {
+      'state': 'Approved'
+    }
+    this.firestoreService.updateWithdrawal(withdrawal.withdrawalId,data).then(res=>{
+      this.openSnackBar('Withdrawal updated','undo');
+    }).then(err=>{
+      this.openSnackBar('Withdrawal Not Updated','retry');
+    })
+  }
+// delete videos
   delete(){
       this.firestoreService.delete(this.id,this.value);
       this.openSnackBar('Deleted Successfully','Unod');
-      // return this.id,this.value
+
   }
   openSnackBar(message:string,action:string){
     this._snackBar.open(message, action, {

@@ -30,7 +30,7 @@
       <tbody>
       <tr *ngFor="let reel of reelsArray">
         <td>{{reel.reelsId}}</td>
-        <td>{{reel.uploadDate}}</td>
+        <td>{{reel.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{reel.videoUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(reel.reelsId,'reels')">X</a></td>
       </tr>

@@ -5,7 +5,7 @@ export interface Youtube{
     videoUrl: string;
     imageUrl: string;
     category: string;
-    uploadDate:string;
+    uploadDate:Timestamp;
     language: string;
     id:string;
 }

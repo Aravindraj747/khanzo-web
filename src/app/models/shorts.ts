@@ -3,6 +3,6 @@ import Timestamp = firebase.firestore.Timestamp;
 
 export interface Shorts{
     shortsLink: string;
-    uploadDate:string;
+    uploadDate:Timestamp;
     shortsId:string;
 }

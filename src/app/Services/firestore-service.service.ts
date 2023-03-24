@@ -8,6 +8,8 @@ import { Coupons } from '../models/coupons';
 import { Staff } from '../models/staff';
 import { deleteDoc } from '@firebase/firestore';
 import { doc } from 'firebase/firestore';
+import { Instagram } from '../models/instagram';
+import { Facebook } from '../models/facebook';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +34,14 @@ export class FirestoreServiceService {
   saveAdbanner(adBanner: AdBanner) {
     console.log('saveBanner');
     return this.firestore.collection('adBanner').doc(adBanner.adBannerId).set(adBanner);
+  }
+
+  saveInstagram(instagram:Instagram){
+    return this.firestore.collection('instagram').doc(instagram.instaId).set(instagram);
+  }
+
+  saveFacebook(faceBook:Facebook){
+    return this.firestore.collection('facebook').doc(faceBook.facebookId).set(faceBook);
   }
 
   getUser() {
@@ -109,8 +119,16 @@ export class FirestoreServiceService {
       this.firestore.collection('reels').doc(id).delete();
       return;
     }
+    else if(type == 'facebook'){
+      this.firestore.collection('facebook').doc(id).delete();
+      return
+    }
   }
 
+  updateWithdrawal(id:string,data:any){
+    console.log(this.firestore.collection('withdrawal', ref => ref.where('withdrawalId', '==', id)));
+    return this.firestore.collection('withdrawal').doc(id).update(data);
+  }
   deleteShorts(id:string){
     this.firestore.collection('youtubeShorts').doc(id).delete();
   }

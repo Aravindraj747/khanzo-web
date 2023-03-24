@@ -4,5 +4,5 @@ import Timestamp = firebase.firestore.Timestamp;
 export interface Instagram{
     videoUrl: string;
     instaId:string;
-    uploadDate:string;
+    uploadDate:Timestamp;
 }

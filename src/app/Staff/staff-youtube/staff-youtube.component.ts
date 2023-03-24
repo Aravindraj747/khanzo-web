@@ -8,8 +8,6 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/
 import { Timestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import {formatDate} from '@angular/common';
-import { MatSort } from '@angular/material/sort';
 export interface Vegetable {
   name: string;
 }
@@ -36,7 +34,7 @@ export class StaffYoutubeComponent implements OnInit {
     category: "",
     language: "",
     id: "",
-    uploadDate:"",
+    uploadDate:Timestamp.now()
   }
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
@@ -47,7 +45,7 @@ export class StaffYoutubeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.youtube.uploadDate = formatDate(new Date(), 'yyyy/MM/dd', 'en');
+    this.youtube.uploadDate = Timestamp.now();
     console.log(this.youtube.uploadDate);
     const youTubeArray: Youtube[] = []
     this.firestoreService.getYoutube().ref.get().then(res => {
@@ -94,7 +92,6 @@ export class StaffYoutubeComponent implements OnInit {
     console.log(id,type);
     return this.dialog.open(DialogComponent,{
       data:{
-        // withdrawal:withdrawal,value
         value:type,id
       }
     })
@@ -151,7 +148,7 @@ export class StaffYoutubeComponent implements OnInit {
       category: "",
       language: "",
       id: "",
-      uploadDate:""
+      uploadDate:Timestamp.now()
     }
   }
 }

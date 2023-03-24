@@ -6,15 +6,29 @@
     </div>
     <br>
     <br>
-    <div class="topic" style="justify-content: space-around;">
-        <p class="selectVideo">Select Video</p>
-        <p class="SelectImage">Select Image</p>
-        <p></p>
+    <div class="topic">
+        <p class="video">Select Video</p>
+        <p class="image">Select Image</p>
+        <p class="state">Select State</p>
+        <p class="district">Select District</p>
     </div>
     <div class="value">
         <form action="">
             <input type="file" (change)="chooseVideo($event)">
             <input type="file" (change)="chooseImage($event)">
+            <select [ngModelOptions]="{standalone: true}" (change)="getdistrict(adBanner.state)" [(ngModel)]="adBanner.state" name="state" id="drop">
+              <option value="">Select</option>
+              <option *ngFor="let state of states">{{state}}</option>
+            </select>
+            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="adBanner.district" name="state" id="drop">
+              <option value="">Select</option>
+              <option *ngFor="let dist of districts">{{dist}}</option>
+            </select>
+            <!-- <select name="" id="">
+              <ng-container *ngFor="let state of states">
+                  <option>state</option>
+              </ng-container>
+            </select> -->
             <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
             <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
         </form>
@@ -30,12 +44,14 @@
         <th>UploadDate</th>
         <th>Video</th>
         <th>Image</th>
+        <!-- <th>State</th>
+        <th>District</th> -->
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let adbanner of adbannerArray">
         <td>{{adbanner?.adBannerId}}</td>
-        <td>{{adbanner?.uploadDate}}</td>
+        <td>{{adbanner.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{adbanner?.videoUrl}}" target="_blank">View</a></td>
         <td><a mat-raised-button href="{{adbanner?.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(adbanner.adBannerId,'adbanner')">X</a></td>

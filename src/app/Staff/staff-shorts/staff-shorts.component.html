@@ -28,7 +28,7 @@
       <tbody>
       <tr *ngFor="let shorts of shortsArrays">
         <td>{{shorts.shortsId}}</td>
-        <td>{{shorts.uploadDate}}</td>
+        <td>{{shorts.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{shorts.shortsLink}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(shorts.shortsId,'shorts')">X</a></td>
       </tr>

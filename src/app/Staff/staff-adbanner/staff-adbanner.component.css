@@ -6,29 +6,24 @@
 .topic p {
     font-weight: bold;
 }
-
 .topic {
     display: flex;
 }
 
-.topic .pasteLink {
+.topic .video {
     margin-left: 110px;
 }
 
-.topic .ThumURL {
-    margin-left: 130px;
+.topic .image {
+    margin-left: 240px;
 }
 
-.topic .ThumPic {
-    margin-left: 120px;
+.topic .state {
+    margin-left: 230px;
 }
 
-.topic .category {
+.topic .district {
     margin-left: 170px;
-}
-
-.topic .language {
-    margin-left: 120px;
 }
 
 .value form {

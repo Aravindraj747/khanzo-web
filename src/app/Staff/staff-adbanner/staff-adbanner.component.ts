@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
@@ -7,6 +6,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { AdBanner } from 'src/app/models/adBanner';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
+import { StaffServiceService } from 'src/app/Services/staff-service.service';
+import data from '../../../assets/district.json';
 
 enum type {
   imageURL = 'image',
@@ -23,10 +24,15 @@ export class StaffAdbannerComponent implements OnInit {
     imageUrl: '',
     videoUrl: '',
     adBannerId: '',
-    uploadDate:''
+    uploadDate:Timestamp.now(),
+    state:'',
+    district:''
   }
-
+  states:any = []
+  districts:any = []
+  countries = {};
   length = 0;
+  state:string = '';
   adbannerArray: AdBanner[] =[];
   spinnerActive:boolean = false;
   ImageFile: any = undefined;
@@ -34,10 +40,20 @@ export class StaffAdbannerComponent implements OnInit {
   files: [any, type][] = []
   constructor(private _snackBar: MatSnackBar,
               private firestoreService: FirestoreServiceService,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog,
+              private service: StaffServiceService) { 
+              }
 
   ngOnInit(): void {
-    this.adBanner.uploadDate = formatDate(new Date(), 'yyyy/MM/dd', 'en');
+    for(var state of data){
+      this.states.push(state.name);
+    }
+    return
+    this.service.getCountries().subscribe(
+      data =>this.countries = data
+    );
+    console.log(this.countries);
+    this.adBanner.uploadDate = Timestamp.now();
     const adBannerArray:AdBanner[] = [];
     this.firestoreService.getadBanner().ref.get().then(res => {
       res.forEach(function (doc) {
@@ -45,7 +61,6 @@ export class StaffAdbannerComponent implements OnInit {
       });
     });
     this.adbannerArray = adBannerArray;
-    console.log(this.adbannerArray);
   }
   chooseImage(event: any) {
     this.ImageFile = event.target.files[0];
@@ -53,10 +68,23 @@ export class StaffAdbannerComponent implements OnInit {
   chooseVideo(event: any) {
     this.VideoFile = event.target.files[0];
   }
+  getdistrict(state:string){
+    console.log(state)
+    for(var dist of data){
+      if(dist.name == state){
+        for(let i:number = 0;i<dist.districts.length;i++){
+          this.districts.push(dist.districts[i])
+        }
+      }
+    }
+  }
+
   submit() {
     this.spinnerActive = true;
     this.length = 0;
     this.adBanner.adBannerId = Timestamp.now().seconds.toString();
+    console.log(this.adBanner);
+    return
     this.files = [];
     if ((this.ImageFile !== undefined) && (this.VideoFile !== undefined)){
       this.files.push([this.ImageFile, type.imageURL]);
@@ -125,7 +153,9 @@ export class StaffAdbannerComponent implements OnInit {
       videoUrl: '',
       imageUrl: '',
       adBannerId: '',
-      uploadDate:''
+      uploadDate:Timestamp.now(),
+      state:'',
+      district:''
     }
   }
   openSnackBar(message: string, action: string) {

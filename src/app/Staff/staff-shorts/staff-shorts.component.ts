@@ -18,7 +18,7 @@ export class StaffShortsComponent implements OnInit {
   shorts: Shorts = {
     shortsLink: '',
     shortsId: '',
-    uploadDate:''
+    uploadDate:Timestamp.now()
   }
   shortsArrays: Shorts[] =[];
   constructor(private _snackBar: MatSnackBar, 
@@ -26,7 +26,7 @@ export class StaffShortsComponent implements OnInit {
               private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.shorts.uploadDate = formatDate(new Date(), 'yyyy/MM/dd', 'en');
+    this.shorts.uploadDate = Timestamp.now();
     const shortsArray: Shorts[] = []
     this.firestoreService.getShorts().ref.get().then(res => {
       res.forEach(function (doc) {
@@ -77,7 +77,7 @@ export class StaffShortsComponent implements OnInit {
     this.shorts = {
       shortsLink: '',
       shortsId: '',
-      uploadDate:''
+      uploadDate:Timestamp.now()
     }
   }
 }

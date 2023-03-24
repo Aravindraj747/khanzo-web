@@ -8,6 +8,6 @@ export interface DailyTask{
     expiryDate: Timestamp;
     couponId: string;
     taskId:string;
-    uploadDate:string;
+    uploadDate:Timestamp;
     category:string;
 }

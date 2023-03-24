@@ -20,7 +20,7 @@ export class CouponsComponent implements OnInit {
   coupons: Coupons = {
     imageUrl: '',
     couponsId: '',
-    uploadDate:''
+    uploadDate:Timestamp.now()
   }
   couponArray: Coupons[] =[];
   constructor(private _snackBar: MatSnackBar,
@@ -28,7 +28,7 @@ export class CouponsComponent implements OnInit {
               private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.coupons.uploadDate = formatDate(new Date(), 'yyyy/MM/dd', 'en');
+    this.coupons.uploadDate = Timestamp.now();
     const couponArrays: Coupons[] =[];
     this.firestoreService.getCoupons().ref.get().then(res=>{
       res.forEach(function (doc){
@@ -112,7 +112,7 @@ export class CouponsComponent implements OnInit {
     this.coupons = {
       imageUrl: '',
       couponsId: '',
-      uploadDate:''
+      uploadDate:Timestamp.now()
     }
   }
   openSnackBar(message: string, action: string) {

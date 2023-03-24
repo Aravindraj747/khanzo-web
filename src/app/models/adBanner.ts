@@ -5,5 +5,7 @@ export interface AdBanner{
     videoUrl: string;
     imageUrl: string;
     adBannerId:string;
-    uploadDate:string;
+    uploadDate:Timestamp;
+    state:string;
+    district:string;
 }

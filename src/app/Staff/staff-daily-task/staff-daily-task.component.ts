@@ -24,7 +24,7 @@ export class StaffDailyTaskComponent implements OnInit {
     couponId: "",
     taskId: "",
     category:"",
-    uploadDate:''
+    uploadDate:Timestamp.now()
   }
   current = 0;
   dailyTasks: DailyTask[] =[];
@@ -35,7 +35,6 @@ export class StaffDailyTaskComponent implements OnInit {
               private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.dailyTask.uploadDate = formatDate(new Date(), 'yyyy/MM/dd', 'en');
     const dailyTaskArray: DailyTask[] = []
     this.firestoreService.getDailyTask().ref.get().then(res => {
       res.forEach(function (doc) {
@@ -50,14 +49,19 @@ export class StaffDailyTaskComponent implements OnInit {
     this.imageFile = event.target.files[0];
   }
   submit() {
+    this.dailyTask.uploadDate = Timestamp.now();
     this.dailyTask.taskId = Timestamp.now().seconds.toString();
+    
     this.spinnerActive = true;
+
     const startDateString: string = String(this.dailyTask.startDate);
     const startDate = new Date(startDateString);
     this.dailyTask.startDate = Timestamp.fromDate(startDate);
+
     const expiryDateString: string = String(this.dailyTask.expiryDate);
     const expiryDate = new Date(expiryDateString);
-    this.dailyTask.startDate = Timestamp.fromDate(expiryDate);
+    this.dailyTask.expiryDate = Timestamp.fromDate(expiryDate);
+
     if(this.dailyTask.videoUrl == ''){
       this.openSnackBar('Enter Video Url to Save','Retry');
       return
@@ -137,7 +141,7 @@ export class StaffDailyTaskComponent implements OnInit {
       couponId: "",
       taskId: "",
       category:"",
-      uploadDate:''
+      uploadDate:Timestamp.now()
     }
   }
 

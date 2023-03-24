@@ -24,7 +24,7 @@
             <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.startDate" id="drop" type="date"> -->
             <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.expiryDate" id="drop" type="date"> -->
             <mat-form-field style="width:50px;">
-              <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="dailyTask.startDate" id="drop" matInput type="datetime-local" placeholder="start Date">
+              <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="dailyTask.startDate" matInput type="datetime-local" placeholder="start Date">
             </mat-form-field>
             <mat-form-field style="width:70px">
               <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="dailyTask.expiryDate" matInput type="datetime-local" placeholder="Expiry Date">
@@ -61,6 +61,7 @@
         <td>{{daily.taskId}}</td>
         <td>{{daily.category}}</td>
         <td>{{daily.uploadDate}}</td>
+        <!-- <td>{{daily.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td> -->
         <td><a mat-raised-button href="https://www.youtube.com/watch?v={{daily.videoUrl}}" target="_blank">View</a></td>
         <td>{{daily.startDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td>{{daily.expiryDate.toDate() | date:'dd-MM-yyyy'}}</td>
@@ -70,4 +71,6 @@
       </tr>
       <tbody>
     </table>
+    <!-- <mat-paginator #paginator [length]="100" [pageSizeOptions]="[3,5,10]" aria-label="select">
+    </mat-paginator> -->
   </div>

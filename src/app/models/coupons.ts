@@ -4,5 +4,5 @@ import Timestamp = firebase.firestore.Timestamp;
 export interface Coupons{
     imageUrl: string;
     couponsId:string;
-    uploadDate:string;
+    uploadDate:Timestamp;
 }

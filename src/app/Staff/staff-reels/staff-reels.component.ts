@@ -1,5 +1,6 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Timestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
@@ -16,7 +17,7 @@ export class StaffReelsComponent implements OnInit {
   reel: Reels = {
     videoUrl: "",
     reelsId:"",
-    uploadDate:""
+    uploadDate:Timestamp.now()
   }
   reels: string = '';
   spinnerActive:boolean = false;
@@ -26,7 +27,7 @@ export class StaffReelsComponent implements OnInit {
               private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.reel.uploadDate = formatDate(new Date(), 'yyyy/MM/dd', 'en');
+    this.reel.uploadDate = Timestamp.now();
     const reelArray: Reels[] =[];
     this.firestoreService.getReels().ref.get().then(res=>{
       res.forEach(function (doc){
@@ -66,7 +67,7 @@ export class StaffReelsComponent implements OnInit {
     this.reel = {
       videoUrl: '',
       reelsId:'',
-      uploadDate:''
+      uploadDate:Timestamp.now()
     }
   }
 }
