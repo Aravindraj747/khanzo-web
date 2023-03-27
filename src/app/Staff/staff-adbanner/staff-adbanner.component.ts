@@ -69,7 +69,7 @@ export class StaffAdbannerComponent implements OnInit {
     this.VideoFile = event.target.files[0];
   }
   getdistrict(state:string){
-    console.log(state)
+    this.districts = [];
     for(var dist of data){
       if(dist.name == state){
         for(let i:number = 0;i<dist.districts.length;i++){

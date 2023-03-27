@@ -2,7 +2,10 @@
     margin-left: 250px;
     margin-top: 50px;
 }
-
+.note {
+  color: red;
+  font-size: 13px;
+}
 .topic p {
     font-weight: bold;
 }
@@ -14,7 +17,12 @@
 .topic .pasteLink {
     margin-left: 110px;
 }
-
+.topic .ThumURL{
+  margin-left: 155px;
+}
+.topic .ThumPic{
+  margin-left: 190px;
+}
 .value form {
     display: flex;
 }

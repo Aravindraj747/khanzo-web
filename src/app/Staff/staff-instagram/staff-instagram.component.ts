@@ -2,6 +2,7 @@ import { formatDate } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
@@ -19,8 +20,10 @@ export class StaffInstagramComponent implements OnInit {
   instagram: Instagram = {
     instaId:"",
     videoUrl:"",
+    imageUrl:'',
     uploadDate:Timestamp.now()
   }
+  thumbImageFile: any = undefined;
   instaLink: string = '';
   errorMessage: string = '';
   jsonFile: string = '';
@@ -43,6 +46,9 @@ export class StaffInstagramComponent implements OnInit {
     console.log(this.instaGramArray);
   }
 
+  chooseThumb(event: any) {
+    this.thumbImageFile = event.target.files[0];
+  }
   delete(id:string,type:string){
     console.log(id,type);
     return this.dialog.open(DialogComponent,{
@@ -57,13 +63,18 @@ export class StaffInstagramComponent implements OnInit {
     console.log(this.instaLink);
     this.spinnerActive = true;
     if(this.instagram.videoUrl !== ''){
-      this.firestoreService.saveInstagram(this.instagram).then(res=>{
-        this.instaGramArray.push(this.instagram);
-        this.spinnerActive = false;
-        this.openSnackBar('Saved Successfully','undo');
-        this.resetPage();
+      if(this.instagram.imageUrl !== ''){
+        this.firestoreService.saveInstagram(this.instagram).then(res=>{
+          this.instaGramArray.push(this.instagram);
+          this.spinnerActive = false;
+          this.openSnackBar('Saved Successfully','undo');
+          this.resetPage();
       });
       return
+    }
+    else if(this.thumbImageFile !==undefined){
+      this.putStorageItem(this.thumbImageFile);
+    }
     }
     else{
       this.spinnerActive = false;
@@ -88,6 +99,43 @@ export class StaffInstagramComponent implements OnInit {
     //   this.openSnackBar('Enter Instagram Link', 'retry');
     // }
   }
+  putStorageItem(file: any) {
+    const storage = getStorage();
+    const storageRef = ref(storage, 'youtubethumbNail/' + file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    return uploadTask.on('state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (error) => {
+        this.openSnackBar('Error occurred while saving images', 'Retry')
+        console.log(error.message);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          this.spinnerActive = false;
+          this.instagram.imageUrl = downloadURL;
+          console.log('after:', this.instagram);
+          if (this.instagram.imageUrl !== "") {
+            this.firestoreService.saveInstagram(this.instagram).then(res => {
+              this.instaGramArray.push(this.instagram);
+              console.log("instagram link saved from storage");
+              this.openSnackBar("Link Saved Successfully", "close");
+              this.spinnerActive = false;
+              this.resetPage();
+            });
+          }
+          else {
+            this.openSnackBar('Error occured', 'retry');
+            this.spinnerActive = false;
+          }
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+          });
+        });
+      });
+  }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,
@@ -98,6 +146,7 @@ export class StaffInstagramComponent implements OnInit {
   resetPage(){
     this.instagram = {
       instaId:"",
+      imageUrl:'',
       videoUrl:"",
       uploadDate:Timestamp.now()
     }

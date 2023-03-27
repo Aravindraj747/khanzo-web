@@ -45,6 +45,8 @@ import { CouponsComponent } from './Staff/coupons/coupons.component';
 import { StaffCreationComponent } from './Admin/staff-creation/staff-creation.component';
 import { DialogComponent } from './Admin/dialog/dialog.component';
 import { FacebookComponent } from './Staff/facebook/facebook.component';
+import { TermsandConditionComponent } from './Staff/termsand-condition/termsand-condition.component';
+import { ImageBannerComponent } from './Staff/image-banner/image-banner.component';
 // import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
@@ -66,7 +68,9 @@ import { FacebookComponent } from './Staff/facebook/facebook.component';
     CouponsComponent,
     StaffCreationComponent,
     DialogComponent,
-    FacebookComponent
+    FacebookComponent,
+    TermsandConditionComponent,
+    ImageBannerComponent
   ],
   entryComponents: [DialogComponent],
   imports: [

@@ -6,11 +6,19 @@
 .topic p {
     font-weight: bold;
 }
-
+.note {
+    color: red;
+    font-size: 13px;
+  }
 .topic {
     display: flex;
 }
-
+.topic .ThumURL{
+    margin-left: 155px;
+  }
+  .topic .ThumPic{
+    margin-left: 190px;
+  }
 .topic .pasteLink {
     margin-left: 110px;
 }

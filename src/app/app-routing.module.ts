@@ -7,6 +7,7 @@ import { StaffCreationComponent } from './Admin/staff-creation/staff-creation.co
 import { UserComponent } from './Admin/user/user.component';
 import { CouponsComponent } from './Staff/coupons/coupons.component';
 import { FacebookComponent } from './Staff/facebook/facebook.component';
+import { ImageBannerComponent } from './Staff/image-banner/image-banner.component';
 import { StaffAdbannerComponent } from './Staff/staff-adbanner/staff-adbanner.component';
 import { StaffDailyTaskComponent } from './Staff/staff-daily-task/staff-daily-task.component';
 import { StaffHomeComponent } from './Staff/staff-home/staff-home.component';
@@ -16,6 +17,7 @@ import { StaffReelsComponent } from './Staff/staff-reels/staff-reels.component';
 import { StaffShortsComponent } from './Staff/staff-shorts/staff-shorts.component';
 import { StaffSideNavComponent } from './Staff/staff-side-nav/staff-side-nav.component';
 import { StaffYoutubeComponent } from './Staff/staff-youtube/staff-youtube.component';
+import { TermsandConditionComponent } from './Staff/termsand-condition/termsand-condition.component';
 
 const routes: Routes = [
   {
@@ -35,6 +37,8 @@ const routes: Routes = [
   {path:'adbanner',component:StaffAdbannerComponent},
   {path:'coupons',component:CouponsComponent},
   {path:'faceBook',component:FacebookComponent},
+  {path:'terms',component:TermsandConditionComponent},
+  {path:'imageBanner',component:ImageBannerComponent},
   // Admin Components
   {path:'adminHome',component:AdminHomeComponent},
   {path:'adminSideNav',component:SideNavComponent},

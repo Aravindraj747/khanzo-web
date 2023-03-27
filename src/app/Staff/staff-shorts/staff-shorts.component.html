@@ -6,13 +6,18 @@
     </div>
     <div class="topic">
         <p class="pasteLink">Video link</p>
+        <p class="ThumURL">Image URL</p>
+        <p class="ThumPic">Image Pic</p>
         <p></p>
     </div>
     <div class="value">
         <form [class.spinnerOverlay]="spinnerActive">
             <input type="text" class="" [(ngModel)]="shorts.shortsLink" [ngModelOptions]="{standalone: true}" id="input">
+            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="shorts.imageUrl"id="input"  type="text">
+            <input type="file" (change)="chooseThumb($event)" id="drop">
             <a mat-raised-button (click)="submit()" color="primary">Save</a>
         </form>
+        <p class="note">Note* :Choose any one of the option for adding Image</p>
         <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
     </div>
 </div>
@@ -23,6 +28,7 @@
         <th>Id</th>
         <th>Upload Date</th>
         <th>Video</th>
+        <th>Image</th>
       </tr>
       </thead>
       <tbody>
@@ -30,6 +36,7 @@
         <td>{{shorts.shortsId}}</td>
         <td>{{shorts.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{shorts.shortsLink}}" target="_blank">View</a></td>
+        <td><a mat-raised-button href="{{shorts.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(shorts.shortsId,'shorts')">X</a></td>
       </tr>
       <tbody>

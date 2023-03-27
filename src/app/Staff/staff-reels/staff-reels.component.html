@@ -6,15 +6,20 @@
     </div>
     <div class="topic">
         <p class="pasteLink">Video link</p>
+        <p class="ThumURL">Image URL</p>
+        <p class="ThumPic">Image Pic</p>
         <p></p>
     </div>
     <div class="value">
         <form [class.spinnerOverlay]="spinnerActive">
-            <input type="text" id="input" [(ngModel)]="reels" [ngModelOptions]="{standalone: true}">
+            <input type="text" id="input" [(ngModel)]="reel.videoUrl" [ngModelOptions]="{standalone: true}">
+            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="reel.imageUrl"id="input"  type="text">
+            <input type="file" (change)="chooseThumb($event)" id="drop">
             <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
             <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
         </form>
     </div>
+    <p class="note">Note* :Choose any one of the option for adding Image</p>
     <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
 </div>
 
@@ -25,6 +30,7 @@
         <th>Id</th>
         <th>UploadDate</th>
         <th>Video</th>
+        <th>Image</th>
       </tr>
       </thead>
       <tbody>
@@ -32,6 +38,7 @@
         <td>{{reel.reelsId}}</td>
         <td>{{reel.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{reel.videoUrl}}" target="_blank">View</a></td>
+        <td><a mat-raised-button href="{{reel.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(reel.reelsId,'reels')">X</a></td>
       </tr>
       <tbody>

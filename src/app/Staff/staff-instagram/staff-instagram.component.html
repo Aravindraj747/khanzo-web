@@ -6,15 +6,20 @@
   </div>
   <div class="topic">
     <p class="pasteLink">Video link</p>
+    <p class="ThumURL">Image URL</p>
+    <p class="ThumPic">Image Pic</p>
     <p></p>
   </div>
   <div class="value">
     <form>
       <input type="text" class="" [(ngModel)]="instagram.videoUrl" id="input" [ngModelOptions]="{standalone: true}">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="instagram.imageUrl"id="input"  type="text">
+      <input type="file" (change)="chooseThumb($event)" id="drop">
       <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
       <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
     </form>
   </div>
+  <p class="note">Note* :Choose any one of the option for adding Image</p>
   <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
 </div>
 
@@ -25,6 +30,7 @@
         <th>Id</th>
         <th>Upload Date</th>
         <th>Video Url</th>
+        <th>Image Url</th>
       </tr>
     </thead>
     <tbody>
@@ -32,6 +38,7 @@
         <td>{{instagram.instaId}}</td>
         <td>{{instagram.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{instagram.videoUrl}}" target="_blank">View</a></td>
+        <td><a mat-raised-button href="{{instagram.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(instagram.instaId,'instagram')">X</a></td>
       </tr>
     <tbody>

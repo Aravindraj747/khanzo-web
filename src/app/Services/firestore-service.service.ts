@@ -10,6 +10,7 @@ import { deleteDoc } from '@firebase/firestore';
 import { doc } from 'firebase/firestore';
 import { Instagram } from '../models/instagram';
 import { Facebook } from '../models/facebook';
+import { Reels } from '../models/reels';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,9 @@ export class FirestoreServiceService {
     return this.firestore.collection('youtubeShorts').doc(shorts.shortsId).set(shorts);
   }
 
+  saveReel(reel: Reels){
+    return this.firestore.collection('reels').doc(reel.reelsId).set(reel);
+  }
   saveAdbanner(adBanner: AdBanner) {
     console.log('saveBanner');
     return this.firestore.collection('adBanner').doc(adBanner.adBannerId).set(adBanner);

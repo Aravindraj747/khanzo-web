@@ -1,6 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Firestore, Timestamp } from '@angular/fire/firestore';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
@@ -18,8 +19,10 @@ export class StaffShortsComponent implements OnInit {
   shorts: Shorts = {
     shortsLink: '',
     shortsId: '',
+    imageUrl:'',
     uploadDate:Timestamp.now()
   }
+  thumbImageFile: any = undefined;
   shortsArrays: Shorts[] =[];
   constructor(private _snackBar: MatSnackBar, 
               private firestoreService: FirestoreServiceService,
@@ -36,26 +39,69 @@ export class StaffShortsComponent implements OnInit {
     this.shortsArrays = shortsArray;
     console.log(this.shortsArrays);
   }
-
+  chooseThumb(event: any) {
+    this.thumbImageFile = event.target.files[0];
+  }
   submit() {
-    console.log('in submit');
+    this.shorts.uploadDate = Timestamp.now();
+    this.shorts.shortsId = Timestamp.now().seconds.toString();
     this.spinnerActive = true;
-    console.log(this.shorts.shortsLink);
-    if (this.shorts.shortsLink == '') {
-      console.log('paste link in required field');
-      this.spinnerActive = false;
-      this.openSnackBar('Paste link in required field', 'retry');
-    }
-    else {
-      console.log('have link');
-      this.shorts.shortsId = Timestamp.now().seconds.toString();
-      this.firestoreService.saveShorts(this.shorts).then(res => {
-        this.spinnerActive = false;
-        this.shortsArrays.push(this.shorts);
-        this.openSnackBar('Shorts saved successfully', 'undo');
-        this.resetPage();
+    if(this.shorts.shortsLink !== ''){
+      if(this.shorts.imageUrl !== ''){
+        this.firestoreService.saveShorts(this.shorts).then(res=>{
+          this.shortsArrays.push(this.shorts);
+          this.spinnerActive = false;
+          this.openSnackBar('Saved Successfully','undo');
+          this.resetPage();
       });
+      return
     }
+    else if(this.thumbImageFile !==undefined){
+      this.putStorageItem(this.thumbImageFile);
+    }
+    }
+    else{
+      this.spinnerActive = false;
+      this.openSnackBar('Enter link to save','retry');
+      return
+    }
+  }
+  putStorageItem(file: any) {
+    const storage = getStorage();
+    const storageRef = ref(storage, 'youtubethumbNail/' + file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    return uploadTask.on('state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (error) => {
+        this.openSnackBar('Error occurred while saving images', 'Retry')
+        console.log(error.message);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          this.spinnerActive = false;
+          this.shorts.imageUrl = downloadURL;
+          console.log('after:', this.shorts);
+          if (this.shorts.imageUrl !== "") {
+            this.firestoreService.saveShorts(this.shorts).then(res => {
+              this.shortsArrays.push(this.shorts);
+              console.log("Shorts link saved from storage");
+              this.openSnackBar("Link Saved Successfully", "close");
+              this.spinnerActive = false;
+              this.resetPage();
+            });
+          }
+          else {
+            this.openSnackBar('Error occured', 'retry');
+            this.spinnerActive = false;
+          }
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+          });
+        });
+      });
   }
   delete(id:string,type:string){
     console.log(id,type);
@@ -77,6 +123,7 @@ export class StaffShortsComponent implements OnInit {
     this.shorts = {
       shortsLink: '',
       shortsId: '',
+      imageUrl:'',
       uploadDate:Timestamp.now()
     }
   }

@@ -15,6 +15,7 @@ export class FacebookComponent implements OnInit {
 
   facebook: Facebook={
     videoUrl:'',
+    imageUrl:'',
     facebookId:'',
     uploadDate:Timestamp.now()
   }
@@ -66,6 +67,7 @@ export class FacebookComponent implements OnInit {
   resetPage(){
     this.facebook = {
       videoUrl: '',
+      imageUrl:'',
       uploadDate: Timestamp.now(),
       facebookId:''
     }
