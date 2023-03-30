@@ -1,9 +1,11 @@
 import firebase from "firebase/compat";
 import Timestamp = firebase.firestore.Timestamp;
 
-export interface Shorts{
+export interface Music{
     videoUrl: string;
-    imageUrl:string;
+    imageUrl: string;
+    category: string;
     uploadDate:Timestamp;
-    shortsId:string;
+    language: string;
+    id:string;
 }

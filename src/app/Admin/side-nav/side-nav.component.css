@@ -14,31 +14,35 @@ body {
 
 /* navbar */
 .navbar {
-  height: 50px;
+  /* height: 50px; */
   width: 100%;
   background: #d3d5d7;
   /* background:#dfe9f5 ; */
   position:relative;
   justify-content: space-between;
 }
-
+.name{
+  font-size: 20px;
+}
 .navbar ul {
   margin-right: 20px;
 }
-
+.logout{
+  float:right;margin-right:10px;color: black;font-size: 18px;margin-top:15px;cursor: pointer;
+}
 .navbar ul li {
   list-style: none;
   display: inline-block;
-  line-height: 30px;
-  margin-top: 3px;
+  /* line-height: 30px; */
+  /* margin-top: 3px; */
 }
 
-.navbar ul li a {
+.name, .navbar ul li a {
   font-style: bold;
   text-decoration: none;
   color: black;
-  font-size: 35px;
-  padding: 6px 13px;
+  font-size: 18px;
+  /* padding: 6px 13px; */
   font-family: 'Roboto', sans-serif;
   transition: .4s;
 }

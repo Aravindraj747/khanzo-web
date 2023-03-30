@@ -73,7 +73,7 @@ export class StaffYoutubeComponent implements OnInit {
     console.log(this.youtube.id);
     if (this.youtube.imageUrl !== '') {
       // download and push to storage and save link in database
-      this.firestoreService.saveyoutube(this.youtube).then(res => {
+      this.firestoreService.saveYoutube(this.youtube).then(res => {
         console.log("youtube directlink saved");
         this.youtubeArray.push(this.youtube);
         this.openSnackBar("Link Saved Successfully", "Close");
@@ -89,12 +89,19 @@ export class StaffYoutubeComponent implements OnInit {
   }
 
   delete(id:string,type:string){
-    console.log(id,type);
-    return this.dialog.open(DialogComponent,{
+    // console.log(id,type);
+    this.dialog.open(DialogComponent,{
       data:{
         value:type,id
       }
     })
+    // this.youtubeArray.indexOf(this.youtubeArray)
+    for(let y in this.youtubeArray){
+      if(this.youtubeArray[y].id == id){
+        console.log(this.youtubeArray[y].id);
+        // this.youtubeArray.splice(y)
+      }
+    }
   }
   putStorageItem(file: any) {
     const storage = getStorage();
@@ -115,7 +122,7 @@ export class StaffYoutubeComponent implements OnInit {
           this.youtube.imageUrl = downloadURL;
           console.log('after:', this.youtube);
           if (this.youtube.imageUrl !== "") {
-            this.firestoreService.saveyoutube(this.youtube).then(res => {
+            this.firestoreService.saveYoutube(this.youtube).then(res => {
               this.youtubeArray.push(this.youtube);
               console.log("youtube link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");

@@ -47,6 +47,9 @@ import { DialogComponent } from './Admin/dialog/dialog.component';
 import { FacebookComponent } from './Staff/facebook/facebook.component';
 import { TermsandConditionComponent } from './Staff/termsand-condition/termsand-condition.component';
 import { ImageBannerComponent } from './Staff/image-banner/image-banner.component';
+import { MusicComponent } from './Staff/music/music.component';
+import { AdminauthguardGuard } from './AuthGuard/adminauthguard.guard';
+import { StaffauthguardGuard } from './AuthGuard/staffauthguard.guard';
 // import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
@@ -70,7 +73,8 @@ import { ImageBannerComponent } from './Staff/image-banner/image-banner.componen
     DialogComponent,
     FacebookComponent,
     TermsandConditionComponent,
-    ImageBannerComponent
+    ImageBannerComponent,
+    MusicComponent
   ],
   entryComponents: [DialogComponent],
   imports: [
@@ -97,7 +101,10 @@ import { ImageBannerComponent } from './Staff/image-banner/image-banner.componen
     MatProgressSpinnerModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    AdminauthguardGuard,
+    StaffauthguardGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

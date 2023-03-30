@@ -46,7 +46,7 @@ export class DialogComponent implements OnInit {
   delete(){
       this.firestoreService.delete(this.id,this.value);
       this.openSnackBar('Deleted Successfully','Unod');
-
+      return 'yes'
   }
   openSnackBar(message:string,action:string){
     this._snackBar.open(message, action, {

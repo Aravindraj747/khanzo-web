@@ -1,71 +1,81 @@
-import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Facebook } from 'src/app/models/facebook';
+import { Music } from 'src/app/models/music';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 
 @Component({
-  selector: 'app-facebook',
-  templateUrl: './facebook.component.html',
-  styleUrls: ['./facebook.component.css']
+  selector: 'app-music',
+  templateUrl: './music.component.html',
+  styleUrls: ['./music.component.css']
 })
-export class FacebookComponent implements OnInit {
+export class MusicComponent implements OnInit {
 
-  facebook: Facebook={
+  music: Music = {
     videoUrl:'',
     imageUrl:'',
-    facebookId:'',
-    uploadDate:Timestamp.now()
+    uploadDate:Timestamp.now(),
+    language:'',
+    category:'',
+    id:'',
   }
-  thumbImageFile:any = undefined;
-  spinnerActive:boolean = false;
-  faceBookArray: Facebook[] =[];
+  musicArray: Music[] = [];
+  category: any[] = ["Entertainment", "Education", "Comdey", "News", "Trailers", "Movies", "Cinema"];
+  thumbImageFile: any = undefined;
+  spinnerActive: boolean = false;
+
   constructor(private firestoreService: FirestoreServiceService,
               private _snackBar: MatSnackBar,
-              private dialog:MatDialog) { }
+              private dialog:MatDialog) {
+  }
 
   ngOnInit(): void {
-    this.facebook.uploadDate = Timestamp.now();
-    const facebookArray: Facebook[] = []
-    this.firestoreService.getInstagramVideo().ref.get().then(res => {
+    this.music.uploadDate = Timestamp.now();
+    console.log(this.music.uploadDate);
+    const youTubeArray: Music[] = []
+    this.firestoreService.getMusic().ref.get().then(res => {
       res.forEach(function (doc) {
-        facebookArray.push(<Facebook>doc.data());
+        youTubeArray.push(<Music>doc.data());
       });
     });
-    this.faceBookArray = facebookArray;
-    console.log(this.faceBookArray);
+    this.musicArray = youTubeArray;
+    console.log(this.musicArray);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
   submit() {
-    this.facebook.uploadDate = Timestamp.now();
-    this.facebook.facebookId = Timestamp.now().seconds.toString();
+    console.log('yub');
     this.spinnerActive = true;
-    if(this.facebook.videoUrl !== ''){
-      if(this.facebook.imageUrl !== ''){
-        this.firestoreService.saveFacebook(this.facebook).then(res=>{
-          this.faceBookArray.push(this.facebook);
-          this.spinnerActive = false;
-          this.openSnackBar('Saved Successfully','undo');
-          this.resetPage();
-      });
-      return
+    if(this.thumbImageFile == undefined && this.music.imageUrl == ''){
+      this.openSnackBar('Choose one option for upload image','retry');
+      this.spinnerActive = false
     }
-    else if(this.thumbImageFile !==undefined){
+    console.log(this.music.imageUrl);
+    console.log(this.thumbImageFile);
+    this.music.id = Timestamp.now().seconds.toString();
+    // this.music.uploadDate = Date();
+    console.log(this.music.id);
+    if (this.music.imageUrl !== '') {
+      // download and push to storage and save link in database
+      this.firestoreService.saveMusic(this.music).then(res => {
+        console.log("music directlink saved");
+        this.musicArray.push(this.music);
+        this.openSnackBar("Link Saved Successfully", "Close");
+        this.resetPage()
+        this.spinnerActive = false;
+      });
+    }
+    else if (this.thumbImageFile !== undefined) {
+      // push to storage and save link in database
+      console.log('before', this.music);
       this.putStorageItem(this.thumbImageFile);
     }
-    }
-    else{
-      this.spinnerActive = false;
-      this.openSnackBar('Enter link to save','retry');
-      return
-    }
   }
+
   delete(id:string,type:string){
     console.log(id,type);
     return this.dialog.open(DialogComponent,{
@@ -90,12 +100,12 @@ export class FacebookComponent implements OnInit {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.spinnerActive = false;
-          this.facebook.imageUrl = downloadURL;
-          console.log('after:', this.facebook);
-          if (this.facebook.imageUrl !== "") {
-            this.firestoreService.saveFacebook(this.facebook).then(res => {
-              this.faceBookArray.push(this.facebook);
-              console.log("Facebook link saved from storage");
+          this.music.imageUrl = downloadURL;
+          console.log('after:', this.music);
+          if (this.music.imageUrl !== "") {
+            this.firestoreService.saveMusic(this.music).then(res => {
+              this.musicArray.push(this.music);
+              console.log("music link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();
@@ -111,7 +121,6 @@ export class FacebookComponent implements OnInit {
         });
       });
   }
-
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       verticalPosition: 'bottom',
@@ -120,12 +129,14 @@ export class FacebookComponent implements OnInit {
     });
   }
 
-  resetPage(){
-    this.facebook = {
-      videoUrl: '',
-      imageUrl:'',
-      uploadDate: Timestamp.now(),
-      facebookId:''
+  resetPage() {
+    this.music = {
+      videoUrl: "",
+      imageUrl: "",
+      category: "",
+      language: "",
+      id: "",
+      uploadDate:Timestamp.now()
     }
   }
 }

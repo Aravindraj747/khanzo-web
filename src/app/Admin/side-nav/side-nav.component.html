@@ -1,11 +1,10 @@
 <nav class="navbar" style="position: fixed;top: 0;">
-    <ul>
-        <li><a href="" class="active">Khanzo</a></li>
-    </ul>
+    <a href="" style="margin-top:15px ;" class="name">Khanzo</a>
+    <a class="logout" (click)="logout()">Logout</a>
 </nav>
 <div class="class">
     <ul>
-        <div *ngIf="isAdmin">
+        <!-- <div *ngIf="isAdmin">
             <li>
                 <span class="heads">Dashboard</span>
             </li>
@@ -18,12 +17,15 @@
             <li><a href="staffCreation">
                     <span class="nav-item">Staff</span>
                 </a></li>
-        </div>
+        </div> -->
         <li>
             <span class="heads">Home</span>
         </li>
         <li><a href="youtube">
                 <span class="nav-item">YouTube</span>
+            </a></li>
+        <li><a href="music">
+                <span class="nav-item">Music</span>
             </a></li>
         <li><a href="faceBook">
                 <span class="nav-item">FaceBook</span>

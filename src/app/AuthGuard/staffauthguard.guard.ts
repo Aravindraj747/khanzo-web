@@ -1,0 +1,20 @@
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AdminServiceService } from '../Services/Service/admin-service.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class StaffauthguardGuard implements CanActivate {
+  constructor(private adminService: AdminServiceService, private route: Router) { }
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+    console.log('instaffauth')
+    if( (this.adminService.getStaffLogin() == 'true') || ( this.adminService.getAdminLogin() == 'true')){
+      console.log('inside staffauth');
+      return true;
+    }
+    this.route.navigate(['adminLogin']);
+    return false;
+  }
+}

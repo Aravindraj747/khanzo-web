@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthenticationServiceService } from 'src/app/Services/authentication-service.service';
+import { AdminServiceService } from 'src/app/Services/Service/admin-service.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -9,12 +11,20 @@ import { AuthenticationServiceService } from 'src/app/Services/authentication-se
 export class SideNavComponent implements OnInit {
 
   isAdmin:boolean = false;
-  constructor(private authService: AuthenticationServiceService) { }
-
+  constructor(private adminService: AdminServiceService,
+              private authService: AuthenticationServiceService,
+              private route: Router) { }
   ngOnInit(): void {
-    this.isAdmin = this.authService.isAdmin;
-    console.log(this.isAdmin);
-    // this.isAdmin = true;
+    if(this.adminService.isAdmin == 'true'){
+      this.isAdmin = true
+    }
+    console.log('sidenav',this.isAdmin);
   }
 
+  logout(){
+    this.authService.logout().then(()=>{
+      console.log('in side');
+      this.route.navigate(['adminLogin']);
+    });
+  }
 }

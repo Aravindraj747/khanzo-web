@@ -60,8 +60,8 @@
       <tr *ngFor="let daily of dailyTasks">
         <td>{{daily.taskId}}</td>
         <td>{{daily.category}}</td>
-        <td>{{daily.uploadDate}}</td>
-        <!-- <td>{{daily.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td> -->
+        <!-- <td>{{daily.uploadDate}}</td> -->
+        <td>{{daily.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="https://www.youtube.com/watch?v={{daily.videoUrl}}" target="_blank">View</a></td>
         <td>{{daily.startDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td>{{daily.expiryDate.toDate() | date:'dd-MM-yyyy'}}</td>

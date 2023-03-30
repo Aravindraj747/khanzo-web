@@ -17,7 +17,7 @@ export class StaffShortsComponent implements OnInit {
 
   spinnerActive:boolean = false;
   shorts: Shorts = {
-    shortsLink: '',
+    videoUrl: '',
     shortsId: '',
     imageUrl:'',
     uploadDate:Timestamp.now()
@@ -46,7 +46,7 @@ export class StaffShortsComponent implements OnInit {
     this.shorts.uploadDate = Timestamp.now();
     this.shorts.shortsId = Timestamp.now().seconds.toString();
     this.spinnerActive = true;
-    if(this.shorts.shortsLink !== ''){
+    if(this.shorts.videoUrl !== ''){
       if(this.shorts.imageUrl !== ''){
         this.firestoreService.saveShorts(this.shorts).then(res=>{
           this.shortsArrays.push(this.shorts);
@@ -121,7 +121,7 @@ export class StaffShortsComponent implements OnInit {
   }
   resetPage() {
     this.shorts = {
-      shortsLink: '',
+      videoUrl: '',
       shortsId: '',
       imageUrl:'',
       uploadDate:Timestamp.now()

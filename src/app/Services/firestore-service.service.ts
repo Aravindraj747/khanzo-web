@@ -19,11 +19,15 @@ export class FirestoreServiceService {
 
   constructor(private firestore: AngularFirestore) { }
 
-  saveyoutube(youtube: Youtube) {
+  saveYoutube(youtube: Youtube) {
     console.log(youtube);
     return this.firestore.collection('youtube').doc(youtube.id).set(youtube);
   }
-
+  saveMusic(youtube: Youtube) {
+    console.log(youtube);
+    return this.firestore.collection('music').doc(youtube.id).set(youtube);
+  }
+  
   saveDailytask(dailyTask: DailyTask) {
     return this.firestore.collection('dailyTasks').doc(dailyTask.taskId).set(dailyTask);
   }
@@ -68,6 +72,10 @@ export class FirestoreServiceService {
     return this.firestore.collection('youtube');
   }
 
+  getMusic(){
+    return this.firestore.collection('music');
+  }
+
   getShorts(){
     return this.firestore.collection('youtubeShorts')
   }
@@ -95,38 +103,34 @@ export class FirestoreServiceService {
   // Delete
   delete(id:string,type:string){
     if(type == 'youtube'){
-      this.firestore.collection('youtube').doc(id).delete();
-      return;
+      return this.firestore.collection('youtube').doc(id).delete();
     }
     else if(type == 'shorts'){
-      this.firestore.collection('youtubeShorts').doc(id).delete();
-      return;
+      return this.firestore.collection('youtubeShorts').doc(id).delete();
     }
     else if(type == 'coupon'){
-      this.firestore.collection('coupons').doc(id).delete();
-      return;
+      return this.firestore.collection('coupons').doc(id).delete();
     }
     else if(type == 'adbanner'){
-      this.firestore.collection('adBanner').doc(id).delete();
-      return;
+      return this.firestore.collection('adBanner').doc(id).delete();
     }
     else if(type == 'dailyTasks'){
       console.log('yup in fire');
-      this.firestore.collection('dailyTasks').doc(id).delete();
-      return;
+      return this.firestore.collection('dailyTasks').doc(id).delete();
     }
     else if(type == 'instagram'){
-      this.firestore.collection('instagram').doc(id).delete();
-      return;
+      return this.firestore.collection('instagram').doc(id).delete();
     }
     else if(type == 'reels'){
-      this.firestore.collection('reels').doc(id).delete();
-      return;
+      return this.firestore.collection('reels').doc(id).delete();
     }
     else if(type == 'facebook'){
-      this.firestore.collection('facebook').doc(id).delete();
-      return
+      return this.firestore.collection('facebook').doc(id).delete();
     }
+    else if(type == 'music'){
+      return this.firestore.collection('music').doc(id).delete();
+    }
+    return 'No'
   }
 
   updateWithdrawal(id:string,data:any){

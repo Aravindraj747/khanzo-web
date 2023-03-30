@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthenticationServiceService } from 'src/app/Services/authentication-service.service';
+import { AdminServiceService } from 'src/app/Services/Service/admin-service.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -18,6 +19,7 @@ export class AdminLoginComponent implements OnInit {
   });
 
   constructor(private _snackBar: MatSnackBar,
+    private adminService: AdminServiceService,
     private authService: AuthenticationServiceService,
     private route: Router) { }
 
@@ -42,12 +44,13 @@ export class AdminLoginComponent implements OnInit {
     }
     console.log(email, password);
     this.spinnerActive = true;
-    this.authService.checkIfAdmin(email!).subscribe(res => {
-      this.authService.isAdmin = true;
+    this.adminService.checkIfAdmin(email!).subscribe(res => {
+      this.adminService.isAdmin = 'true';
       console.log(res);
       if (res.docs.length > 0) {
         this.authService.login(email!, password!).then((res) => {
           console.log(res);
+          this.getAdminDetails(email!);
           this.spinnerActive = false;
           this.route.navigate(['adminHome']);
         }, err => {
@@ -58,13 +61,38 @@ export class AdminLoginComponent implements OnInit {
         console.log(email, password);
       }
       else {
-        this.openSnackBar('Enter valid credential to login', 'Retry');
-        this.spinnerActive = false;
-        return;
+        console.log('staff here')
+        this.adminService.checkIfStaff(email!).subscribe(res=>{
+          this.adminService.isStaff = 'true';
+          console.log(res);
+          if (res.docs.length > 0) {
+            this.authService.login(email!, password!).then((res) => {
+              console.log(res);
+              this.getStaffDetails(email!);
+              this.spinnerActive = false;
+              this.route.navigate(['youtube']);
+            }, err => {
+              console.log('error', err);
+              this.openSnackBar('Invalid Email or password', 'Undo');
+              this.spinnerActive = false;
+            });
+            console.log(email, password);
+          }
+          else{
+            this.openSnackBar('Enter valid credential to login', 'Retry');
+            this.spinnerActive = false;
+            return;
+          }
+        });
       }
     });
   }
-
+  async getAdminDetails(email: string) {
+    await this.adminService.getAdmin(email);
+  }
+  async getStaffDetails(email: string) {
+    await this.adminService.getStaff(email!);
+  }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,

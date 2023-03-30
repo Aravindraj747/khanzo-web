@@ -2,10 +2,7 @@
     margin-left: 250px;
     margin-top: 50px;
 }
-.note {
-  color: red;
-  font-size: 13px;
-}
+
 .topic p {
     font-weight: bold;
 }
@@ -17,24 +14,36 @@
 .topic .pasteLink {
     margin-left: 110px;
 }
+
 .topic .ThumURL {
-  margin-left: 155px;
+    margin-left: 150px;
 }
 
 .topic .ThumPic {
-  margin-left: 190px;
-}
-.value form {
-    display: flex;
+    margin-left: 190px;
 }
 
-.value input {
-    margin-left: 60px;
+.topic .category {
+    margin-left: 170px;
+}
+
+.topic .language {
+    margin-left: 120px;
+}
+
+.value form {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .new {
     display: flex;
 }
+
+.delete{
+    cursor: pointer;
+}
+
 .value #input {
     /* background-color: rgb(183, 193, 202); */
     /* border: 0; */
@@ -42,8 +51,9 @@
     border-bottom: 1px solid black;
 }
 
-.value a{
-    margin-left: 20px;
+.value #drop{
+    border: 0;
+    outline: 0;
 }
 
 .note {
@@ -51,9 +61,7 @@
     font-size: 13px;
 }
 
-/* Save button */
 button {
-    margin-left: 50px;
     max-width: 75px;
     background-color: deepskyblue;
     color: #080710;
@@ -100,16 +108,13 @@ table{
     color: white;
     padding: 30px 0;
   }
-  .delete{
-    cursor:pointer;
-  }
+  
   /* Table Styles */
   
-  .table-wrapper{
-    margin-top: 30px;
-    /* margin: 10px 70px 70px;
-    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 ); */
-  }
+  /* .table-wrapper{
+    margin: 10px 70px 70px;
+    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+  } */
   
   .fl-table {
     border-radius: 5px;
