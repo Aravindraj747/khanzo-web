@@ -14,21 +14,27 @@ body {
 
 /* navbar */
 .navbar {
-  /* height: 50px; */
+  z-index: 4;
+  height: 50px;
   width: 100%;
-  background: #d3d5d7;
+  background: #adcae7;
   /* background:#dfe9f5 ; */
   position:relative;
   justify-content: space-between;
 }
 .name{
   font-size: 20px;
+  margin-top:15px;
+  margin-left: 5px;
 }
 .navbar ul {
   margin-right: 20px;
 }
 .logout{
-  float:right;margin-right:10px;color: black;font-size: 18px;margin-top:15px;cursor: pointer;
+  float:right;
+  margin-right:10px;
+  margin-top:5px;
+  cursor: pointer;
 }
 .navbar ul li {
   list-style: none;
@@ -46,16 +52,19 @@ body {
   font-family: 'Roboto', sans-serif;
   transition: .4s;
 }
-
 /* SideNav */
 .class {
-  position: fixed;
-  top: 45px;
-  bottom: 0;
-  height: 100vh;
+  /* overflow: scroll; */
+  -webkit-overflow-scrolling: touch;
+  position: absolute;
+  overflow-x:hidden;
+  top: 30px;
+  /* top: 0;*/
+  bottom: 0; 
+  /* height: 100vh; */
   /* background: #d3d5d7; */
   width: 240px;
-  overflow: hidden;
+  /* overflow: hidden; */
   transition: width 0.2s linear;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }

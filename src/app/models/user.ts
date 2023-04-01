@@ -9,4 +9,5 @@ export interface User {
     address: string;
     joinedDate: Timestamp;
     level: string;
+    amount:number;
 }

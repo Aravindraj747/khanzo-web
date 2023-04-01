@@ -11,24 +11,26 @@
     display: flex;
 }
 
+.topic .pasteLink {
+    margin-left: 110px;
+}
+
 .topic .ThumURL {
-    margin-left: 90px;
+    margin-left: 150px;
 }
 
 .topic .ThumPic {
-    margin-left: 140px;
+    margin-left: 190px;
 }
 
 .topic .category {
-    margin-left: 230px;
+    margin-left: 170px;
 }
 
 .topic .language {
-    margin-left: 170px;
+    margin-left: 120px;
 }
-.topic .phone{
-    margin-left: 140px;
-}
+
 .value form {
     display: flex;
     justify-content: space-evenly;

@@ -1,2 +1,57 @@
+<!-- <app-staff-side-nav></app-staff-side-nav> -->
 <app-side-nav></app-side-nav>
-<p style="margin-left:300px;margin-top: 100px;">Image Banner Works</p>
+<div class="container">
+    <!-- <div class="new">
+        <p style="margin-left: 20px;"><a href=""><mat-icon>add_circle_outline</mat-icon> Add NewLink</a></p>
+    </div> -->
+    <div class="new">
+        <h1>Image Banner</h1>
+    </div>
+    <div class="topic">
+        <p class="ThumURL">Image URL</p>
+        <p class="ThumPic">Image Pic</p>
+        <p class="category">Email</p>
+        <p class="language">Address</p>
+        <p class="phone">PhoneNumber</p>
+        <p></p>
+    </div>
+    <div class="value">
+        <form action="" [class.spinnerOverlay]="spinnerActive">
+            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.imageUrl"id="input"  type="text">
+            <input type="file" (change)="chooseThumb($event)" id="drop">
+            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.email" type="text" id="input" class="pasteLink">
+            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.address" type="text" id="input" class="pasteLink">
+            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.phoneNumber" type="text" id="input" class="pasteLink">
+            <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+        </form>
+    </div>
+    <br>
+    <p class="note">Note* :Choose any one of the option for adding Image</p>
+    <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+</div>
+<div class="table-wrapper">
+    <table class="fl-table">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Email</th>
+        <th>PhoneNumber</th>
+        <th>UploadDate</th>
+        <th>Address</th>
+        <th>Image</th>
+        <th>Delete</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let banner of bannerArray">
+        <td>{{banner?.id}}</td>
+        <td>{{banner?.email}}</td>
+        <td>{{banner?.phoneNumber}}</td>
+        <td>{{banner?.uploadDate?.toDate() | date:'dd-MM-yyyy'}}</td>
+        <td>{{banner?.address}}</td>
+        <td><a mat-raised-button href="{{banner.imageUrl}}" target="_blank">View</a></td>
+        <td><a class="delete" (click)="delete(banner.id,'imageBanner')">X</a></td>
+      </tr>
+      <tbody>
+    </table>
+  </div>

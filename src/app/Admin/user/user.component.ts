@@ -15,13 +15,13 @@ export class UserComponent implements OnInit {
   constructor(private firestroreService: FirestoreServiceService) { }
 
   ngOnInit(): void {
-    const agentsArray: User[] = []
+    const usersArray: User[] = []
     this.firestroreService.getUser().ref.get().then(res => {
       res.forEach(function (doc) {
-        agentsArray.push(<User>doc.data());
+        usersArray.push(<User>doc.data());
       });
     });
-    this.users = agentsArray;
+    this.users = usersArray;
     console.log(this.users);
   }
 

@@ -24,6 +24,10 @@
                 <option value="">Select Category</option>
                 <option *ngFor="let c of category">{{c}}</option>
             </select>
+            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.language" name="select" id="drop">
+              <option value="">Select language</option>
+              <option *ngFor="let l of language">{{l}}</option>
+          </select>
             <!-- <ng-select
               [items]="cars"
               bindLabel="name"
@@ -36,7 +40,7 @@
               <option value="">Select Category</option>
               <option *ngFor="let c of category">{{c}}</option>
           </select> -->
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.language" id="input" type="text">
+            <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.language" id="input" type="text"> -->
             <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
             <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
         </form>
@@ -51,6 +55,7 @@
       <tr>
         <th>Id</th>
         <th>Category</th>
+        <th>Language</th>
         <th>UploadDate</th>
         <th>Video</th>
         <th>Image</th>
@@ -59,10 +64,11 @@
       </thead>
       <tbody>
       <tr *ngFor="let youtube of youtubeArray">
-        <td>{{youtube.id}}</td>
-        <td>{{youtube.category}}</td>
+        <td>{{youtube?.id}}</td>
+        <td>{{youtube?.category}}</td>
+        <td>{{youtube?.language}}</td>
         <!-- <td>{{youtube.category}}</td> -->
-        <td>{{youtube.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
+        <td>{{youtube?.uploadDate?.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="https://www.youtube.com/watch?v={{youtube.videoUrl}}" target="_blank">View</a></td>
         <td><a mat-raised-button href="{{youtube.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(youtube.id,'youtube')">X</a></td>

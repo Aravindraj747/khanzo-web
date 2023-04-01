@@ -45,13 +45,13 @@ export class AdminLoginComponent implements OnInit {
     console.log(email, password);
     this.spinnerActive = true;
     this.adminService.checkIfAdmin(email!).subscribe(res => {
-      this.adminService.isAdmin = 'true';
       console.log(res);
       if (res.docs.length > 0) {
         this.authService.login(email!, password!).then((res) => {
           console.log(res);
           this.getAdminDetails(email!);
           this.spinnerActive = false;
+          this.adminService.isAdmin = 'true';
           this.route.navigate(['adminHome']);
         }, err => {
           console.log('error', err);
@@ -63,10 +63,10 @@ export class AdminLoginComponent implements OnInit {
       else {
         console.log('staff here')
         this.adminService.checkIfStaff(email!).subscribe(res=>{
-          this.adminService.isStaff = 'true';
           console.log(res);
           if (res.docs.length > 0) {
             this.authService.login(email!, password!).then((res) => {
+              this.adminService.isStaff = 'true';
               console.log(res);
               this.getStaffDetails(email!);
               this.spinnerActive = false;

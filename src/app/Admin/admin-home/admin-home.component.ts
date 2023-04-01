@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { Withdrawal } from 'src/app/models/withdrawal';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
@@ -34,11 +35,44 @@ export class AdminHomeComponent implements OnInit {
   }
 
   openDialog(value:string,withdrawal:Withdrawal){
+    let id = withdrawal.withdrawalId;
     console.log(value);
-    return this.dialog.open(DialogComponent,{
+    const dialogRef = this.dialog.open(DialogComponent,{
       data:{
         withdrawal:withdrawal,value
       }
     })
+      dialogRef.componentInstance.updated.subscribe(val => {
+        const rejectedUser: User []= [];
+        for(let i = 0;i<this.withdrawals.length;i++){
+          if(this.withdrawals[i].withdrawalId === id){
+            if (value == 'accept'){
+              this.withdrawals[i].status = 'SUCCESS';
+            }else{
+              this.withdrawals[i].status = 'REJECT';
+              this.firestoreService.getrejectedUser(withdrawal.userId,withdrawal.amount);
+              // this.firestoreService.getUser().ref.get().then(res=>{
+              //   res.forEach(function (doc) {
+              //     userArray.push(<User>doc.data());
+              //   });
+              //   for(let i = 0;i<userArray.length;i++){
+              //     if(userArray[i].email === withdrawal.userId){
+              //       console.log(userArray);
+              //       let amt = userArray[i].amount + withdrawal.amount;
+              //       let data = {
+              //         'amount': amt
+              //       }
+              //       this.firestoreService.updateUser(withdrawal.userId,data).then(res=>{
+              //         return;
+              //       })
+              //       break;
+              //     }
+              //   }
+              // })
+            }
+            break;
+          }
+        }
+      });
+    }
   }
-}

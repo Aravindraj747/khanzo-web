@@ -118,12 +118,23 @@ export class StaffDailyTaskComponent implements OnInit {
       });
   }
   delete(id:string,type:string){
-    console.log(id,type);
-    return this.dialog.open(DialogComponent,{
+    // console.log(id,type);
+     const dialogRef = this.dialog.open(DialogComponent,{
       data:{
         value:type,id
       }
-    })
+    });
+    dialogRef.componentInstance.deleted.subscribe(val => {
+
+      for(let i = 0;i<this.dailyTasks.length;i++){
+        if(this.dailyTasks[i].taskId === id){
+          console.log('deleting',this.dailyTasks[i].taskId);
+          this.dailyTasks.splice(i, 1);
+          break;
+        }
+      }
+    
+    });
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {

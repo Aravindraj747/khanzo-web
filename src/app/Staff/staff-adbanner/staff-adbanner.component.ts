@@ -23,7 +23,7 @@ export class StaffAdbannerComponent implements OnInit {
   adBanner: AdBanner = {
     imageUrl: '',
     videoUrl: '',
-    adBannerId: '',
+    id: '',
     uploadDate:Timestamp.now(),
     state:'',
     district:''
@@ -48,7 +48,6 @@ export class StaffAdbannerComponent implements OnInit {
     for(var state of data){
       this.states.push(state.name);
     }
-    return
     this.service.getCountries().subscribe(
       data =>this.countries = data
     );
@@ -82,9 +81,8 @@ export class StaffAdbannerComponent implements OnInit {
   submit() {
     this.spinnerActive = true;
     this.length = 0;
-    this.adBanner.adBannerId = Timestamp.now().seconds.toString();
+    this.adBanner.id = Timestamp.now().seconds.toString();
     console.log(this.adBanner);
-    return
     this.files = [];
     if ((this.ImageFile !== undefined) && (this.VideoFile !== undefined)){
       this.files.push([this.ImageFile, type.imageURL]);
@@ -140,19 +138,29 @@ export class StaffAdbannerComponent implements OnInit {
       });
   }
   delete(id:string,type:string){
-    console.log(id,type);
-    return this.dialog.open(DialogComponent,{
+    // console.log(id,type);
+     const dialogRef = this.dialog.open(DialogComponent,{
       data:{
-        // withdrawal:withdrawal,value
         value:type,id
       }
-    })
+    });
+    dialogRef.componentInstance.deleted.subscribe(val => {
+
+      for(let i = 0;i<this.adbannerArray.length;i++){
+        if(this.adbannerArray[i].id === id){
+          console.log('deleting',this.adbannerArray[i].id);
+          this.adbannerArray.splice(i, 1);
+          break;
+        }
+      }
+    
+    });
   }
   resetPage() {
     this.adBanner = {
       videoUrl: '',
       imageUrl: '',
-      adBannerId: '',
+      id: '',
       uploadDate:Timestamp.now(),
       state:'',
       district:''

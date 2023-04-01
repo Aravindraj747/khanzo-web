@@ -2,10 +2,11 @@ import firebase from "firebase/compat/app";
 import Timestamp = firebase.firestore.Timestamp;
 
 export interface Withdrawal {
-    withdrawalAmount: number;
+    amount: number;
     userId: string;
     requestedDate: Timestamp;
-    settlementDate: Timestamp;
+    completedDate: Timestamp;
+    accountNumber:string;  //show in table also
     status: string;
     withdrawalId: string;
 }

@@ -23,7 +23,8 @@ export class MusicComponent implements OnInit {
     id:'',
   }
   musicArray: Music[] = [];
-  category: any[] = ["Entertainment", "Education", "Comdey", "News", "Trailers", "Movies", "Cinema"];
+  language: any[] = ['English','Tamil','Kanada','Telugu','Hindi','Malayalam'];
+  category: any[] = ["Latest songs", "Melody songs", "Love songs", "Sad songs", "Albums", "Remix", "Old songs"];
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
 
@@ -77,12 +78,23 @@ export class MusicComponent implements OnInit {
   }
 
   delete(id:string,type:string){
-    console.log(id,type);
-    return this.dialog.open(DialogComponent,{
+    // console.log(id,type);
+     const dialogRef = this.dialog.open(DialogComponent,{
       data:{
         value:type,id
       }
-    })
+    });
+    dialogRef.componentInstance.deleted.subscribe(val => {
+
+      for(let i = 0;i<this.musicArray.length;i++){
+        if(this.musicArray[i].id === id){
+          console.log('deleting',this.musicArray[i].id);
+          this.musicArray.splice(i, 1);
+          break;
+        }
+      }
+    
+    });
   }
   putStorageItem(file: any) {
     const storage = getStorage();

@@ -5,5 +5,5 @@ export interface Shorts{
     videoUrl: string;
     imageUrl:string;
     uploadDate:Timestamp;
-    shortsId:string;
+    id:string;
 }

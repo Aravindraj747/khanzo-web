@@ -37,13 +37,9 @@ table {
 }
 
 .Accept{
-    /* color: white; */
-    /* background-color: green; */
     margin-left:10px;
 }
 .Reject{
-    /* color: white; */
-    /* background-color: red; */
     margin-left:10px;
 }
 .button{
@@ -65,10 +61,6 @@ table{
   
   /* Table Styles */
   
-  /* .table-wrapper{
-    margin: 10px 70px 70px;
-    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
-  } */
   
   .fl-table {
     border-radius: 5px;
@@ -76,10 +68,7 @@ table{
     font-weight: normal;
     border: none;
     border-collapse: collapse;
-    /* width: 100%; */
-    /* max-width: 100%; */
     white-space: nowrap;
-    /* background-color: white; */
     box-shadow: 3px 3px 5px 6px #d8d2d2;
   }
   

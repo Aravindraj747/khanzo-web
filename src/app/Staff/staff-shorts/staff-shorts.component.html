@@ -33,11 +33,11 @@
       </thead>
       <tbody>
       <tr *ngFor="let shorts of shortsArrays">
-        <td>{{shorts.shortsId}}</td>
+        <td>{{shorts.id}}</td>
         <td>{{shorts.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{shorts.videoUrl}}" target="_blank">View</a></td>
         <td><a mat-raised-button href="{{shorts.imageUrl}}" target="_blank">View</a></td>
-        <td><a class="delete" (click)="delete(shorts.shortsId,'shorts')">X</a></td>
+        <td><a class="delete" (click)="delete(shorts.id,'shorts')">X</a></td>
       </tr>
       <tbody>
     </table>

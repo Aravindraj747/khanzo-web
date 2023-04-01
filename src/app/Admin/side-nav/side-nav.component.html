@@ -1,10 +1,11 @@
 <nav class="navbar" style="position: fixed;top: 0;">
-    <a href="" style="margin-top:15px ;" class="name">Khanzo</a>
-    <a class="logout" (click)="logout()">Logout</a>
+    <p class="name">Khanzo Play</p>
+    <!-- <a class="logout" (click)="logout()">Logout</a> -->
+    <!-- <button mat-raised-button class="logout" (click)="logout()" >Logout</button> -->
 </nav>
 <div class="class">
     <ul>
-        <!-- <div *ngIf="isAdmin">
+        <div *ngIf="isAdmin">
             <li>
                 <span class="heads">Dashboard</span>
             </li>
@@ -17,7 +18,7 @@
             <li><a href="staffCreation">
                     <span class="nav-item">Staff</span>
                 </a></li>
-        </div> -->
+        </div>
         <li>
             <span class="heads">Home</span>
         </li>
@@ -39,6 +40,9 @@
         <li><a href="reels">
                 <span class="nav-item">Reels</span>
             </a></li>
+            <li><a href="kids">
+                <span class="nav-item">Kids</span>
+            </a></li>
         <li>
             <span class="heads">DailyTask</span>
         </li>
@@ -57,7 +61,10 @@
         </li>
         <li><a href="imageBanner">
             <span class="nav-item">ImageBanner</span>
-        </a>
-    </li>
+        </a></li>     
+        <li><a>
+            <span (click)=logout() class="logout">Logout</span>
+        </a></li>
+        
     </ul>
 </div>

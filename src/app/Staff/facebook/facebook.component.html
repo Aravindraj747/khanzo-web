@@ -32,10 +32,10 @@
       </thead>
       <tbody>
       <tr *ngFor="let faceBook of faceBookArray">
-        <td>{{faceBook.facebookId}}</td>
+        <td>{{faceBook.id}}</td>
         <td>{{faceBook.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{faceBook.videoUrl}}" target="_blank">View</a></td>
-        <td><a class="delete" (click)="delete(faceBook.facebookId,'facebook')">X</a></td>
+        <td><a class="delete" (click)="delete(faceBook.id,'facebook')">X</a></td>
       </tr>
       <tbody>
     </table>

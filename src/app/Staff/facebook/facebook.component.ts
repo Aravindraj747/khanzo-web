@@ -18,7 +18,7 @@ export class FacebookComponent implements OnInit {
   facebook: Facebook={
     videoUrl:'',
     imageUrl:'',
-    facebookId:'',
+    id:'',
     uploadDate:Timestamp.now()
   }
   thumbImageFile:any = undefined;
@@ -44,7 +44,7 @@ export class FacebookComponent implements OnInit {
   }
   submit() {
     this.facebook.uploadDate = Timestamp.now();
-    this.facebook.facebookId = Timestamp.now().seconds.toString();
+    this.facebook.id = Timestamp.now().seconds.toString();
     this.spinnerActive = true;
     if(this.facebook.videoUrl !== ''){
       if(this.facebook.imageUrl !== ''){
@@ -67,12 +67,24 @@ export class FacebookComponent implements OnInit {
     }
   }
   delete(id:string,type:string){
-    console.log(id,type);
-    return this.dialog.open(DialogComponent,{
+    // console.log(id,type);
+     const dialogRef = this.dialog.open(DialogComponent,{
       data:{
         value:type,id
       }
-    })
+    });
+    dialogRef.componentInstance.deleted.subscribe(val => {
+
+      for(let i = 0;i<this.faceBookArray.length;i++){
+        if(this.faceBookArray[i].id === id){
+          console.log('deleting',this.faceBookArray[i].id);
+          this.faceBookArray.splice(i, 1);
+          break;
+        }
+      }
+    
+    });
+    
   }
   putStorageItem(file: any) {
     const storage = getStorage();
@@ -125,7 +137,7 @@ export class FacebookComponent implements OnInit {
       videoUrl: '',
       imageUrl:'',
       uploadDate: Timestamp.now(),
-      facebookId:''
+      id:''
     }
   }
 }

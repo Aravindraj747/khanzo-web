@@ -35,11 +35,11 @@
     </thead>
     <tbody>
       <tr *ngFor="let instagram of instaGramArray">
-        <td>{{instagram.instaId}}</td>
+        <td>{{instagram.id}}</td>
         <td>{{instagram.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{instagram.videoUrl}}" target="_blank">View</a></td>
         <td><a mat-raised-button href="{{instagram.imageUrl}}" target="_blank">View</a></td>
-        <td><a class="delete" (click)="delete(instagram.instaId,'instagram')">X</a></td>
+        <td><a class="delete" (click)="delete(instagram.id,'instagram')">X</a></td>
       </tr>
     <tbody>
   </table>

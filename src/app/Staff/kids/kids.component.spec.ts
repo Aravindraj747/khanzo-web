@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StaffSideNavComponent } from './staff-side-nav.component';
+import { KidsComponent } from './kids.component';
 
-describe('StaffSideNavComponent', () => {
-  let component: StaffSideNavComponent;
-  let fixture: ComponentFixture<StaffSideNavComponent>;
+describe('KidsComponent', () => {
+  let component: KidsComponent;
+  let fixture: ComponentFixture<KidsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StaffSideNavComponent ]
+      declarations: [ KidsComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(StaffSideNavComponent);
+    fixture = TestBed.createComponent(KidsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -6,11 +6,13 @@ import { Shorts } from '../models/shorts';
 import { AdBanner } from '../models/adBanner';
 import { Coupons } from '../models/coupons';
 import { Staff } from '../models/staff';
-import { deleteDoc } from '@firebase/firestore';
+import { deleteDoc, FieldValue } from '@firebase/firestore';
 import { doc } from 'firebase/firestore';
 import { Instagram } from '../models/instagram';
 import { Facebook } from '../models/facebook';
 import { Reels } from '../models/reels';
+import { Banner } from '../models/banner';
+import { increment } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,13 @@ export class FirestoreServiceService {
     console.log(youtube);
     return this.firestore.collection('youtube').doc(youtube.id).set(youtube);
   }
+  saveKids(youtube: Youtube) {
+    console.log(youtube);
+    return this.firestore.collection('childVideos').doc(youtube.id).set(youtube);
+  }
+  saveBanner(banner:Banner){
+    return this.firestore.collection('imageBanner').doc(banner.id).set(banner);
+  }
   saveMusic(youtube: Youtube) {
     console.log(youtube);
     return this.firestore.collection('music').doc(youtube.id).set(youtube);
@@ -33,23 +42,22 @@ export class FirestoreServiceService {
   }
 
   saveShorts(shorts: Shorts) {
-    return this.firestore.collection('youtubeShorts').doc(shorts.shortsId).set(shorts);
+    return this.firestore.collection('youtubeShorts').doc(shorts.id).set(shorts);
   }
 
   saveReel(reel: Reels){
-    return this.firestore.collection('reels').doc(reel.reelsId).set(reel);
+    return this.firestore.collection('reels').doc(reel.id).set(reel);
   }
   saveAdbanner(adBanner: AdBanner) {
-    console.log('saveBanner');
-    return this.firestore.collection('adBanner').doc(adBanner.adBannerId).set(adBanner);
+    return this.firestore.collection('adBanner').doc(adBanner.id).set(adBanner);
   }
 
   saveInstagram(instagram:Instagram){
-    return this.firestore.collection('instagram').doc(instagram.instaId).set(instagram);
+    return this.firestore.collection('instagram').doc(instagram.id).set(instagram);
   }
 
   saveFacebook(faceBook:Facebook){
-    return this.firestore.collection('facebook').doc(faceBook.facebookId).set(faceBook);
+    return this.firestore.collection('facebook').doc(faceBook.id).set(faceBook);
   }
 
   getUser() {
@@ -57,7 +65,7 @@ export class FirestoreServiceService {
   }
 
   saveCoupons(coupons: Coupons) {
-    return this.firestore.collection('coupons').doc(coupons.couponsId).set(coupons);
+    return this.firestore.collection('coupons').doc(coupons.couponId).set(coupons);
   }
 
   createStaff(staff:Staff){
@@ -67,11 +75,15 @@ export class FirestoreServiceService {
   getAllWithdrawal(){
     return this.firestore.collection('withdrawal');
   }
-
   getYoutube(){
     return this.firestore.collection('youtube');
   }
-
+  getKids(){
+    return this.firestore.collection('childVideos');
+  }
+  getBanner(){
+    return this.firestore.collection('imageBanner');
+  }
   getMusic(){
     return this.firestore.collection('music');
   }
@@ -99,7 +111,10 @@ export class FirestoreServiceService {
   getReels(){
     return this.firestore.collection('reels');
   }
-
+  getrejectedUser(id:string,amt:number){
+    return this.firestore.collection('user')
+    .doc(id).update({'amount': increment(amt)});
+  }
   // Delete
   delete(id:string,type:string){
     if(type == 'youtube'){
@@ -113,6 +128,9 @@ export class FirestoreServiceService {
     }
     else if(type == 'adbanner'){
       return this.firestore.collection('adBanner').doc(id).delete();
+    }
+    else if(type == 'imageBanner'){
+      return this.firestore.collection('imageBanner').doc(id).delete();
     }
     else if(type == 'dailyTasks'){
       console.log('yup in fire');
@@ -130,12 +148,19 @@ export class FirestoreServiceService {
     else if(type == 'music'){
       return this.firestore.collection('music').doc(id).delete();
     }
+    else if(type == 'kid'){
+      return this.firestore.collection('childVideos').doc(id).delete();
+    }
     return 'No'
   }
 
   updateWithdrawal(id:string,data:any){
     console.log(this.firestore.collection('withdrawal', ref => ref.where('withdrawalId', '==', id)));
     return this.firestore.collection('withdrawal').doc(id).update(data);
+  }
+  updateUser(id:string,data:any){
+    console.log('rejectedUser',this.firestore.collection('user').doc(id).get());
+    return this.firestore.collection('user').doc(id).update(data);
   }
   deleteShorts(id:string){
     this.firestore.collection('youtubeShorts').doc(id).delete();
@@ -159,5 +184,9 @@ export class FirestoreServiceService {
 
   deleteAdbanner(id:string){
     this.firestore.collection('adBanner').doc(id).delete();
+  }
+  // Rejectcall
+  getrejectUser(id:string){
+    return this.firestore.collection('user', ref => ref.where('userId', '==', id)).get();
   }
 }

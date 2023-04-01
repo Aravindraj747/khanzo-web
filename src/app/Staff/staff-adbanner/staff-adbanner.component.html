@@ -50,11 +50,11 @@
       </thead>
       <tbody>
       <tr *ngFor="let adbanner of adbannerArray">
-        <td>{{adbanner?.adBannerId}}</td>
+        <td>{{adbanner?.id}}</td>
         <td>{{adbanner.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{adbanner?.videoUrl}}" target="_blank">View</a></td>
         <td><a mat-raised-button href="{{adbanner?.imageUrl}}" target="_blank">View</a></td>
-        <td><a class="delete" (click)="delete(adbanner.adBannerId,'adbanner')">X</a></td>
+        <td><a class="delete" (click)="delete(adbanner.id,'adbanner')">X</a></td>
       </tr>
       <tbody>
     </table>

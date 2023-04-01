@@ -33,11 +33,11 @@
       </thead>
       <tbody>
       <tr *ngFor="let coupon of couponArray">
-        <td>{{coupon.couponsId}}</td>
+        <td>{{coupon.couponId}}</td>
         <td>{{coupon.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <!-- <td>{{coupon.uploadDate}}</td> -->
         <td><a mat-raised-button href="{{coupon.imageUrl}}" target="_blank">View</a></td>
-        <td><a class="delete" (click)="delete(coupon.couponsId,'coupon')">X</a></td>
+        <td><a class="delete" (click)="delete(coupon.couponId,'coupon')">X</a></td>
       </tr>
       <tbody>
     </table>

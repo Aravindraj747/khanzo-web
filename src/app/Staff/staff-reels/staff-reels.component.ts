@@ -17,7 +17,7 @@ export class StaffReelsComponent implements OnInit {
 
   reel: Reels = {
     videoUrl: "",
-    reelsId:"",
+    id:"",
     imageUrl:'',
     uploadDate:Timestamp.now()
   }
@@ -44,7 +44,7 @@ export class StaffReelsComponent implements OnInit {
   }
   submit() {
     this.reel.uploadDate = Timestamp.now();
-    this.reel.reelsId = Timestamp.now().seconds.toString();
+    this.reel.id = Timestamp.now().seconds.toString();
     this.spinnerActive = true;
     if(this.reel.videoUrl !== ''){
       if(this.reel.imageUrl !== ''){
@@ -67,13 +67,23 @@ export class StaffReelsComponent implements OnInit {
     }
   }
   delete(id:string,type:string){
-    console.log(id,type);
-    return this.dialog.open(DialogComponent,{
+    // console.log(id,type);
+     const dialogRef = this.dialog.open(DialogComponent,{
       data:{
-        // withdrawal:withdrawal,value
         value:type,id
       }
-    })
+    });
+    dialogRef.componentInstance.deleted.subscribe(val => {
+
+      for(let i = 0;i<this.reelsArray.length;i++){
+        if(this.reelsArray[i].id === id){
+          console.log('deleting',this.reelsArray[i].id);
+          this.reelsArray.splice(i, 1);
+          break;
+        }
+      }
+    
+    });
   }
   putStorageItem(file: any) {
     const storage = getStorage();
@@ -122,7 +132,7 @@ export class StaffReelsComponent implements OnInit {
   resetPage(){
     this.reel = {
       videoUrl: '',
-      reelsId:'',
+      id:'',
       imageUrl:'',
       uploadDate:Timestamp.now()
     }

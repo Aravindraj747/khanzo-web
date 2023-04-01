@@ -10,15 +10,14 @@ import { StaffauthguardGuard } from './AuthGuard/staffauthguard.guard';
 import { CouponsComponent } from './Staff/coupons/coupons.component';
 import { FacebookComponent } from './Staff/facebook/facebook.component';
 import { ImageBannerComponent } from './Staff/image-banner/image-banner.component';
+import { KidsComponent } from './Staff/kids/kids.component';
 import { MusicComponent } from './Staff/music/music.component';
+import { PrivacyComponent } from './Staff/privacy/privacy.component';
 import { StaffAdbannerComponent } from './Staff/staff-adbanner/staff-adbanner.component';
 import { StaffDailyTaskComponent } from './Staff/staff-daily-task/staff-daily-task.component';
-import { StaffHomeComponent } from './Staff/staff-home/staff-home.component';
 import { StaffInstagramComponent } from './Staff/staff-instagram/staff-instagram.component';
-import { StaffLoginComponent } from './Staff/staff-login/staff-login.component';
 import { StaffReelsComponent } from './Staff/staff-reels/staff-reels.component';
 import { StaffShortsComponent } from './Staff/staff-shorts/staff-shorts.component';
-import { StaffSideNavComponent } from './Staff/staff-side-nav/staff-side-nav.component';
 import { StaffYoutubeComponent } from './Staff/staff-youtube/staff-youtube.component';
 import { TermsandConditionComponent } from './Staff/termsand-condition/termsand-condition.component';
 
@@ -29,10 +28,6 @@ const routes: Routes = [
     component: AdminLoginComponent
   },
   // Staff Components
-  {path:'staffLogin',component:StaffLoginComponent},
-  {path:'adminLogin',component:AdminLoginComponent},
-  {path:'staffSideNav',component:StaffSideNavComponent},
-  {path:'staffHome',component:StaffHomeComponent},
   {path:'youtube',component:StaffYoutubeComponent ,canActivate:[StaffauthguardGuard]},
   {path:'dailyTask',component:StaffDailyTaskComponent ,canActivate:[StaffauthguardGuard]},
   {path:'instagram',component:StaffInstagramComponent ,canActivate:[StaffauthguardGuard]},
@@ -42,11 +37,13 @@ const routes: Routes = [
   {path:'coupons',component:CouponsComponent ,canActivate:[StaffauthguardGuard]},
   {path:'faceBook',component:FacebookComponent ,canActivate:[StaffauthguardGuard]},
   {path:'music',component:MusicComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'terms',component:TermsandConditionComponent ,canActivate:[StaffauthguardGuard]},
+  {path:'terms',component:TermsandConditionComponent},
   {path:'imageBanner',component:ImageBannerComponent ,canActivate:[StaffauthguardGuard]},
+  {path:'kids',component:KidsComponent ,canActivate:[StaffauthguardGuard]},
+  {path:'privacy-policy',component:PrivacyComponent},
   // Admin Components
   {path:'adminHome',component:AdminHomeComponent ,canActivate:[AdminauthguardGuard]},
-  {path:'adminSideNav',component:SideNavComponent},
+  {path:'adminSideNav',component:SideNavComponent,canActivate:[StaffauthguardGuard]},
   {path:'user',component:UserComponent  ,canActivate:[AdminauthguardGuard]},
   {path:'staffCreation',component:StaffCreationComponent  ,canActivate:[AdminauthguardGuard]},
 ];

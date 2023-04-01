@@ -5,12 +5,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AdminLoginComponent } from './Admin/admin-login/admin-login.component';
-import { StaffLoginComponent } from './Staff/staff-login/staff-login.component';
 import { AdminHomeComponent } from './Admin/admin-home/admin-home.component';
 import { SideNavComponent } from './Admin/side-nav/side-nav.component';
-import { StaffSideNavComponent } from './Staff/staff-side-nav/staff-side-nav.component';
 import { StaffYoutubeComponent } from './Staff/staff-youtube/staff-youtube.component';
-import { StaffHomeComponent } from './Staff/staff-home/staff-home.component';
 import { StaffDailyTaskComponent } from './Staff/staff-daily-task/staff-daily-task.component';
 
 // MatMlodule
@@ -50,17 +47,16 @@ import { ImageBannerComponent } from './Staff/image-banner/image-banner.componen
 import { MusicComponent } from './Staff/music/music.component';
 import { AdminauthguardGuard } from './AuthGuard/adminauthguard.guard';
 import { StaffauthguardGuard } from './AuthGuard/staffauthguard.guard';
+import { KidsComponent } from './Staff/kids/kids.component';
+import { PrivacyComponent } from './Staff/privacy/privacy.component';
 // import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminLoginComponent,
-    StaffLoginComponent,
     AdminHomeComponent,
     SideNavComponent,
-    StaffSideNavComponent,
-    StaffHomeComponent,
     StaffYoutubeComponent,
     StaffDailyTaskComponent,
     StaffInstagramComponent,
@@ -74,7 +70,9 @@ import { StaffauthguardGuard } from './AuthGuard/staffauthguard.guard';
     FacebookComponent,
     TermsandConditionComponent,
     ImageBannerComponent,
-    MusicComponent
+    MusicComponent,
+    KidsComponent,
+    PrivacyComponent
   ],
   entryComponents: [DialogComponent],
   imports: [

@@ -18,7 +18,7 @@ export class StaffShortsComponent implements OnInit {
   spinnerActive:boolean = false;
   shorts: Shorts = {
     videoUrl: '',
-    shortsId: '',
+    id: '',
     imageUrl:'',
     uploadDate:Timestamp.now()
   }
@@ -44,7 +44,7 @@ export class StaffShortsComponent implements OnInit {
   }
   submit() {
     this.shorts.uploadDate = Timestamp.now();
-    this.shorts.shortsId = Timestamp.now().seconds.toString();
+    this.shorts.id = Timestamp.now().seconds.toString();
     this.spinnerActive = true;
     if(this.shorts.videoUrl !== ''){
       if(this.shorts.imageUrl !== ''){
@@ -104,13 +104,23 @@ export class StaffShortsComponent implements OnInit {
       });
   }
   delete(id:string,type:string){
-    console.log(id,type);
-    return this.dialog.open(DialogComponent,{
+    // console.log(id,type);
+     const dialogRef = this.dialog.open(DialogComponent,{
       data:{
-        // withdrawal:withdrawal,value
         value:type,id
       }
-    })
+    });
+    dialogRef.componentInstance.deleted.subscribe(val => {
+
+      for(let i = 0;i<this.shortsArrays.length;i++){
+        if(this.shortsArrays[i].id === id){
+          console.log('deleting',this.shortsArrays[i].id);
+          this.shortsArrays.splice(i, 1);
+          break;
+        }
+      }
+    
+    });
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -122,7 +132,7 @@ export class StaffShortsComponent implements OnInit {
   resetPage() {
     this.shorts = {
       videoUrl: '',
-      shortsId: '',
+      id: '',
       imageUrl:'',
       uploadDate:Timestamp.now()
     }

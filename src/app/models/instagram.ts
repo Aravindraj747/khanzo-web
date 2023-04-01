@@ -3,7 +3,7 @@ import Timestamp = firebase.firestore.Timestamp;
 
 export interface Instagram{
     videoUrl: string;
-    instaId:string;
+    id:string;
     imageUrl:string;
     uploadDate:Timestamp;
 }

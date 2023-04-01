@@ -18,21 +18,21 @@
       <tbody>
       <tr *ngFor="let withdrawal of withdrawals">
         <td>{{withdrawal.userId}}</td>
-        <td>{{withdrawal.withdrawalAmount}}</td>
+        <td>{{withdrawal.amount}}</td>
         <td>{{withdrawal.requestedDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td>
-          <ng-template [ngIf]="withdrawal.status == 'pending'">
-            <p style="color:black;">{{withdrawal.status}}</p>
+          <ng-template [ngIf]="withdrawal.status == 'PENDING'">
+            <p style="color:rgb(54, 55, 37);">{{withdrawal.status}}</p>
           </ng-template>
-          <ng-template [ngIf]="withdrawal.status == 'success'">
+          <ng-template [ngIf]="withdrawal.status == 'SUCCESS'">
             <p style="color:green;">{{withdrawal.status}}</p>
           </ng-template>
-          <ng-template [ngIf]="withdrawal.status == 'reject'">
+          <ng-template [ngIf]="withdrawal.status == 'REJECT'">
             <p style="color:red;">{{withdrawal.status}}</p>
           </ng-template>
         </td>
         <td>
-          <ng-template [ngIf]="withdrawal.status === 'pending'">
+          <ng-template [ngIf]="withdrawal.status === 'PENDING'">
         <td>
           <a class="Accept" style="color:forestgreen" mat-raised-button (click)="openDialog('accept',withdrawal)">Accept</a>
           <a class="Reject" style="color:red" mat-raised-button (click)="openDialog('reject',withdrawal)">Reject</a>

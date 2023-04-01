@@ -19,7 +19,7 @@ export class CouponsComponent implements OnInit {
   imageFile: any = undefined;
   coupons: Coupons = {
     imageUrl: '',
-    couponsId: '',
+    couponId: '',
     uploadDate:Timestamp.now()
   }
   couponArray: Coupons[] =[];
@@ -43,8 +43,8 @@ export class CouponsComponent implements OnInit {
     this.imageFile = event.target.files[0];
   }
   submit() {
-    this.coupons.couponsId = Timestamp.now().seconds.toString();
-    console.log(this.coupons.couponsId);
+    this.coupons.couponId = Timestamp.now().seconds.toString();
+    console.log(this.coupons.couponId);
     this.spinnerActive = true;
     if(this.coupons.imageUrl == '' && this.imageFile == undefined){
       this.openSnackBar('Choose any on option to save','retry');
@@ -100,18 +100,29 @@ export class CouponsComponent implements OnInit {
       });
   }
   delete(id:string,type:string){
-    console.log(id,type);
-    return this.dialog.open(DialogComponent,{
+    // console.log(id,type);
+     const dialogRef = this.dialog.open(DialogComponent,{
       data:{
-        // withdrawal:withdrawal,value
         value:type,id
       }
-    })
+    });
+    dialogRef.componentInstance.deleted.subscribe(val => {
+
+      for(let i = 0;i<this.couponArray.length;i++){
+        if(this.couponArray[i].couponId === id){
+          console.log('deleting',this.couponArray[i].couponId);
+          this.couponArray.splice(i, 1);
+          break;
+        }
+      }
+    
+    });
+    
   }
   resetPage() {
     this.coupons = {
       imageUrl: '',
-      couponsId: '',
+      couponId: '',
       uploadDate:Timestamp.now()
     }
   }

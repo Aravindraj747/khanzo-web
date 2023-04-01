@@ -23,8 +23,7 @@ export class SideNavComponent implements OnInit {
 
   logout(){
     this.authService.logout().then(()=>{
-      console.log('in side');
-      this.route.navigate(['adminLogin']);
+      return this.route.navigate(['/']);
     });
   }
 }

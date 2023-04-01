@@ -1,7 +1,7 @@
 <app-side-nav></app-side-nav>
 <div class="container">
     <div class="new">
-        <h1>Music video</h1>
+        <h1>Kids video</h1>
     </div>
     <div class="topic">
         <p class="pasteLink">Paste link</p>
@@ -13,14 +13,14 @@
     </div>
     <div class="value">
         <form action="" [class.spinnerOverlay]="spinnerActive">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="music.videoUrl" type="text" id="input" class="pasteLink">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="music.imageUrl"id="input"  type="text">
+            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.videoUrl" type="text" id="input" class="pasteLink">
+            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.imageUrl"id="input"  type="text">
             <input type="file" (change)="chooseThumb($event)" id="drop">
-            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="music.category" name="select" id="drop">
+            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.category" name="select" id="drop">
                 <option value="">Select Category</option>
                 <option *ngFor="let c of category">{{c}}</option>
             </select>
-            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="music.language" name="select" id="drop">
+            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.language" name="select" id="drop">
               <option value="">Select language</option>
               <option *ngFor="let l of language">{{l}}</option>
           </select>
@@ -46,15 +46,14 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let music of musicArray">
-        <td>{{music.id}}</td>
-        <td>{{music.category}}</td>
-        <td>{{music.language}}</td>
-        <td>{{music.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
-        <!-- <td>{{music.uploadDate}}</td> -->
-        <td><a mat-raised-button href="https://www.youtube.com/watch?v={{music.videoUrl}}" target="_blank">View</a></td>
-        <td><a mat-raised-button href="{{music.imageUrl}}" target="_blank">View</a></td>
-        <td><a class="delete" (click)="delete(music.id,'music')">X</a></td>
+      <tr *ngFor="let kid of kidsArray">
+        <td>{{kid?.id}}</td>
+        <td>{{kid?.category}}</td>
+        <td>{{kid?.language}}</td>
+        <td>{{kid?.uploadDate?.toDate() | date:'dd-MM-yyyy'}}</td>
+        <td><a mat-raised-button href="https://www.youtube.com/watch?v={{kid.videoUrl}}" target="_blank">View</a></td>
+        <td><a mat-raised-button href="{{kid.imageUrl}}" target="_blank">View</a></td>
+        <td><a class="delete" (click)="delete(kid.id,'kid')">X</a></td>
       </tr>
       <tbody>
     </table>

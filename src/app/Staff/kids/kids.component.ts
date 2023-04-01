@@ -1,42 +1,29 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { Youtube } from '../../models/youTube';
-import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
+import { Component, OnInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-export interface Vegetable {
-  name: string;
-}
+import { Kids } from 'src/app/models/kids';
+import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 
 @Component({
-  selector: 'app-staff-youtube',
-  templateUrl: './staff-youtube.component.html',
-  styleUrls: ['./staff-youtube.component.css']
+  selector: 'app-kids',
+  templateUrl: './kids.component.html',
+  styleUrls: ['./kids.component.css']
 })
-export class StaffYoutubeComponent implements OnInit {
-
-  youtubeArray: Youtube[] = [];
-  category: any[] = ["Trending Videos","Entertainment", "Education", "Comdey", "News", "Trailers", "Movies", "Cinema"];
-  language: any[] = ['English','Tamil','Kanada','Telugu','Hindi','Malayalam'];
-  // @ViewChild(MatSort) sort: MatSort = <MatSort>{};
-  // @ViewChild('paginator') paginator: MatPaginator;
-  // dataSource: MatTableDataSource<Youtube>
-  // ngAfterViewInit(){
-  //   this.dataSource = new MatTableDataSource(this.youtubeArray)
-  //   this.dataSource.paginator = this.paginator;
-  // }
-  youtube: Youtube = {
-    videoUrl: "",
-    imageUrl: "",
-    category: "",
-    language: "",
-    id: "",
-    uploadDate:Timestamp.now()
+export class KidsComponent implements OnInit {
+  kid: Kids = {
+    videoUrl:'',
+    imageUrl:'',
+    uploadDate:Timestamp.now(),
+    language:'',
+    category:'',
+    id:'',
   }
+  kidsArray: Kids[] = [];
+  language: any[] = ['English','Tamil','Kanada','Telugu','Hindi','Malayalam'];
+  category: any[] = ["Rymes", "Cartoons",];
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
 
@@ -46,38 +33,37 @@ export class StaffYoutubeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.youtube.uploadDate = Timestamp.now();
-    console.log(this.youtube.uploadDate);
-    const youTubeArray: Youtube[] = []
-    this.firestoreService.getYoutube().ref.get().then(res => {
+    this.kid.uploadDate = Timestamp.now();
+    console.log(this.kid.uploadDate);
+    const kidsArray: Kids[] = []
+    this.firestoreService.getKids().ref.get().then(res => {
       res.forEach(function (doc) {
-        youTubeArray.push(<Youtube>doc.data());
+        kidsArray.push(<Kids>doc.data());
       });
     });
-    this.youtubeArray = youTubeArray;
-    console.log(this.youtubeArray);
+    this.kidsArray = kidsArray;
+    console.log(this.kidsArray);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
   submit() {
     console.log('yub');
-    console.log(this.youtube);
     this.spinnerActive = true;
-    if(this.thumbImageFile == undefined && this.youtube.imageUrl == ''){
+    if(this.thumbImageFile == undefined && this.kid.imageUrl == ''){
       this.openSnackBar('Choose one option for upload image','retry');
       this.spinnerActive = false
     }
-    console.log(this.youtube.imageUrl);
+    console.log(this.kid.imageUrl);
     console.log(this.thumbImageFile);
-    this.youtube.id = Timestamp.now().seconds.toString();
-    // this.youtube.uploadDate = Date();
-    console.log(this.youtube.id);
-    if (this.youtube.imageUrl !== '') {
+    this.kid.id = Timestamp.now().seconds.toString();
+    // this.kid.uploadDate = Date();
+    console.log(this.kid.id);
+    if (this.kid.imageUrl !== '') {
       // download and push to storage and save link in database
-      this.firestoreService.saveYoutube(this.youtube).then(res => {
-        console.log("youtube directlink saved");
-        this.youtubeArray.push(this.youtube);
+      this.firestoreService.saveKids(this.kid).then(res => {
+        console.log("music directlink saved");
+        this.kidsArray.push(this.kid);
         this.openSnackBar("Link Saved Successfully", "Close");
         this.resetPage()
         this.spinnerActive = false;
@@ -85,12 +71,12 @@ export class StaffYoutubeComponent implements OnInit {
     }
     else if (this.thumbImageFile !== undefined) {
       // push to storage and save link in database
-      console.log('before', this.youtube);
+      console.log('before', this.kid);
       this.putStorageItem(this.thumbImageFile);
     }
   }
 
-   delete(id:string,type:string){
+  delete(id:string,type:string){
     // console.log(id,type);
      const dialogRef = this.dialog.open(DialogComponent,{
       data:{
@@ -99,16 +85,15 @@ export class StaffYoutubeComponent implements OnInit {
     });
     dialogRef.componentInstance.deleted.subscribe(val => {
 
-      for(let i = 0;i<this.youtubeArray.length;i++){
-        if(this.youtubeArray[i].id === id){
-          console.log('deleting',this.youtubeArray[i].id);
-          this.youtubeArray.splice(i, 1);
+      for(let i = 0;i<this.kidsArray.length;i++){
+        if(this.kidsArray[i].id === id){
+          console.log('deleting',this.kidsArray[i].id);
+          this.kidsArray.splice(i, 1);
           break;
         }
       }
     
     });
-    
   }
   putStorageItem(file: any) {
     const storage = getStorage();
@@ -126,12 +111,12 @@ export class StaffYoutubeComponent implements OnInit {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.spinnerActive = false;
-          this.youtube.imageUrl = downloadURL;
-          console.log('after:', this.youtube);
-          if (this.youtube.imageUrl !== "") {
-            this.firestoreService.saveYoutube(this.youtube).then(res => {
-              this.youtubeArray.push(this.youtube);
-              console.log("youtube link saved from storage");
+          this.kid.imageUrl = downloadURL;
+          console.log('after:', this.kid);
+          if (this.kid.imageUrl !== "") {
+            this.firestoreService.saveKids(this.kid).then(res => {
+              this.kidsArray.push(this.kid);
+              console.log("music link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();
@@ -156,7 +141,7 @@ export class StaffYoutubeComponent implements OnInit {
   }
 
   resetPage() {
-    this.youtube = {
+    this.kid = {
       videoUrl: "",
       imageUrl: "",
       category: "",

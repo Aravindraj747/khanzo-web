@@ -18,7 +18,7 @@ export class StaffInstagramComponent implements OnInit {
 
 
   instagram: Instagram = {
-    instaId:"",
+    id:"",
     videoUrl:"",
     imageUrl:'',
     uploadDate:Timestamp.now()
@@ -50,16 +50,26 @@ export class StaffInstagramComponent implements OnInit {
     this.thumbImageFile = event.target.files[0];
   }
   delete(id:string,type:string){
-    console.log(id,type);
-    return this.dialog.open(DialogComponent,{
+    // console.log(id,type);
+     const dialogRef = this.dialog.open(DialogComponent,{
       data:{
-        // withdrawal:withdrawal,value
         value:type,id
       }
-    })
+    });
+    dialogRef.componentInstance.deleted.subscribe(val => {
+
+      for(let i = 0;i<this.instaGramArray.length;i++){
+        if(this.instaGramArray[i].id === id){
+          console.log('deleting',this.instaGramArray[i].id);
+          this.instaGramArray.splice(i, 1);
+          break;
+        }
+      }
+    
+    });
   }
   submit() {
-    this.instagram.instaId = Timestamp.now().seconds.toString();
+    this.instagram.id = Timestamp.now().seconds.toString();
     console.log(this.instaLink);
     this.spinnerActive = true;
     if(this.instagram.videoUrl !== ''){
@@ -145,7 +155,7 @@ export class StaffInstagramComponent implements OnInit {
   }
   resetPage(){
     this.instagram = {
-      instaId:"",
+      id:"",
       imageUrl:'',
       videoUrl:"",
       uploadDate:Timestamp.now()
