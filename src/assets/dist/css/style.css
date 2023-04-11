@@ -1282,7 +1282,7 @@ label {
 .site-header-inner {
     position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center
 }
 

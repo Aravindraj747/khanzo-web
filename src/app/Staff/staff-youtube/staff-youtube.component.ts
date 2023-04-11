@@ -22,24 +22,12 @@ export interface Vegetable {
 export class StaffYoutubeComponent implements OnInit {
 
   youtubeArray: Youtube[] = [];
+  dataSource = new MatTableDataSource<Youtube>(this.youtubeArray);
+
   category: any[] = ["Trending Videos", "Entertainment", "Education", "Comedy", "News", "Trailers", "Movies", "Cinema"];
   language: any[] = ['English', 'Tamil', 'Kanada', 'Telugu', 'Hindi', 'Malayalam'];
-  // dataSource = new MatTableDataSource<Youtube>(this.youtubeArray);
-  // @ViewChild(MatPaginator) set matPaginator(paginator : MatPaginator){
-  //   this.dataSource.paginator = paginator;
-  // }
-  // @ViewChild(MatSort) sort! : MatSort;
-  // ngAfterViewInit(){
-  //   // this.dataSource.paginator = this.paginator;
-  //   this.dataSource.sort = this.sort;
-  // }
-  // @ViewChild(MatSort) sort: MatSort = <MatSort>{};
-  // @ViewChild('paginator') paginator: MatPaginator;
-  // dataSource: MatTableDataSource<Youtube>
-  // ngAfterViewInit(){
-  //   this.dataSource = new MatTableDataSource(this.youtubeArray)
-  //   this.dataSource.paginator = this.paginator;
-  // }
+  displayedColumns: string[] = ['Id', 'Category', 'Language', 'UploadDate', 'Video', 'Image', 'Delete'];
+
   youtube: Youtube = {
     videoUrl: "",
     imageUrl: "",
@@ -51,6 +39,21 @@ export class StaffYoutubeComponent implements OnInit {
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
   fileName: string = 'youtube.xlsx';
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<Youtube>(this.youtubeArray);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getYoutube().snapshotChanges().subscribe(res => {
+      this.youtubeArray = [];
+      res.forEach(doc => {
+        this.youtubeArray.push(<Youtube>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.youtubeArray;
+    });
+  }
+
   constructor(private firestoreService: FirestoreServiceService,
     private _snackBar: MatSnackBar,
     private dialog: MatDialog) {
@@ -58,23 +61,6 @@ export class StaffYoutubeComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.youtube.uploadDate);
-    const youTubeArray: Youtube[] = []
-    this.firestoreService.getYoutube().snapshotChanges().subscribe(res => {
-      res.forEach(doc => {
-        youTubeArray.push(<Youtube>doc.payload.doc.data());
-      })
-    });
-    // this.firestoreService.getYoutube().ref.get().then(res => {
-    //   res.forEach(function (doc) {
-    //     youTubeArray.push(<Youtube>doc.data());
-    //   });
-    // });
-    this.youtubeArray = youTubeArray;
-    // this.dataSource = new MatTableDataSource<Youtube>(this.youtubeArray);
-    // this.dataSource.sort = this.sort;
-    // this.dataSource.paginator = this.paginator;
-    // console.log(this.dataSource)
-    // console.log(this.youtubeArray);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
@@ -120,8 +106,8 @@ export class StaffYoutubeComponent implements OnInit {
 
       for (let i = 0; i < this.youtubeArray.length; i++) {
         if (this.youtubeArray[i].id === id) {
-          console.log('deleting', this.youtubeArray[i].id);
           this.youtubeArray.splice(i, 1);
+          this.dataSource.data = this.youtubeArray;
           break;
         }
       }
