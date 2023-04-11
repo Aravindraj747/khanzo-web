@@ -13,7 +13,10 @@ import { MatSort } from '@angular/material/sort';
 export interface Vegetable {
   name: string;
 }
-
+interface Language {
+  value: string;
+  viewValue: string;
+}
 @Component({
   selector: 'app-staff-youtube',
   templateUrl: './staff-youtube.component.html',
@@ -24,8 +27,26 @@ export class StaffYoutubeComponent implements OnInit {
   youtubeArray: Youtube[] = [];
   dataSource = new MatTableDataSource<Youtube>(this.youtubeArray);
 
+  foods: Language[] = [
+    {value: 'English', viewValue: 'English'},
+    {value: 'Tamil', viewValue: 'Tamil'},
+    {value: 'Kannada', viewValue: 'Kannada'},
+    {value: 'Telugu', viewValue: 'Telugu'},
+    {value: 'Hindi', viewValue: 'Hindi'},
+    {value: 'Malayalam', viewValue: 'Malayalam'},
+  ];
+  foodss: Language[] = [
+    {value: 'Trending Videos', viewValue: 'Trending Videos'},
+    {value: 'Entertainment', viewValue: 'Entertainment'},
+    {value: 'Education', viewValue: 'Education'},
+    {value: 'Comedy', viewValue: 'Comedy'},
+    {value: 'News', viewValue: 'News'},
+    {value: 'Trailers', viewValue: 'Trailers'},
+    {value: 'Movies', viewValue: 'Movies'},
+    {value: 'Cinema', viewValue: 'Cinema'},
+  ];
   category: any[] = ["Trending Videos", "Entertainment", "Education", "Comedy", "News", "Trailers", "Movies", "Cinema"];
-  language: any[] = ['English', 'Tamil', 'Kanada', 'Telugu', 'Hindi', 'Malayalam'];
+  language: any[] = ['English', 'Tamil', 'Kannada', 'Telugu', 'Hindi', 'Malayalam'];
   displayedColumns: string[] = ['Id', 'Category', 'Language', 'UploadDate', 'Video', 'Image', 'Delete'];
 
   youtube: Youtube = {
@@ -39,7 +60,7 @@ export class StaffYoutubeComponent implements OnInit {
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
   fileName: string = 'youtube.xlsx';
-
+  // selectedValue: string = '';
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
@@ -114,16 +135,21 @@ export class StaffYoutubeComponent implements OnInit {
     });
   }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.youtubeArray;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'youtube.xlsx');
   }
   putStorageItem(file: any) {
     const storage = getStorage();

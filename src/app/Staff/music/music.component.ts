@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Music } from 'src/app/models/music';
+import { Report } from 'src/app/models/report';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
 @Component({
@@ -28,27 +31,41 @@ export class MusicComponent implements OnInit {
   category: any[] = ["Latest songs", "Melody songs", "Love songs", "Sad songs", "Albums", "Remix", "Old songs"];
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
+  displayedColumns: string[] = ['Id', 'UploadDate','Category','Language','Image', 'Video','Delete'];
+  dataSource = new MatTableDataSource<Music>(this.musicArray);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<Music>(this.musicArray);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getMusic().snapshotChanges().subscribe(res => {
+      this.musicArray = [];
+      res.forEach(doc => {
+        this.musicArray.push(<Music>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.musicArray;
+    });
+  }
   constructor(private firestoreService: FirestoreServiceService,
     private _snackBar: MatSnackBar,
     private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
-    this.music.uploadDate = Timestamp.now();
-    console.log(this.music.uploadDate);
-    const youTubeArray: Music[] = [];
-    this.firestoreService.getMusic().snapshotChanges().subscribe(res => {
-      res.forEach(doc => {
-        youTubeArray.push(<Music>doc.payload.doc.data());
-      })
-    });
+    // this.music.uploadDate = Timestamp.now();
+    // console.log(this.music.uploadDate);
+    // const youTubeArray: Music[] = [];
+    // this.firestoreService.getMusic().snapshotChanges().subscribe(res => {
+    //   res.forEach(doc => {
+    //     youTubeArray.push(<Music>doc.payload.doc.data());
+    //   })
+    // });
     // this.firestoreService.getMusic().ref.get().then(res => {
     //   res.forEach(function (doc) {
     //     youTubeArray.push(<Music>doc.data());
     //   });
     // });
-    this.musicArray = youTubeArray;
+    // this.musicArray = youTubeArray;
     console.log(this.musicArray);
   }
   chooseThumb(event: any) {
@@ -136,16 +153,21 @@ export class MusicComponent implements OnInit {
       });
   }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.musicArray;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'music.xlsx');
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,6 +9,9 @@ import { OfflineShop } from 'src/app/models/offline';
 import * as XLSX from 'xlsx';
 import data from '../../../assets/district.json';
 import { StaffServiceService } from 'src/app/Services/staff-service.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Report } from 'src/app/models/report';
 
 @Component({
   selector: 'app-offline-shop',
@@ -38,6 +41,21 @@ export class OfflineShopComponent implements OnInit {
   offlineShops: OfflineShop[] = [];
   spinnerActive: boolean = false;
   imageFile: any = undefined;
+  displayedColumns: string[] = ['Id','Name','Address', 'UploadDate','StartDate','ExpiryDate','Contact','Image','Delete'];
+  dataSource = new MatTableDataSource<OfflineShop>(this.offlineShops);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<OfflineShop>(this.offlineShops);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getOfflineShop().snapshotChanges().subscribe(res => {
+      this.offlineShops = [];
+      res.forEach(doc => {
+        this.offlineShops.push(<OfflineShop>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.offlineShops;
+    });
+  }
   constructor(private _snackBar: MatSnackBar,
     private firestoreService: FirestoreServiceService,
     private dialog: MatDialog,
@@ -50,19 +68,19 @@ export class OfflineShopComponent implements OnInit {
     this.service.getCountries().subscribe(
       data => this.countries = data
     );
-    this.offline.uploadDate = Timestamp.now();
-    const offlineshop: OfflineShop[] = [];
-    this.firestoreService.getOfflineShop().snapshotChanges().subscribe(res => {
-      res.forEach(doc => {
-        offlineshop.push(<OfflineShop>doc.payload.doc.data());
-      })
-    });
+    // this.offline.uploadDate = Timestamp.now();
+    // const offlineshop: OfflineShop[] = [];
+    // this.firestoreService.getOfflineShop().snapshotChanges().subscribe(res => {
+    //   res.forEach(doc => {
+    //     offlineshop.push(<OfflineShop>doc.payload.doc.data());
+    //   })
+    // });
     // this.firestoreService.getOfflineShop().ref.get().then(res => {
     //   res.forEach(function (doc) {
     //     offlineshop.push(<OfflineShop>doc.data());
     //   });
     // });
-    this.offlineShops = offlineshop;
+    // this.offlineShops = offlineshop;
     console.log(this.offlineShops);
   }
   chooseImage(event: any) {
@@ -79,16 +97,21 @@ export class OfflineShopComponent implements OnInit {
     }
   }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.offlineShops;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'offlineShop.xlsx');
   }
   submit() {
     this.offline.availability = 'OFFLINE';

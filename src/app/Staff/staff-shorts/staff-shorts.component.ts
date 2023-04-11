@@ -1,9 +1,11 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Firestore, Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Shorts } from 'src/app/models/shorts';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
@@ -27,24 +29,42 @@ export class StaffShortsComponent implements OnInit {
   fileName: string = 'shorts.xlsx';
   thumbImageFile: any = undefined;
   shortsArrays: Shorts[] = [];
+
+  dataSource = new MatTableDataSource<Shorts>(this.shortsArrays);
+  displayedColumns: string[] = ['Id', 'uploadDate', 'Video', 'Image', 'Delete'];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<Shorts>(this.shortsArrays);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getShorts().snapshotChanges().subscribe(res => {
+      this.shortsArrays = [];
+      res.forEach(doc => {
+        this.shortsArrays.push(<Shorts>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.shortsArrays;
+    });
+  }
+
   constructor(private _snackBar: MatSnackBar,
     private firestoreService: FirestoreServiceService,
     private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.shorts.uploadDate = Timestamp.now();
-    const shortsArray: Shorts[] = [];
-    this.firestoreService.getShorts().snapshotChanges().subscribe(res => {
-      res.forEach(doc => {
-        shortsArray.push(<Shorts>doc.payload.doc.data());
-      })
-    });
+    // this.shorts.uploadDate = Timestamp.now();
+    // const shortsArray: Shorts[] = [];
+    // this.firestoreService.getShorts().snapshotChanges().subscribe(res => {
+    //   res.forEach(doc => {
+    //     shortsArray.push(<Shorts>doc.payload.doc.data());
+    //   })
+    // });
     // this.firestoreService.getShorts().ref.get().then(res => {
     //   res.forEach(function (doc) {
     //     shortsArray.push(<Shorts>doc.data());
     //   });
     // });
-    this.shortsArrays = shortsArray;
+    // this.shortsArrays = shortsArray;
     console.log(this.shortsArrays);
   }
   chooseThumb(event: any) {
@@ -131,16 +151,21 @@ export class StaffShortsComponent implements OnInit {
     });
   }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.shortsArrays;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'shorts.xlsx');
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DailyTask } from 'src/app/models/dailyTask';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
@@ -7,6 +7,9 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import * as XLSX from 'xlsx';
+import { MatTableDataSource } from '@angular/material/table';
+import { Instagram } from 'src/app/models/instagram';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-staff-daily-task',
@@ -33,23 +36,37 @@ export class StaffDailyTaskComponent implements OnInit {
   dailyTasks: DailyTask[] = [];
   imageFile: any = undefined;
   spinnerActive: boolean = false;
+  displayedColumns: string[] = ['Id','Category', 'UploadDate','StartDate','ExpiryDate','CouponId', 'Video', 'Image', 'Delete'];
+  dataSource = new MatTableDataSource<DailyTask>(this.dailyTasks);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<DailyTask>(this.dailyTasks);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getDailyTask().snapshotChanges().subscribe(res => {
+      this.dailyTasks = [];
+      res.forEach(doc => {
+        this.dailyTasks.push(<DailyTask>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.dailyTasks;
+    });
+  }
   constructor(private firestoreService: FirestoreServiceService,
     private _snackBar: MatSnackBar,
     private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    const dailyTaskArray: DailyTask[] = [];
-    this.firestoreService.getDailyTask().snapshotChanges().subscribe(res => {
-      res.forEach(doc => {
-        dailyTaskArray.push(<DailyTask>doc.payload.doc.data());
-      })
-    });
+    // const dailyTaskArray: DailyTask[] = [];
+    // this.firestoreService.getDailyTask().snapshotChanges().subscribe(res => {
+    //   res.forEach(doc => {
+    //     dailyTaskArray.push(<DailyTask>doc.payload.doc.data());
+    //   })
+    // });
     // this.firestoreService.getDailyTask().ref.get().then(res => {
     //   res.forEach(function (doc) {
     //     dailyTaskArray.push(<DailyTask>doc.data());
     //   });
     // });
-    this.dailyTasks = dailyTaskArray;
+    // this.dailyTasks = dailyTaskArray;
     console.log(this.dailyTasks);
   }
 
@@ -145,16 +162,21 @@ export class StaffDailyTaskComponent implements OnInit {
     });
   }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.dailyTasks;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'dailyTask.xlsx');
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { User } from 'src/app/models/user';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
@@ -12,6 +14,22 @@ export class UserComponent implements OnInit {
 
   users: User[] = [];
   fileName = 'UserExcel.xlsx';
+
+  displayedColumns: string[] = ['Email', 'PhoneNumber', 'JoinedDate','Address','Level'];
+  dataSource = new MatTableDataSource<User>(this.users);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<User>(this.users);
+    this.dataSource.paginator = this.paginator;
+    this.firestroreService.getUser().snapshotChanges().subscribe(res => {
+      this.users = [];
+      res.forEach(doc => {
+        this.users.push(<User>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.users;
+    });
+  }
   constructor(private firestroreService: FirestoreServiceService) { }
 
   ngOnInit(): void {

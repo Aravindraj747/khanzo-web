@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { Withdrawal } from 'src/app/models/withdrawal';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import * as XLSX from 'xlsx';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-admin-home',
@@ -15,6 +17,22 @@ export class AdminHomeComponent implements OnInit {
 
   withdrawals: Withdrawal[] =[];
   fileName = 'withdrawal.xlsx';
+
+  // displayedColumns: string[] = ['Id', 'Name', 'BuyLink', 'UploadDate','WebsiteName','Image','Delete'];
+  // dataSource = new MatTableDataSource<Withdrawal>(this.withdrawals);
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  // ngAfterViewInit() {
+  //   this.dataSource = new MatTableDataSource<Withdrawal>(this.withdrawals);
+  //   this.dataSource.paginator = this.paginator;
+  //   this.firestoreService.getAllWithdrawal().snapshotChanges().subscribe(res => {
+  //     this.withdrawals = [];
+  //     res.forEach(doc => {
+  //       this.withdrawals.push(<Withdrawal>doc.payload.doc.data());
+  //     });
+  //     this.dataSource.data = this.withdrawals;
+  //   });
+  // }
   constructor(private firestoreService: FirestoreServiceService,
               private dialog: MatDialog) { }
 

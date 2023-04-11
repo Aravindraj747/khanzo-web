@@ -95,10 +95,14 @@ button {
 
 /*  */
 table {
-    margin-top: 10px;
-    margin-left: 350px;
-    width: 70%;
-}
+    width: 100%;
+  }
+  
+  .youtube-table {
+    margin-left: 20%;
+    margin-right: 5%;
+    margin-top: 20px;
+  }
 
 h2 {
     text-align: center;

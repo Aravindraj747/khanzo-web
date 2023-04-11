@@ -26,7 +26,7 @@
 <div class="btn">
   <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
 </div>
-<div class="table-wrapper">
+<!-- <div class="table-wrapper">
   <table class="fl-table" id="excel-table">
     <thead>
       <tr>
@@ -39,10 +39,40 @@
       <tr *ngFor="let coupon of couponArray">
         <td>{{coupon.couponId}}</td>
         <td>{{coupon.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
-        <!-- <td>{{coupon.uploadDate}}</td> -->
         <td><a mat-raised-button href="{{coupon.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(coupon.couponId,'coupon')">X</a></td>
       </tr>
     <tbody>
   </table>
+</div> -->
+<div class="mat-elevation-z8 youtube-table">
+  <table id="excel-table" mat-table [dataSource]="dataSource">
+    <!-- Position Column -->
+    <ng-container matColumnDef="Id">
+      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <td mat-cell *matCellDef="let element"> {{element.couponId}} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="uploadDate">
+      <th mat-header-cell *matHeaderCellDef> uploadDate </th>
+      <td mat-cell *matCellDef="let element">{{element?.uploadDate?.toDate() | date:'dd-MM-yyyy'}}</td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="Image">
+      <th mat-header-cell *matHeaderCellDef> Image </th>
+      <td mat-cell *matCellDef="let element">
+        <a mat-stroked-button color="primary" href="{{element.imageUrl}}" target="_blank">View</a>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
 </div>

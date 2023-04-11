@@ -1,9 +1,11 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Coupons } from 'src/app/models/coupons';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
@@ -24,24 +26,39 @@ export class CouponsComponent implements OnInit {
   }
   fileName:string = 'coupons.xlsx';
   couponArray: Coupons[] =[];
+  displayedColumns: string[] = ['Id','uploadDate', 'Image'];
+  dataSource = new MatTableDataSource<Coupons>(this.couponArray);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<Coupons>(this.couponArray);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getCoupons().snapshotChanges().subscribe(res => {
+      this.couponArray = [];
+      res.forEach(doc => {
+        this.couponArray.push(<Coupons>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.couponArray;
+    });
+  }
   constructor(private _snackBar: MatSnackBar,
               private firestoreService: FirestoreServiceService,
               private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.coupons.uploadDate = Timestamp.now();
-    const couponArrays: Coupons[] =[];
-    this.firestoreService.getCoupons().snapshotChanges().subscribe(res => {
-      res.forEach(doc => {
-        couponArrays.push(<Coupons>doc.payload.doc.data());
-      })
-    });
+    // this.coupons.uploadDate = Timestamp.now();
+    // const couponArrays: Coupons[] =[];
+    // this.firestoreService.getCoupons().snapshotChanges().subscribe(res => {
+    //   res.forEach(doc => {
+    //     couponArrays.push(<Coupons>doc.payload.doc.data());
+    //   })
+    // });
     // this.firestoreService.getCoupons().ref.get().then(res=>{
     //   res.forEach(function (doc){
     //     couponArrays.push(<Coupons>doc.data());
     //   });
     // });
-    this.couponArray = couponArrays;
+    // this.couponArray = couponArrays;
     console.log(this.couponArray);
   }
 
@@ -106,17 +123,23 @@ export class CouponsComponent implements OnInit {
       });
   }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.couponArray;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'coupons.xlsx');
   }
+
   delete(id:string,type:string){
     // console.log(id,type);
      const dialogRef = this.dialog.open(DialogComponent,{

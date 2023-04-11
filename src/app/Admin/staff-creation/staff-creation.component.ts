@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { Timestamp } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -7,6 +7,8 @@ import { AuthenticationServiceService } from 'src/app/Services/authentication-se
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-staff-creation',
@@ -25,7 +27,21 @@ export class StaffCreationComponent implements OnInit {
   }
 
   staffArray: Staff[] = [];
+  displayedColumns: string[] = ['Name','Email', 'Password', 'CreationDate','Delete'];
+  dataSource = new MatTableDataSource<Staff>(this.staffArray);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<Staff>(this.staffArray);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getStaff().snapshotChanges().subscribe(res => {
+      this.staffArray = [];
+      res.forEach(doc => {
+        this.staffArray.push(<Staff>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.staffArray;
+    });
+  }
   constructor(private firestoreService: FirestoreServiceService,
     private authService: AuthenticationServiceService,
     private dialog: MatDialog,

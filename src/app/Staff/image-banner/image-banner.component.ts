@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Banner } from 'src/app/models/banner';
+import { Report } from 'src/app/models/report';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
 @Component({
@@ -26,7 +29,21 @@ export class ImageBannerComponent implements OnInit {
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
   fileName: string = 'imagebanner.xlsx';
+  displayedColumns: string[] = ['Id', 'Address', 'Email', 'uploadDate','PhoneNumber','Image','Delete'];
+  dataSource = new MatTableDataSource<Banner>(this.bannerArray);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<Banner>(this.bannerArray);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getBanner().snapshotChanges().subscribe(res => {
+      this.bannerArray = [];
+      res.forEach(doc => {
+        this.bannerArray.push(<Banner>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.bannerArray;
+    });
+  }
 
   constructor(private firestoreService: FirestoreServiceService,
     private _snackBar: MatSnackBar,
@@ -34,19 +51,19 @@ export class ImageBannerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.banner.uploadDate = Timestamp.now();
-    const youTubeArray: Banner[] = [];
-    this.firestoreService.getBanner().snapshotChanges().subscribe(res => {
-      res.forEach(doc => {
-        youTubeArray.push(<Banner>doc.payload.doc.data());
-      })
-    });
+    // this.banner.uploadDate = Timestamp.now();
+    // const youTubeArray: Banner[] = [];
+    // this.firestoreService.getBanner().snapshotChanges().subscribe(res => {
+    //   res.forEach(doc => {
+    //     youTubeArray.push(<Banner>doc.payload.doc.data());
+    //   })
+    // });
     // this.firestoreService.getBanner().ref.get().then(res => {
     //   res.forEach(function (doc) {
     //     youTubeArray.push(<Banner>doc.data());
     //   });
     // });
-    this.bannerArray = youTubeArray;
+    // this.bannerArray = youTubeArray;
     console.log(this.bannerArray);
   }
   chooseThumb(event: any) {
@@ -81,16 +98,21 @@ export class ImageBannerComponent implements OnInit {
     }
   }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.bannerArray;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'imagebanner.xlsx');
   }
   delete(id: string, type: string) {
     // console.log(id,type);

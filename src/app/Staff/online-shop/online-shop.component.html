@@ -38,7 +38,7 @@
 <div class="btn">
   <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
 </div>
-<div class="table-wrapper">
+<!-- <div class="table-wrapper">
   <table class="fl-table" id="excel-table">
     <thead>
       <tr>
@@ -55,7 +55,6 @@
       <tr *ngFor="let online of onlineShops">
         <td>{{online?.id}}</td>
         <td>{{online?.name}}</td>
-        <!-- <td>{{online?.buyLink}}</td> -->
         <td><a mat-raised-button href="{{online?.buyLink}}" target="_blank">View</a></td>
         <td>{{online?.uploadDate?.toDate() | date:'dd-MM-yyyy'}}</td>
         <td>{{online?.websiteName}}</td>
@@ -64,6 +63,54 @@
       </tr>
     <tbody>
   </table>
-  <!-- <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" aria-label="Select page">
-    </mat-paginator> -->
+</div> -->
+<div class="mat-elevation-z8 youtube-table">
+  <table id="excel-table" mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="Id">
+      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+    <ng-container matColumnDef="WebsiteName">
+      <th mat-header-cell *matHeaderCellDef> WebsiteName </th>
+      <td mat-cell *matCellDef="let element"> {{element.websiteName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+    <ng-container matColumnDef="BuyLink">
+      <th mat-header-cell *matHeaderCellDef> BuyLink </th>
+      <td mat-cell *matCellDef="let element">
+        <a mat-stroked-button color="primary" href="{{element.buyLink}}" target="_blank">View</a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="UploadDate">
+      <th mat-header-cell *matHeaderCellDef> UploadDate </th>
+      <td mat-cell *matCellDef="let element">{{element?.uploadDate?.toDate() | date:'dd-MM-yyyy'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Image">
+      <th mat-header-cell *matHeaderCellDef> Image </th>
+      <td mat-cell *matCellDef="let element">
+        <a mat-stroked-button color="primary" href="{{element.imageUrl}}" target="_blank">View</a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Delete">
+      <th mat-header-cell *matHeaderCellDef> Delete </th>
+      <td mat-cell *matCellDef="let element">
+        <a mat-stroked-button color="warn" (click)="delete(element.id, 'youtube')">Delete</a>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
 </div>

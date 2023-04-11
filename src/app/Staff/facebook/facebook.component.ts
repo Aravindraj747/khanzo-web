@@ -1,11 +1,14 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Facebook } from 'src/app/models/facebook';
+import { Report } from 'src/app/models/report';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
 @Component({
@@ -25,40 +28,60 @@ export class FacebookComponent implements OnInit {
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
   faceBookArray: Facebook[] = [];
+  displayedColumns: string[] = ['Id', 'uploadDate','Video','Delete'];
+  dataSource = new MatTableDataSource<Facebook>(this.faceBookArray);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<Facebook>(this.faceBookArray);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getFacebook().snapshotChanges().subscribe(res => {
+      this.faceBookArray = [];
+      res.forEach(doc => {
+        this.faceBookArray.push(<Facebook>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.faceBookArray;
+    });
+  }
   constructor(private firestoreService: FirestoreServiceService,
     private _snackBar: MatSnackBar,
     private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.facebook.uploadDate = Timestamp.now();
-    const facebookArray: Facebook[] = [];
-    this.firestoreService.getFacebook().snapshotChanges().subscribe(res => {
-      res.forEach(doc => {
-        facebookArray.push(<Facebook>doc.payload.doc.data());
-      })
-    });
+    // this.facebook.uploadDate = Timestamp.now();
+    // const facebookArray: Facebook[] = [];
+    // this.firestoreService.getFacebook().snapshotChanges().subscribe(res => {
+    //   res.forEach(doc => {
+    //     facebookArray.push(<Facebook>doc.payload.doc.data());
+    //   })
+    // });
     // this.firestoreService.getFacebook().ref.get().then(res => {
     //   res.forEach(function (doc) {
     //     facebookArray.push(<Facebook>doc.data());
     //   });
     // });
-    this.faceBookArray = facebookArray;
+    // this.faceBookArray = facebookArray;
     console.log(this.faceBookArray);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.faceBookArray;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'facebook.xlsx');
   }
   submit() {
     this.facebook.uploadDate = Timestamp.now();

@@ -21,6 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatSelectModule} from '@angular/material/select';
 
 // FireBase
 import { AngularFireModule } from '@angular/fire/compat';
@@ -94,6 +95,7 @@ import { LandingComponent } from './Staff/landing/landing.component';
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     MatDialogModule,
     MatSnackBarModule,

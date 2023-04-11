@@ -32,8 +32,8 @@
 }
 
 .value form {
-    display: flex;
-    justify-content: space-evenly;
+    display:flex;
+    justify-content:space-between;
 }
 
 .new {

@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import { OnlineShop } from 'src/app/models/online';
@@ -30,25 +32,41 @@ export class OnlineShopComponent implements OnInit {
   onlineShops: OnlineShop[] = [];
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
+
+  displayedColumns: string[] = ['Id', 'Name', 'UploadDate','WebsiteName', 'BuyLink','Image','Delete'];
+  dataSource = new MatTableDataSource<OnlineShop>(this.onlineShops);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<OnlineShop>(this.onlineShops);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getOnlineshops().snapshotChanges().subscribe(res => {
+      this.onlineShops = [];
+      res.forEach(doc => {
+        this.onlineShops.push(<OnlineShop>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.onlineShops;
+    });
+  }
   constructor(private firestoreService: FirestoreServiceService,
     private _snackBar: MatSnackBar,
     private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.onlineShop.uploadDate = Timestamp.now();
-    console.log(this.onlineShop.uploadDate);
-    const onlineshops: OnlineShop[] = [];
-    this.firestoreService.getOnlineshops().snapshotChanges().subscribe(res => {
-      res.forEach(doc => {
-        onlineshops.push(<OnlineShop>doc.payload.doc.data());
-      })
-    });
+    // this.onlineShop.uploadDate = Timestamp.now();
+    // console.log(this.onlineShop.uploadDate);
+    // const onlineshops: OnlineShop[] = [];
+    // this.firestoreService.getOnlineshops().snapshotChanges().subscribe(res => {
+    //   res.forEach(doc => {
+    //     onlineshops.push(<OnlineShop>doc.payload.doc.data());
+    //   })
+    // });
     // this.firestoreService.getOnlineshops().ref.get().then(res => {
     //   res.forEach(function (doc) {
     //     onlineshops.push(<OnlineShop>doc.data());
     //   });
     // });
-    this.onlineShops = onlineshops;
+    // this.onlineShops = onlineshops;
     console.log(this.onlineShops);
   }
   chooseThumb(event: any) {
@@ -143,16 +161,21 @@ export class OnlineShopComponent implements OnInit {
       });
   }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.onlineShops;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'onlineShops.xlsx');
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {

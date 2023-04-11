@@ -1,10 +1,12 @@
 import { formatDate } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Instagram } from 'src/app/models/instagram';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
@@ -30,25 +32,39 @@ export class StaffInstagramComponent implements OnInit {
   fileName:string = 'instagram.xlsx';
   instaGramArray: Instagram[] = [];
   spinnerActive:boolean = false;
+  displayedColumns: string[] = ['Id', 'UploadDate', 'Video', 'Image', 'Delete'];
+  dataSource = new MatTableDataSource<Instagram>(this.instaGramArray);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource<Instagram>(this.instaGramArray);
+    this.dataSource.paginator = this.paginator;
+    this.firestoreService.getInstagramVideo().snapshotChanges().subscribe(res => {
+      this.instaGramArray = [];
+      res.forEach(doc => {
+        this.instaGramArray.push(<Instagram>doc.payload.doc.data());
+      });
+      this.dataSource.data = this.instaGramArray;
+    });
+  }
   constructor(private _snackBar: MatSnackBar,
               private firestoreService: FirestoreServiceService,
               private http: HttpClient,
               private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.instagram.uploadDate = Timestamp.now();
-    const instagramArray: Instagram[] = [];
-    this.firestoreService.getInstagramVideo().snapshotChanges().subscribe(res => {
-      res.forEach(doc => {
-        instagramArray.push(<Instagram>doc.payload.doc.data());
-      })
-    });
+    // this.instagram.uploadDate = Timestamp.now();
+    // const instagramArray: Instagram[] = [];
+    // this.firestoreService.getInstagramVideo().snapshotChanges().subscribe(res => {
+    //   res.forEach(doc => {
+    //     instagramArray.push(<Instagram>doc.payload.doc.data());
+    //   })
+    // });
     // this.firestoreService.getInstagramVideo().ref.get().then(res => {
     //   res.forEach(function (doc) {
     //     instagramArray.push(<Instagram>doc.data());
     //   });
     // });
-    this.instaGramArray = instagramArray;
+    // this.instaGramArray = instagramArray;
     console.log(this.instaGramArray);
   }
 
@@ -116,16 +132,21 @@ export class StaffInstagramComponent implements OnInit {
     // }
   }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.instaGramArray;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'instagram.xlsx');
   }
   putStorageItem(file: any) {
     const storage = getStorage();
