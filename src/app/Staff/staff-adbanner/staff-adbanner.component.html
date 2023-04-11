@@ -1,61 +1,66 @@
 <!-- <app-staff-side-nav></app-staff-side-nav> -->
 <app-side-nav></app-side-nav>
 <div class="container">
-    <div class="new">
-        <h1>Add Banner</h1>
-    </div>
-    <br>
-    <br>
-    <div class="topic">
-        <p class="video">Select Video</p>
-        <p class="image">Select Image</p>
-        <p class="state">Select State</p>
-        <p class="district">Select District</p>
-    </div>
-    <div class="value">
-        <form action="">
-            <input type="file" (change)="chooseVideo($event)">
-            <input type="file" (change)="chooseImage($event)">
-            <select [ngModelOptions]="{standalone: true}" (change)="getdistrict(adBanner.state)" [(ngModel)]="adBanner.state" name="state" id="drop">
-              <option value="">Select</option>
-              <option *ngFor="let state of states">{{state}}</option>
-            </select>
-            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="adBanner.district" name="state" id="drop">
-              <option value="">Select</option>
-              <option *ngFor="let dist of districts">{{dist}}</option>
-            </select>
-            <!-- <select name="" id="">
+  <div class="new">
+    <h1>Add Banner</h1>
+  </div>
+  <br>
+  <br>
+  <div class="topic">
+    <p class="video">Select Video</p>
+    <p class="image">Select Image</p>
+    <p class="state">Select State</p>
+    <p class="district">Select District</p>
+  </div>
+  <div class="value">
+    <form action="">
+      <input type="file" (change)="chooseVideo($event)">
+      <input type="file" (change)="chooseImage($event)">
+      <select [ngModelOptions]="{standalone: true}" (change)="getdistrict(adBanner.state)" [(ngModel)]="adBanner.state"
+        name="state" id="drop">
+        <option value="">Select</option>
+        <option *ngFor="let state of states">{{state}}</option>
+      </select>
+      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="adBanner.district" name="state" id="drop">
+        <option value="">Select</option>
+        <option *ngFor="let dist of districts">{{dist}}</option>
+      </select>
+      <!-- <select name="" id="">
               <ng-container *ngFor="let state of states">
                   <option>state</option>
               </ng-container>
             </select> -->
-            <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
-            <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
-        </form>
-    </div>
-    <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+      <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+      <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
+    </form>
+  </div>
+  <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
 </div>
-
+<div class="btn">
+  <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
+</div>
 <div class="table-wrapper">
-    <table class="fl-table">
-      <thead>
+  <table class="fl-table" id="excel-table">
+    <thead>
       <tr>
         <th>Id</th>
         <th>UploadDate</th>
         <th>Video</th>
         <th>Image</th>
-        <!-- <th>State</th>
-        <th>District</th> -->
+        <th>Views</th>
+        <th>Delete</th>
+        <!-- <th>District</th> -->
       </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
       <tr *ngFor="let adbanner of adbannerArray">
         <td>{{adbanner?.id}}</td>
         <td>{{adbanner.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a mat-raised-button href="{{adbanner?.videoUrl}}" target="_blank">View</a></td>
         <td><a mat-raised-button href="{{adbanner?.imageUrl}}" target="_blank">View</a></td>
+        <td>{{adbanner.views}}</td>
         <td><a class="delete" (click)="delete(adbanner.id,'adbanner')">X</a></td>
       </tr>
-      <tbody>
-    </table>
-  </div>
+    <tbody>
+  </table>
+</div>

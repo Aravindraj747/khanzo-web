@@ -8,6 +8,7 @@ import { AdBanner } from 'src/app/models/adBanner';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import { StaffServiceService } from 'src/app/Services/staff-service.service';
 import data from '../../../assets/district.json';
+import * as XLSX from 'xlsx';
 
 enum type {
   imageURL = 'image',
@@ -24,41 +25,48 @@ export class StaffAdbannerComponent implements OnInit {
     imageUrl: '',
     videoUrl: '',
     id: '',
-    uploadDate:Timestamp.now(),
-    state:'',
-    district:''
+    uploadDate: Timestamp.now(),
+    state: '',
+    district: '',
+    views: 0
   }
-  states:any = []
-  districts:any = []
+  states: any = []
+  districts: any = []
   countries = {};
   length = 0;
-  state:string = '';
-  adbannerArray: AdBanner[] =[];
-  spinnerActive:boolean = false;
+  state: string = '';
+  fileName: string = 'adbanner.xlsx';
+  adbannerArray: AdBanner[] = [];
+  spinnerActive: boolean = false;
   ImageFile: any = undefined;
   VideoFile: any = undefined;
   files: [any, type][] = []
   constructor(private _snackBar: MatSnackBar,
-              private firestoreService: FirestoreServiceService,
-              private dialog: MatDialog,
-              private service: StaffServiceService) { 
-              }
+    private firestoreService: FirestoreServiceService,
+    private dialog: MatDialog,
+    private service: StaffServiceService) {
+  }
 
   ngOnInit(): void {
-    for(var state of data){
+    for (var state of data) {
       this.states.push(state.name);
     }
     this.service.getCountries().subscribe(
-      data =>this.countries = data
+      data => this.countries = data
     );
     console.log(this.countries);
     this.adBanner.uploadDate = Timestamp.now();
-    const adBannerArray:AdBanner[] = [];
-    this.firestoreService.getadBanner().ref.get().then(res => {
-      res.forEach(function (doc) {
-        adBannerArray.push(<AdBanner>doc.data());
-      });
+    const adBannerArray: AdBanner[] = [];
+    this.firestoreService.getadBanner().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        adBannerArray.push(<AdBanner>doc.payload.doc.data());
+      })
     });
+    // this.firestoreService.getadBanner().ref.get().then(res => {
+    //   res.forEach(function (doc) {
+    //     adBannerArray.push(<AdBanner>doc.data());
+    //   });
+    // });
     this.adbannerArray = adBannerArray;
   }
   chooseImage(event: any) {
@@ -67,11 +75,11 @@ export class StaffAdbannerComponent implements OnInit {
   chooseVideo(event: any) {
     this.VideoFile = event.target.files[0];
   }
-  getdistrict(state:string){
+  getdistrict(state: string) {
     this.districts = [];
-    for(var dist of data){
-      if(dist.name == state){
-        for(let i:number = 0;i<dist.districts.length;i++){
+    for (var dist of data) {
+      if (dist.name == state) {
+        for (let i: number = 0; i < dist.districts.length; i++) {
           this.districts.push(dist.districts[i])
         }
       }
@@ -84,12 +92,12 @@ export class StaffAdbannerComponent implements OnInit {
     this.adBanner.id = Timestamp.now().seconds.toString();
     console.log(this.adBanner);
     this.files = [];
-    if ((this.ImageFile !== undefined) && (this.VideoFile !== undefined)){
+    if ((this.ImageFile !== undefined) && (this.VideoFile !== undefined)) {
       this.files.push([this.ImageFile, type.imageURL]);
       this.files.push([this.VideoFile, type.videoURL]);
       console.log(this.files);
     }
-    else{
+    else {
       this.spinnerActive = false;
       this.openSnackBar('Upload ImageFile or VideoFile to continue', 'retry');
     }
@@ -137,23 +145,35 @@ export class StaffAdbannerComponent implements OnInit {
         });
       });
   }
-  delete(id:string,type:string){
+  export() {
+    console.log('in function');
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+  }
+  delete(id: string, type: string) {
     // console.log(id,type);
-     const dialogRef = this.dialog.open(DialogComponent,{
-      data:{
-        value:type,id
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        value: type, id
       }
     });
     dialogRef.componentInstance.deleted.subscribe(val => {
 
-      for(let i = 0;i<this.adbannerArray.length;i++){
-        if(this.adbannerArray[i].id === id){
-          console.log('deleting',this.adbannerArray[i].id);
+      for (let i = 0; i < this.adbannerArray.length; i++) {
+        if (this.adbannerArray[i].id === id) {
+          console.log('deleting', this.adbannerArray[i].id);
           this.adbannerArray.splice(i, 1);
           break;
         }
       }
-    
+
     });
   }
   resetPage() {
@@ -161,9 +181,10 @@ export class StaffAdbannerComponent implements OnInit {
       videoUrl: '',
       imageUrl: '',
       id: '',
-      uploadDate:Timestamp.now(),
-      state:'',
-      district:''
+      uploadDate: Timestamp.now(),
+      state: '',
+      district: '',
+      views: 0
     }
   }
   openSnackBar(message: string, action: string) {

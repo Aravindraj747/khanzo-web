@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Coupons } from 'src/app/models/coupons';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-coupons',
   templateUrl: './coupons.component.html',
@@ -22,6 +22,7 @@ export class CouponsComponent implements OnInit {
     couponId: '',
     uploadDate:Timestamp.now()
   }
+  fileName:string = 'coupons.xlsx';
   couponArray: Coupons[] =[];
   constructor(private _snackBar: MatSnackBar,
               private firestoreService: FirestoreServiceService,
@@ -30,11 +31,16 @@ export class CouponsComponent implements OnInit {
   ngOnInit(): void {
     this.coupons.uploadDate = Timestamp.now();
     const couponArrays: Coupons[] =[];
-    this.firestoreService.getCoupons().ref.get().then(res=>{
-      res.forEach(function (doc){
-        couponArrays.push(<Coupons>doc.data());
-      });
+    this.firestoreService.getCoupons().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        couponArrays.push(<Coupons>doc.payload.doc.data());
+      })
     });
+    // this.firestoreService.getCoupons().ref.get().then(res=>{
+    //   res.forEach(function (doc){
+    //     couponArrays.push(<Coupons>doc.data());
+    //   });
+    // });
     this.couponArray = couponArrays;
     console.log(this.couponArray);
   }
@@ -43,7 +49,7 @@ export class CouponsComponent implements OnInit {
     this.imageFile = event.target.files[0];
   }
   submit() {
-    this.coupons.couponId = Timestamp.now().seconds.toString();
+    // this.coupons.couponId = Timestamp.now().seconds.toString();
     console.log(this.coupons.couponId);
     this.spinnerActive = true;
     if(this.coupons.imageUrl == '' && this.imageFile == undefined){
@@ -98,6 +104,18 @@ export class CouponsComponent implements OnInit {
           return;
         });
       });
+  }
+  export() {
+    console.log('in function');
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
   }
   delete(id:string,type:string){
     // console.log(id,type);

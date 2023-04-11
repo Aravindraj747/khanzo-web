@@ -1,40 +1,43 @@
 <app-side-nav></app-side-nav>
 <div class="container">
-    <div class="new">
-        <h1>Kids video</h1>
-    </div>
-    <div class="topic">
-        <p class="pasteLink">Paste link</p>
-        <p class="ThumURL">Image URL</p>
-        <p class="ThumPic">Image Pic</p>
-        <p class="category">Category</p>
-        <p class="language">Language</p>
-        <p></p>
-    </div>
-    <div class="value">
-        <form action="" [class.spinnerOverlay]="spinnerActive">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.videoUrl" type="text" id="input" class="pasteLink">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.imageUrl"id="input"  type="text">
-            <input type="file" (change)="chooseThumb($event)" id="drop">
-            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.category" name="select" id="drop">
-                <option value="">Select Category</option>
-                <option *ngFor="let c of category">{{c}}</option>
-            </select>
-            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.language" name="select" id="drop">
-              <option value="">Select language</option>
-              <option *ngFor="let l of language">{{l}}</option>
-          </select>
-            <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="music.language" id="input" type="text"> -->
-            <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
-        </form>
-    </div>
-    <br>
-    <p class="note">Note* :Choose any one of the option for adding Image</p>
-    <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+  <div class="new">
+    <h1>Kids video</h1>
+  </div>
+  <div class="topic">
+    <p class="pasteLink">Paste link</p>
+    <p class="ThumURL">Image URL</p>
+    <p class="ThumPic">Image Pic</p>
+    <p class="category">Category</p>
+    <p class="language">Language</p>
+    <p></p>
+  </div>
+  <div class="value">
+    <form action="" [class.spinnerOverlay]="spinnerActive">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.videoUrl" type="text" id="input" class="pasteLink">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.imageUrl" id="input" type="text">
+      <input type="file" (change)="chooseThumb($event)" id="drop">
+      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.category" name="select" id="drop">
+        <option value="">Select Category</option>
+        <option *ngFor="let c of category">{{c}}</option>
+      </select>
+      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="kid.language" name="select" id="drop">
+        <option value="">Select language</option>
+        <option *ngFor="let l of language">{{l}}</option>
+      </select>
+      <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="music.language" id="input" type="text"> -->
+      <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+    </form>
+  </div>
+  <br>
+  <p class="note">Note* :Choose any one of the option for adding Image</p>
+  <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+</div>
+<div class="btn">
+  <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
 </div>
 <div class="table-wrapper">
-    <table class="fl-table">
-      <thead>
+  <table class="fl-table" id="excel-table">
+    <thead>
       <tr>
         <th>Id</th>
         <th>Category</th>
@@ -44,8 +47,8 @@
         <th>Image</th>
         <th>Delete</th>
       </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
       <tr *ngFor="let kid of kidsArray">
         <td>{{kid?.id}}</td>
         <td>{{kid?.category}}</td>
@@ -55,6 +58,6 @@
         <td><a mat-raised-button href="{{kid.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(kid.id,'kid')">X</a></td>
       </tr>
-      <tbody>
-    </table>
-  </div>
+    <tbody>
+  </table>
+</div>

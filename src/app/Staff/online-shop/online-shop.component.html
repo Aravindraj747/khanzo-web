@@ -1,0 +1,69 @@
+<!-- <app-staff-side-nav></app-staff-side-nav> -->
+<app-side-nav></app-side-nav>
+<div class="container">
+  <!-- <div class="new">
+        <p style="margin-left: 20px;"><a href=""><mat-icon>add_circle_outline</mat-icon> Add NewLink</a></p>
+    </div> -->
+  <div class="new">
+    <h1>Online Shop</h1>
+  </div>
+  <div class="topic">
+    <!-- <p class="pasteLink">Paste link</p> -->
+    <p class="ThumURL">Image URL</p>
+    <p class="ThumPic">Image Pic</p>
+    <p class="category">Name</p>
+    <p class="website">Website Name</p>
+    <p class="drop">Category</p>
+    <p class="language">Buy Link</p>
+    <p></p>
+  </div>
+  <div class="value">
+    <form action="" [class.spinnerOverlay]="spinnerActive">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="onlineShop.imageUrl" id="input" type="text">
+      <input type="file" (change)="chooseThumb($event)" id="drop">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="onlineShop.name" id="input" type="text">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="onlineShop.websiteName" id="input" type="text">
+      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="onlineShop.category" name="state" id="drop">
+        <option value="">Select</option>
+        <option *ngFor="let c of category">{{c}}</option>
+      </select>
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="onlineShop.buyLink" id="input" type="text">
+      <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+    </form>
+  </div>
+  <br>
+  <p class="note">Note* :Choose any one of the option for adding Image</p>
+  <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+</div>
+<div class="btn">
+  <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
+</div>
+<div class="table-wrapper">
+  <table class="fl-table" id="excel-table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>BuyLink</th>
+        <th>UploadDate</th>
+        <th>WebsiteName</th>
+        <th>Image</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let online of onlineShops">
+        <td>{{online?.id}}</td>
+        <td>{{online?.name}}</td>
+        <!-- <td>{{online?.buyLink}}</td> -->
+        <td><a mat-raised-button href="{{online?.buyLink}}" target="_blank">View</a></td>
+        <td>{{online?.uploadDate?.toDate() | date:'dd-MM-yyyy'}}</td>
+        <td>{{online?.websiteName}}</td>
+        <td><a mat-raised-button href="{{online.imageUrl}}" target="_blank">View</a></td>
+        <td><a class="delete" (click)="delete(online.id,'online')">X</a></td>
+      </tr>
+    <tbody>
+  </table>
+  <!-- <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" aria-label="Select page">
+    </mat-paginator> -->
+</div>

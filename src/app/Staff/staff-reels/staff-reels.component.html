@@ -1,39 +1,41 @@
 <!-- <app-staff-side-nav></app-staff-side-nav> -->
 <app-side-nav></app-side-nav>
 <div class="container">
-    <div class="new">
-        <h1>Instagram Reels video</h1>
-    </div>
-    <div class="topic">
-        <p class="pasteLink">Video link</p>
-        <p class="ThumURL">Image URL</p>
-        <p class="ThumPic">Image Pic</p>
-        <p></p>
-    </div>
-    <div class="value">
-        <form [class.spinnerOverlay]="spinnerActive">
-            <input type="text" id="input" [(ngModel)]="reel.videoUrl" [ngModelOptions]="{standalone: true}">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="reel.imageUrl"id="input"  type="text">
-            <input type="file" (change)="chooseThumb($event)" id="drop">
-            <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
-            <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
-        </form>
-    </div>
-    <p class="note">Note* :Choose any one of the option for adding Image</p>
-    <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+  <div class="new">
+    <h1>Instagram Reels video</h1>
+  </div>
+  <div class="topic">
+    <p class="pasteLink">Video link</p>
+    <p class="ThumURL">Image URL</p>
+    <p class="ThumPic">Image Pic</p>
+    <p></p>
+  </div>
+  <div class="value">
+    <form [class.spinnerOverlay]="spinnerActive">
+      <input type="text" id="input" [(ngModel)]="reel.videoUrl" [ngModelOptions]="{standalone: true}">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="reel.imageUrl" id="input" type="text">
+      <input type="file" (change)="chooseThumb($event)" id="drop">
+      <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
+      <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+    </form>
+  </div>
+  <p class="note">Note* :Choose any one of the option for adding Image</p>
+  <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
 </div>
-
+<div class="btn">
+  <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
+</div>
 <div class="table-wrapper">
-    <table class="fl-table">
-      <thead>
+  <table class="fl-table" id="excel-table">
+    <thead>
       <tr>
         <th>Id</th>
         <th>UploadDate</th>
         <th>Video</th>
         <th>Image</th>
       </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
       <tr *ngFor="let reel of reelsArray">
         <td>{{reel.id}}</td>
         <td>{{reel.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
@@ -41,6 +43,6 @@
         <td><a mat-raised-button href="{{reel.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(reel.id,'reels')">X</a></td>
       </tr>
-      <tbody>
-    </table>
-  </div>
+    <tbody>
+  </table>
+</div>

@@ -20,7 +20,7 @@
 }
 
 .topic .pasteLink {
-    margin-left: 100px;
+    margin-left: 25px;
 }
 
 .topic .ThumURL {
@@ -28,49 +28,63 @@
 }
 
 .topic .ThumPic {
-    margin-left: 110px;
+    margin-left: 125px;
 }
-.topic .start{
-    margin-left: 80px;
+
+.topic .start {
+    margin-left: 55px;
 }
+
 .topic .Expiry {
-    margin-left: 50px;
+    margin-left: 20px;
 }
 
 .topic .coupon {
-    margin-left: 140px;
+    margin-left: 80px;
+}
+
+.topic .lang {
+    margin-left: 135px;
 }
 
 .topic .category {
-    margin-left: 130px;
+    margin-left: 80px;
 }
 
 .value form {
     display: flex;
     justify-content: space-evenly;
 }
-.value #drop{
+
+.value #drop {
     border: 0;
     outline: 0;
 }
+
 .new {
     display: flex;
+}
+
+.btn {
+    margin-left: 90%;
 }
 
 /* .value input {
     background-color: rgb(183, 193, 202);
     border: none;
 } */
-.value a{
+.value a {
     height: 30px;
 }
+
 .value #input {
     /* background-color: rgb(183, 193, 202); */
     /* border: 0;
     outline: 0; */
     border-bottom: 1px solid black;
-    height:30px;
+    height: 30px;
 }
+
 .note {
     color: red;
     font-size: 13px;
@@ -102,31 +116,35 @@ button {
     position: absolute;
     margin-left: 30%;
 }
-.delete{
+
+.delete {
     cursor: pointer;
 }
+
 /*  */
-table{
+table {
+    margin-top: 10px;
     margin-left: 350px;
     width: 70%;
-  }
-  h2{
+}
+
+h2 {
     text-align: center;
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: white;
     padding: 30px 0;
-  }
-  
-  /* Table Styles */
-  
-  /* .table-wrapper{
+}
+
+/* Table Styles */
+
+/* .table-wrapper{
     margin: 10px 70px 70px;
     box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
   } */
-  
-  .fl-table {
+
+.fl-table {
     border-radius: 5px;
     font-size: 12px;
     font-weight: normal;
@@ -137,24 +155,26 @@ table{
     white-space: nowrap;
     /* background-color: white; */
     box-shadow: 3px 3px 5px 6px #d8d2d2;
-  }
-  
-  .fl-table th{
+}
+
+.fl-table th {
     font-weight: 800;
     font-style: bold;
-  }
-  .fl-table td, .fl-table th {
+}
+
+.fl-table td,
+.fl-table th {
     text-align: center;
     padding: 12px;
     color: #565353;
-    font-family: 'Montserrat',sans-serif;
-  }
-  
-  .fl-table td {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.fl-table td {
     border-right: 1px solid #f8f8f8;
     font-size: 12px;
-  }
-  
-  .fl-table tr:nth-child(even) {
+}
+
+.fl-table tr:nth-child(even) {
     background: #F8F8F8;
-  }
+}

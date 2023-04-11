@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Kids } from 'src/app/models/kids';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-kids',
   templateUrl: './kids.component.html',
@@ -14,33 +14,39 @@ import { FirestoreServiceService } from 'src/app/Services/firestore-service.serv
 })
 export class KidsComponent implements OnInit {
   kid: Kids = {
-    videoUrl:'',
-    imageUrl:'',
-    uploadDate:Timestamp.now(),
-    language:'',
-    category:'',
-    id:'',
+    videoUrl: '',
+    imageUrl: '',
+    uploadDate: Timestamp.now(),
+    language: '',
+    category: '',
+    id: '',
   }
+  fileName: string = 'kid.xlsx';
   kidsArray: Kids[] = [];
-  language: any[] = ['English','Tamil','Kanada','Telugu','Hindi','Malayalam'];
+  language: any[] = ['English', 'Tamil', 'Kanada', 'Telugu', 'Hindi', 'Malayalam'];
   category: any[] = ["Rymes", "Cartoons",];
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
 
   constructor(private firestoreService: FirestoreServiceService,
-              private _snackBar: MatSnackBar,
-              private dialog:MatDialog) {
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
     this.kid.uploadDate = Timestamp.now();
     console.log(this.kid.uploadDate);
-    const kidsArray: Kids[] = []
-    this.firestoreService.getKids().ref.get().then(res => {
-      res.forEach(function (doc) {
-        kidsArray.push(<Kids>doc.data());
-      });
+    const kidsArray: Kids[] = [];
+    this.firestoreService.getKids().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        kidsArray.push(<Kids>doc.payload.doc.data());
+      })
     });
+    // this.firestoreService.getKids().ref.get().then(res => {
+    //   res.forEach(function (doc) {
+    //     kidsArray.push(<Kids>doc.data());
+    //   });
+    // });
     this.kidsArray = kidsArray;
     console.log(this.kidsArray);
   }
@@ -50,8 +56,8 @@ export class KidsComponent implements OnInit {
   submit() {
     console.log('yub');
     this.spinnerActive = true;
-    if(this.thumbImageFile == undefined && this.kid.imageUrl == ''){
-      this.openSnackBar('Choose one option for upload image','retry');
+    if (this.thumbImageFile == undefined && this.kid.imageUrl == '') {
+      this.openSnackBar('Choose one option for upload image', 'retry');
       this.spinnerActive = false
     }
     console.log(this.kid.imageUrl);
@@ -76,23 +82,23 @@ export class KidsComponent implements OnInit {
     }
   }
 
-  delete(id:string,type:string){
+  delete(id: string, type: string) {
     // console.log(id,type);
-     const dialogRef = this.dialog.open(DialogComponent,{
-      data:{
-        value:type,id
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        value: type, id
       }
     });
     dialogRef.componentInstance.deleted.subscribe(val => {
 
-      for(let i = 0;i<this.kidsArray.length;i++){
-        if(this.kidsArray[i].id === id){
-          console.log('deleting',this.kidsArray[i].id);
+      for (let i = 0; i < this.kidsArray.length; i++) {
+        if (this.kidsArray[i].id === id) {
+          console.log('deleting', this.kidsArray[i].id);
           this.kidsArray.splice(i, 1);
           break;
         }
       }
-    
+
     });
   }
   putStorageItem(file: any) {
@@ -139,7 +145,18 @@ export class KidsComponent implements OnInit {
       duration: 2000,
     });
   }
+  export() {
+    console.log('in function');
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+  }
   resetPage() {
     this.kid = {
       videoUrl: "",
@@ -147,7 +164,7 @@ export class KidsComponent implements OnInit {
       category: "",
       language: "",
       id: "",
-      uploadDate:Timestamp.now()
+      uploadDate: Timestamp.now()
     }
   }
 }

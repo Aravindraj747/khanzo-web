@@ -2,15 +2,16 @@
 <div class="content">
   <h2>Withdrawl Request</h2>
   <div class="btn">
-    <!-- <button><span style="color:white ;">Export</span></button> -->
+    <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
   </div>
   <div class="table-wrapper">
-    <table class="fl-table">
+    <table class="fl-table" id="excel-table">
       <thead>
       <tr>
         <th>User ID</th>
         <th>Withdrawal Amount</th>
         <th>Request Date</th>
+        <th>Account Details</th>
         <th>Status</th>
         <th>Action</th>
       </tr>
@@ -20,6 +21,7 @@
         <td>{{withdrawal.userId}}</td>
         <td>{{withdrawal.amount}}</td>
         <td>{{withdrawal.requestedDate.toDate() | date:'dd-MM-yyyy'}}</td>
+        <td><a (click)="openDialog('details',withdrawal)" mat-raised-button>View</a></td>
         <td>
           <ng-template [ngIf]="withdrawal.status == 'PENDING'">
             <p style="color:rgb(54, 55, 37);">{{withdrawal.status}}</p>

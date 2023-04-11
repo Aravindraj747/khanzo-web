@@ -6,7 +6,7 @@ import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { formatDate } from '@angular/common';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-staff-daily-task',
@@ -16,31 +16,39 @@ import { formatDate } from '@angular/common';
 export class StaffDailyTaskComponent implements OnInit {
 
   category: any[] = ["Shorts", "Video"];
+  language: any[] = ['English', 'Tamil', 'Kanada', 'Telugu', 'Hindi', 'Malayalam'];
   dailyTask: DailyTask = {
     videoUrl: "",
     imageUrl: "",
-    startDate:Timestamp.now(),
+    startDate: Timestamp.now(),
     expiryDate: Timestamp.now(),
     couponId: "",
     taskId: "",
-    category:"",
-    uploadDate:Timestamp.now()
+    category: "",
+    language: "",
+    uploadDate: Timestamp.now()
   }
   current = 0;
-  dailyTasks: DailyTask[] =[];
+  fileName = 'dailyTask.xlsx';
+  dailyTasks: DailyTask[] = [];
   imageFile: any = undefined;
   spinnerActive: boolean = false;
   constructor(private firestoreService: FirestoreServiceService,
-              private _snackBar: MatSnackBar,
-              private dialog: MatDialog) { }
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    const dailyTaskArray: DailyTask[] = []
-    this.firestoreService.getDailyTask().ref.get().then(res => {
-      res.forEach(function (doc) {
-        dailyTaskArray.push(<DailyTask>doc.data());
-      });
+    const dailyTaskArray: DailyTask[] = [];
+    this.firestoreService.getDailyTask().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        dailyTaskArray.push(<DailyTask>doc.payload.doc.data());
+      })
     });
+    // this.firestoreService.getDailyTask().ref.get().then(res => {
+    //   res.forEach(function (doc) {
+    //     dailyTaskArray.push(<DailyTask>doc.data());
+    //   });
+    // });
     this.dailyTasks = dailyTaskArray;
     console.log(this.dailyTasks);
   }
@@ -51,7 +59,7 @@ export class StaffDailyTaskComponent implements OnInit {
   submit() {
     this.dailyTask.uploadDate = Timestamp.now();
     this.dailyTask.taskId = Timestamp.now().seconds.toString();
-    
+
     this.spinnerActive = true;
 
     const startDateString: string = String(this.dailyTask.startDate);
@@ -62,8 +70,8 @@ export class StaffDailyTaskComponent implements OnInit {
     const expiryDate = new Date(expiryDateString);
     this.dailyTask.expiryDate = Timestamp.fromDate(expiryDate);
 
-    if(this.dailyTask.videoUrl == ''){
-      this.openSnackBar('Enter Video Url to Save','Retry');
+    if (this.dailyTask.videoUrl == '') {
+      this.openSnackBar('Enter Video Url to Save', 'Retry');
       return
     }
     else if (this.dailyTask.imageUrl !== "") {
@@ -117,24 +125,36 @@ export class StaffDailyTaskComponent implements OnInit {
         });
       });
   }
-  delete(id:string,type:string){
+  delete(id: string, type: string) {
     // console.log(id,type);
-     const dialogRef = this.dialog.open(DialogComponent,{
-      data:{
-        value:type,id
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        value: type, id
       }
     });
     dialogRef.componentInstance.deleted.subscribe(val => {
 
-      for(let i = 0;i<this.dailyTasks.length;i++){
-        if(this.dailyTasks[i].taskId === id){
-          console.log('deleting',this.dailyTasks[i].taskId);
+      for (let i = 0; i < this.dailyTasks.length; i++) {
+        if (this.dailyTasks[i].taskId === id) {
+          console.log('deleting', this.dailyTasks[i].taskId);
           this.dailyTasks.splice(i, 1);
           break;
         }
       }
-    
+
     });
+  }
+  export() {
+    console.log('in function');
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -147,12 +167,13 @@ export class StaffDailyTaskComponent implements OnInit {
     this.dailyTask = {
       videoUrl: "",
       imageUrl: "",
-      startDate:Timestamp.now(),
+      startDate: Timestamp.now(),
       expiryDate: Timestamp.now(),
       couponId: "",
       taskId: "",
-      category:"",
-      uploadDate:Timestamp.now()
+      language: '',
+      category: "",
+      uploadDate: Timestamp.now()
     }
   }
 

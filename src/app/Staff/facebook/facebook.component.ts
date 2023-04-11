@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Facebook } from 'src/app/models/facebook';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-facebook',
   templateUrl: './facebook.component.html',
@@ -15,76 +15,94 @@ import { FirestoreServiceService } from 'src/app/Services/firestore-service.serv
 })
 export class FacebookComponent implements OnInit {
 
-  facebook: Facebook={
-    videoUrl:'',
-    imageUrl:'',
-    id:'',
-    uploadDate:Timestamp.now()
+  facebook: Facebook = {
+    videoUrl: '',
+    imageUrl: '',
+    id: '',
+    uploadDate: Timestamp.now()
   }
-  thumbImageFile:any = undefined;
-  spinnerActive:boolean = false;
-  faceBookArray: Facebook[] =[];
+  fileName: string = 'facebook.xlsx';
+  thumbImageFile: any = undefined;
+  spinnerActive: boolean = false;
+  faceBookArray: Facebook[] = [];
   constructor(private firestoreService: FirestoreServiceService,
-              private _snackBar: MatSnackBar,
-              private dialog:MatDialog) { }
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.facebook.uploadDate = Timestamp.now();
-    const facebookArray: Facebook[] = []
-    this.firestoreService.getInstagramVideo().ref.get().then(res => {
-      res.forEach(function (doc) {
-        facebookArray.push(<Facebook>doc.data());
-      });
+    const facebookArray: Facebook[] = [];
+    this.firestoreService.getFacebook().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        facebookArray.push(<Facebook>doc.payload.doc.data());
+      })
     });
+    // this.firestoreService.getFacebook().ref.get().then(res => {
+    //   res.forEach(function (doc) {
+    //     facebookArray.push(<Facebook>doc.data());
+    //   });
+    // });
     this.faceBookArray = facebookArray;
     console.log(this.faceBookArray);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
+  export() {
+    console.log('in function');
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+  }
   submit() {
     this.facebook.uploadDate = Timestamp.now();
     this.facebook.id = Timestamp.now().seconds.toString();
     this.spinnerActive = true;
-    if(this.facebook.videoUrl !== ''){
-      if(this.facebook.imageUrl !== ''){
-        this.firestoreService.saveFacebook(this.facebook).then(res=>{
+    if (this.facebook.videoUrl !== '') {
+      if (this.facebook.imageUrl !== '') {
+        this.firestoreService.saveFacebook(this.facebook).then(res => {
           this.faceBookArray.push(this.facebook);
           this.spinnerActive = false;
-          this.openSnackBar('Saved Successfully','undo');
+          this.openSnackBar('Saved Successfully', 'undo');
           this.resetPage();
-      });
-      return
+        });
+        return
+      }
+      else if (this.thumbImageFile !== undefined) {
+        this.putStorageItem(this.thumbImageFile);
+      }
     }
-    else if(this.thumbImageFile !==undefined){
-      this.putStorageItem(this.thumbImageFile);
-    }
-    }
-    else{
+    else {
       this.spinnerActive = false;
-      this.openSnackBar('Enter link to save','retry');
+      this.openSnackBar('Enter link to save', 'retry');
       return
     }
   }
-  delete(id:string,type:string){
+  delete(id: string, type: string) {
     // console.log(id,type);
-     const dialogRef = this.dialog.open(DialogComponent,{
-      data:{
-        value:type,id
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        value: type, id
       }
     });
     dialogRef.componentInstance.deleted.subscribe(val => {
 
-      for(let i = 0;i<this.faceBookArray.length;i++){
-        if(this.faceBookArray[i].id === id){
-          console.log('deleting',this.faceBookArray[i].id);
+      for (let i = 0; i < this.faceBookArray.length; i++) {
+        if (this.faceBookArray[i].id === id) {
+          console.log('deleting', this.faceBookArray[i].id);
           this.faceBookArray.splice(i, 1);
           break;
         }
       }
-    
+
     });
-    
+
   }
   putStorageItem(file: any) {
     const storage = getStorage();
@@ -132,12 +150,12 @@ export class FacebookComponent implements OnInit {
     });
   }
 
-  resetPage(){
+  resetPage() {
     this.facebook = {
       videoUrl: '',
-      imageUrl:'',
+      imageUrl: '',
       uploadDate: Timestamp.now(),
-      id:''
+      id: ''
     }
   }
 }

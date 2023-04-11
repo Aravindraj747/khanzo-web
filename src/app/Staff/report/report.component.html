@@ -1,0 +1,30 @@
+<app-side-nav></app-side-nav>
+<div class="btn">
+  <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
+</div>
+<div class="container">
+  <div class="new">
+    <h1>Report</h1>
+  </div>
+  <div class="table-wrapper">
+    <table class="fl-table" id="excel-table">
+      <thead>
+        <tr>
+          <th>UserID</th>
+          <th>Message</th>
+          <th>Subject</th>
+          <th>ReportedDate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of reportArrays">
+          <td>{{report?.userId}}</td>
+          <td>{{report?.message}}</td>
+          <td>{{report?.subject}}</td>
+          <!-- <td>{{youtube.category}}</td> -->
+          <td>{{report?.reportedDate?.toDate() | date:'dd-MM-yyyy'}}</td>
+        </tr>
+      <tbody>
+    </table>
+  </div>
+</div>

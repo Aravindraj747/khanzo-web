@@ -1,37 +1,41 @@
 <!-- <app-staff-side-nav></app-staff-side-nav> -->
 <app-side-nav></app-side-nav>
 <div class="container">
-    <div class="new">
-        <h1>Coupons</h1>
-    </div>
-    <div class="topic">
-        <p class="ThumURL">Image URL</p>
-        <p class="ThumPic">Image Pic</p>
-        <p></p>
-    </div>
-    <div class="value">
-        <form  action="" (ngSubmit)="submit()" [class.spinnerOverlay]="spinnerActive">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="coupons.imageUrl" type="text" id="input">
-            <input type="file" (change)="chooseImage($event)">
-            <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
-            <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
-        </form>
-    </div>
-    <br>
-    <p class="note">Note* :Choose any one option to upload image.</p>
-    <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+  <div class="new">
+    <h1>Coupons</h1>
+  </div>
+  <div class="topic">
+    <p class="ThumURL">Image URL</p>
+    <p class="ThumPic">Image Pic</p>
+    <p class="coupon">CouponId</p>
+    <p></p>
+  </div>
+  <div class="value">
+    <form action="" (ngSubmit)="submit()" [class.spinnerOverlay]="spinnerActive">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="coupons.imageUrl" type="text" id="input">
+      <input type="file" (change)="chooseImage($event)">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="coupons.couponId" type="text" id="input">
+      <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
+      <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+    </form>
+  </div>
+  <br>
+  <p class="note">Note* :Choose any one option to upload image.</p>
+  <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
 </div>
-
+<div class="btn">
+  <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
+</div>
 <div class="table-wrapper">
-    <table class="fl-table">
-      <thead>
+  <table class="fl-table" id="excel-table">
+    <thead>
       <tr>
         <th>Id</th>
         <th>UploadDate</th>
         <th>Image</th>
       </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
       <tr *ngFor="let coupon of couponArray">
         <td>{{coupon.couponId}}</td>
         <td>{{coupon.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
@@ -39,6 +43,6 @@
         <td><a mat-raised-button href="{{coupon.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(coupon.couponId,'coupon')">X</a></td>
       </tr>
-      <tbody>
-    </table>
-  </div>
+    <tbody>
+  </table>
+</div>

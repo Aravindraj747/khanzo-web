@@ -1,37 +1,45 @@
 <!-- <app-staff-side-nav></app-staff-side-nav> -->
 <app-side-nav></app-side-nav>
 <div class="container">
-    <div class="new">
-        <h1>Youtube Shorts video</h1>
-    </div>
-    <div class="topic">
-        <p class="pasteLink">Video link</p>
-        <p class="ThumURL">Image URL</p>
-        <p class="ThumPic">Image Pic</p>
-        <p></p>
-    </div>
-    <div class="value">
-        <form [class.spinnerOverlay]="spinnerActive">
-            <input type="text" class="" [(ngModel)]="shorts.videoUrl" [ngModelOptions]="{standalone: true}" id="input">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="shorts.imageUrl"id="input"  type="text">
-            <input type="file" (change)="chooseThumb($event)" id="drop">
-            <a mat-raised-button (click)="submit()" color="primary">Save</a>
-        </form>
-        <p class="note">Note* :Choose any one of the option for adding Image</p>
-        <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
-    </div>
+  <div class="new">
+    <h1>Youtube Shorts video</h1>
+  </div>
+  <div class="topic">
+    <p class="pasteLink">Video link</p>
+    <p class="ThumURL">Image URL</p>
+    <p class="ThumPic">Image Pic</p>
+    <p class="lang">Language</p>
+    <p></p>
+  </div>
+  <div class="value">
+    <form [class.spinnerOverlay]="spinnerActive">
+      <input type="text" class="" [(ngModel)]="shorts.videoUrl" [ngModelOptions]="{standalone: true}" id="input">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="shorts.imageUrl" id="input" type="text">
+      <input type="file" (change)="chooseThumb($event)" id="drop">
+      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="shorts.language" name="select" id="drop">
+        <option value="">Select language</option>
+        <option *ngFor="let l of language">{{l}}</option>
+      </select>
+      <a mat-raised-button (click)="submit()" color="primary">Save</a>
+    </form>
+    <p class="note">Note* :Choose any one of the option for adding Image</p>
+    <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+  </div>
+</div>
+<div class="btn">
+  <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
 </div>
 <div class="table-wrapper">
-    <table class="fl-table">
-      <thead>
+  <table class="fl-table" id="excel-table">
+    <thead>
       <tr>
         <th>Id</th>
         <th>Upload Date</th>
         <th>Video</th>
         <th>Image</th>
       </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
       <tr *ngFor="let shorts of shortsArrays">
         <td>{{shorts.id}}</td>
         <td>{{shorts.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
@@ -39,6 +47,6 @@
         <td><a mat-raised-button href="{{shorts.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(shorts.id,'shorts')">X</a></td>
       </tr>
-      <tbody>
-    </table>
-  </div>
+    <tbody>
+  </table>
+</div>

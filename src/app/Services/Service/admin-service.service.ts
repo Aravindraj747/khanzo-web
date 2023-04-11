@@ -11,19 +11,19 @@ export class AdminServiceService {
 
   isAdmin: string = '';
   isStaff: string = '';
-  constructor(private firestore: AngularFirestore) { 
+  constructor(private firestore: AngularFirestore) {
   }
 
-  getAdmin(email: string){
+  getAdmin(email: string) {
     console.log('get admin')
-    this.firestore.collection('admin').doc<Admin>(email).get().subscribe(res=>{
-      sessionStorage.setItem('adminLogin',this.isAdmin)
+    this.firestore.collection('admin').doc<Admin>(email).get().subscribe(res => {
+      sessionStorage.setItem('adminLogin', this.isAdmin)
     })
   }
 
-  getStaff(email:string){
-    this.firestore.collection('staff').doc<Staff>(email).get().subscribe(res=>{
-      sessionStorage.setItem('staffLogin',this.isStaff)
+  getStaff(email: string) {
+    this.firestore.collection('staff').doc<Staff>(email).get().subscribe(res => {
+      sessionStorage.setItem('staffLogin', this.isStaff)
     })
   }
 
@@ -34,7 +34,7 @@ export class AdminServiceService {
     return this.isAdmin;
   }
 
-  getStaffLogin(){
+  getStaffLogin() {
     if (this.isStaff === '') {
       this.isStaff = sessionStorage.getItem('staffLogin')!;
     }
@@ -45,7 +45,7 @@ export class AdminServiceService {
     return this.firestore.collection('admin', ref => ref.where("email", "==", id)).get();
   }
 
-  checkIfStaff(id:string){
-    return this.firestore.collection('staff', ref =>ref.where("email", "==" , id)).get();
+  checkIfStaff(id: string) {
+    return this.firestore.collection('staff', ref => ref.where("email", "==", id)).get();
   }
 }

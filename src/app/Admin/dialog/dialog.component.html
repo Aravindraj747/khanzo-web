@@ -5,6 +5,7 @@
     <h3 style="margin-left: 110px;font-weight: bold;">Accept</h3>
     <h3>Withdrawal Amount: {{withdrawal.amount}}</h3>
     <h3>Do you want to accept the withdrawal?</h3>
+    <input type="text" [(ngModel)] ="this.utr">
     <mat-dialog-actions>
         <button mat-button mat-dialog-close class="reject">Cancel</button>
         <button mat-flat-button color="primary" class="accept" mat-dialog-close (click)="accept('accept')">Ok</button>
@@ -14,16 +15,28 @@
     <h3>Reject</h3>
     <h3>Withdrawal Amount: {{withdrawal.amount}}</h3>
     <h3>Do you want to reject the withdrawal?</h3>
+    <input type="text" [(ngModel)] ="this.reason">
     <mat-dialog-actions>
         <button mat-button mat-dialog-close class="reject">Cancel</button>
         <button mat-flat-button color="primary" class="accept" mat-dialog-close (click)="accept('reject')">Ok</button>
     </mat-dialog-actions>
 </div>
 
-<div *ngIf="value == 'youtube' || value == 'shorts' || value == 'reels' || value == 'instagram' || value == 'kid' || value == 'dailyTasks' || value == 'adbanner' || value == 'coupon' || value == 'faceBook' || value == 'music' || value == 'imageBanner'">
+<div *ngIf="value == 'youtube' || value == 'shorts' || value == 'staff' || value == 'reels' || value == 'instagram' || value == 'kid' || value == 'dailyTasks' || value == 'adbanner' || value == 'coupon' || value == 'faceBook' || value == 'music' || value == 'imageBanner'|| value == 'online' || value == 'offline'">
     <h3>Are you sure to delete?</h3>
     <mat-dialog-actions>
         <button mat-flat-button mat-dialog-close class="reject">Cancel</button>
         <button mat-flat-button color="primary" class="accept" mat-dialog-close (click)="delete()">Ok</button>
+    </mat-dialog-actions>
+</div>
+
+<div *ngIf="value == 'details'">
+    <h3>Account Details</h3>
+    <h3>Account Number: {{withdrawal.accountNumber}}</h3>
+    <h3>IFSC: {{withdrawal.ifsc}}</h3>
+    <h3>Upi id: {{withdrawal.upiId}}</h3>
+    <mat-dialog-actions>
+        <button mat-flat-button mat-dialog-close color="primary" class="reject">Ok</button>
+        <!-- <button mat-flat-button color="primary" class="accept" mat-dialog-close (click)="accept('reject')">Ok</button> -->
     </mat-dialog-actions>
 </div>

@@ -63,14 +63,14 @@ export class AdminLoginComponent implements OnInit {
       else {
         console.log('staff here')
         this.adminService.checkIfStaff(email!).subscribe(res=>{
-          console.log(res);
           if (res.docs.length > 0) {
             this.authService.login(email!, password!).then((res) => {
+              this.route.navigate(['youtube']);
+              console.log('in login');
               this.adminService.isStaff = 'true';
               console.log(res);
               this.getStaffDetails(email!);
               this.spinnerActive = false;
-              this.route.navigate(['youtube']);
             }, err => {
               console.log('error', err);
               this.openSnackBar('Invalid Email or password', 'Undo');

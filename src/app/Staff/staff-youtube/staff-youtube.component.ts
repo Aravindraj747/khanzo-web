@@ -8,6 +8,8 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/
 import { Timestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
+import * as XLSX from 'xlsx';
+import { MatSort } from '@angular/material/sort';
 export interface Vegetable {
   name: string;
 }
@@ -20,8 +22,17 @@ export interface Vegetable {
 export class StaffYoutubeComponent implements OnInit {
 
   youtubeArray: Youtube[] = [];
-  category: any[] = ["Trending Videos","Entertainment", "Education", "Comdey", "News", "Trailers", "Movies", "Cinema"];
-  language: any[] = ['English','Tamil','Kanada','Telugu','Hindi','Malayalam'];
+  category: any[] = ["Trending Videos", "Entertainment", "Education", "Comedy", "News", "Trailers", "Movies", "Cinema"];
+  language: any[] = ['English', 'Tamil', 'Kanada', 'Telugu', 'Hindi', 'Malayalam'];
+  // dataSource = new MatTableDataSource<Youtube>(this.youtubeArray);
+  // @ViewChild(MatPaginator) set matPaginator(paginator : MatPaginator){
+  //   this.dataSource.paginator = paginator;
+  // }
+  // @ViewChild(MatSort) sort! : MatSort;
+  // ngAfterViewInit(){
+  //   // this.dataSource.paginator = this.paginator;
+  //   this.dataSource.sort = this.sort;
+  // }
   // @ViewChild(MatSort) sort: MatSort = <MatSort>{};
   // @ViewChild('paginator') paginator: MatPaginator;
   // dataSource: MatTableDataSource<Youtube>
@@ -35,37 +46,45 @@ export class StaffYoutubeComponent implements OnInit {
     category: "",
     language: "",
     id: "",
-    uploadDate:Timestamp.now()
+    uploadDate: Timestamp.now()
   }
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
-
+  fileName: string = 'youtube.xlsx';
   constructor(private firestoreService: FirestoreServiceService,
-              private _snackBar: MatSnackBar,
-              private dialog:MatDialog) {
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
-    this.youtube.uploadDate = Timestamp.now();
     console.log(this.youtube.uploadDate);
     const youTubeArray: Youtube[] = []
-    this.firestoreService.getYoutube().ref.get().then(res => {
-      res.forEach(function (doc) {
-        youTubeArray.push(<Youtube>doc.data());
-      });
+    this.firestoreService.getYoutube().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        youTubeArray.push(<Youtube>doc.payload.doc.data());
+      })
     });
+    // this.firestoreService.getYoutube().ref.get().then(res => {
+    //   res.forEach(function (doc) {
+    //     youTubeArray.push(<Youtube>doc.data());
+    //   });
+    // });
     this.youtubeArray = youTubeArray;
-    console.log(this.youtubeArray);
+    // this.dataSource = new MatTableDataSource<Youtube>(this.youtubeArray);
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+    // console.log(this.dataSource)
+    // console.log(this.youtubeArray);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
   submit() {
-    console.log('yub');
+    this.youtube.uploadDate = Timestamp.now();
     console.log(this.youtube);
     this.spinnerActive = true;
-    if(this.thumbImageFile == undefined && this.youtube.imageUrl == ''){
-      this.openSnackBar('Choose one option for upload image','retry');
+    if (this.thumbImageFile == undefined && this.youtube.imageUrl == '') {
+      this.openSnackBar('Choose one option for upload image', 'retry');
       this.spinnerActive = false
     }
     console.log(this.youtube.imageUrl);
@@ -90,25 +109,35 @@ export class StaffYoutubeComponent implements OnInit {
     }
   }
 
-   delete(id:string,type:string){
+  delete(id: string, type: string) {
     // console.log(id,type);
-     const dialogRef = this.dialog.open(DialogComponent,{
-      data:{
-        value:type,id
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        value: type, id
       }
     });
     dialogRef.componentInstance.deleted.subscribe(val => {
 
-      for(let i = 0;i<this.youtubeArray.length;i++){
-        if(this.youtubeArray[i].id === id){
-          console.log('deleting',this.youtubeArray[i].id);
+      for (let i = 0; i < this.youtubeArray.length; i++) {
+        if (this.youtubeArray[i].id === id) {
+          console.log('deleting', this.youtubeArray[i].id);
           this.youtubeArray.splice(i, 1);
           break;
         }
       }
-    
     });
-    
+  }
+  export() {
+    console.log('in function');
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
   }
   putStorageItem(file: any) {
     const storage = getStorage();
@@ -162,7 +191,7 @@ export class StaffYoutubeComponent implements OnInit {
       category: "",
       language: "",
       id: "",
-      uploadDate:Timestamp.now()
+      uploadDate: Timestamp.now()
     }
   }
 }

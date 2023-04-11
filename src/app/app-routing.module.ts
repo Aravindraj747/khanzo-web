@@ -20,32 +20,41 @@ import { StaffReelsComponent } from './Staff/staff-reels/staff-reels.component';
 import { StaffShortsComponent } from './Staff/staff-shorts/staff-shorts.component';
 import { StaffYoutubeComponent } from './Staff/staff-youtube/staff-youtube.component';
 import { TermsandConditionComponent } from './Staff/termsand-condition/termsand-condition.component';
+import { ReportComponent } from './Staff/report/report.component';
+import { OnlineShopComponent } from './Staff/online-shop/online-shop.component';
+import { OfflineShopComponent } from './Staff/offline-shop/offline-shop.component';
+import { LandingComponent } from './Staff/landing/landing.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: AdminLoginComponent
+    component: LandingComponent
   },
   // Staff Components
-  {path:'youtube',component:StaffYoutubeComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'dailyTask',component:StaffDailyTaskComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'instagram',component:StaffInstagramComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'shorts',component:StaffShortsComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'reels',component:StaffReelsComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'adbanner',component:StaffAdbannerComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'coupons',component:CouponsComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'faceBook',component:FacebookComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'music',component:MusicComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'terms',component:TermsandConditionComponent},
-  {path:'imageBanner',component:ImageBannerComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'kids',component:KidsComponent ,canActivate:[StaffauthguardGuard]},
-  {path:'privacy-policy',component:PrivacyComponent},
+  { path: 'youtube', component: StaffYoutubeComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'dailyTask', component: StaffDailyTaskComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'instagram', component: StaffInstagramComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'shorts', component: StaffShortsComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'reels', component: StaffReelsComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'adbanner', component: StaffAdbannerComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'coupons', component: CouponsComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'faceBook', component: FacebookComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'music', component: MusicComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'terms', component: TermsandConditionComponent },
+  { path: 'landing', component: LandingComponent },
+  { path: 'imageBanner', component: ImageBannerComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'kids', component: KidsComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'privacy-policy', component: PrivacyComponent },
+  { path: 'adminLogin', component: AdminLoginComponent },
+  { path: 'online', component: OnlineShopComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'offline', component: OfflineShopComponent, canActivate: [StaffauthguardGuard] },
   // Admin Components
-  {path:'adminHome',component:AdminHomeComponent ,canActivate:[AdminauthguardGuard]},
-  {path:'adminSideNav',component:SideNavComponent,canActivate:[StaffauthguardGuard]},
-  {path:'user',component:UserComponent  ,canActivate:[AdminauthguardGuard]},
-  {path:'staffCreation',component:StaffCreationComponent  ,canActivate:[AdminauthguardGuard]},
+  { path: 'adminHome', component: AdminHomeComponent, canActivate: [AdminauthguardGuard] },
+  { path: 'report', component: ReportComponent, canActivate: [AdminauthguardGuard] },
+  { path: 'adminSideNav', component: SideNavComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'user', component: UserComponent, canActivate: [AdminauthguardGuard] },
+  { path: 'staffCreation', component: StaffCreationComponent, canActivate: [AdminauthguardGuard] },
 ];
 
 @NgModule({

@@ -8,4 +8,5 @@ export interface AdBanner{
     uploadDate:Timestamp;
     state:string;
     district:string;
+    views:number;
 }

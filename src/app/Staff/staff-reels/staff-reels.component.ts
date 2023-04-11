@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Reels } from 'src/app/models/reels';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-staff-reels',
   templateUrl: './staff-reels.component.html',
@@ -17,25 +17,31 @@ export class StaffReelsComponent implements OnInit {
 
   reel: Reels = {
     videoUrl: "",
-    id:"",
-    imageUrl:'',
-    uploadDate:Timestamp.now()
+    id: "",
+    imageUrl: '',
+    uploadDate: Timestamp.now()
   }
   thumbImageFile: any = undefined;
   reels: string = '';
-  spinnerActive:boolean = false;
-  reelsArray: Reels[] =[];
+  spinnerActive: boolean = false;
+  fileName: string = 'reels.xlsx';
+  reelsArray: Reels[] = [];
   constructor(private _snackBar: MatSnackBar,
-              private firestoreService: FirestoreServiceService,
-              private dialog: MatDialog) { }
+    private firestoreService: FirestoreServiceService,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    const reelArray: Reels[] =[];
-    this.firestoreService.getReels().ref.get().then(res=>{
-      res.forEach(function (doc){
-        reelArray.push(<Reels>doc.data());
-      });
+    const reelArray: Reels[] = [];
+    this.firestoreService.getReels().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        reelArray.push(<Reels>doc.payload.doc.data());
+      })
     });
+    // this.firestoreService.getReels().ref.get().then(res => {
+    //   res.forEach(function (doc) {
+    //     reelArray.push(<Reels>doc.data());
+    //   });
+    // });
     this.reelsArray = reelArray;
     console.log(this.reelsArray);
   }
@@ -46,43 +52,54 @@ export class StaffReelsComponent implements OnInit {
     this.reel.uploadDate = Timestamp.now();
     this.reel.id = Timestamp.now().seconds.toString();
     this.spinnerActive = true;
-    if(this.reel.videoUrl !== ''){
-      if(this.reel.imageUrl !== ''){
-        this.firestoreService.saveReel(this.reel).then(res=>{
+    if (this.reel.videoUrl !== '') {
+      if (this.reel.imageUrl !== '') {
+        this.firestoreService.saveReel(this.reel).then(res => {
           this.reelsArray.push(this.reel);
           this.spinnerActive = false;
-          this.openSnackBar('Saved Successfully','undo');
+          this.openSnackBar('Saved Successfully', 'undo');
           this.resetPage();
-      });
-      return
+        });
+        return
+      }
+      else if (this.thumbImageFile !== undefined) {
+        this.putStorageItem(this.thumbImageFile);
+      }
     }
-    else if(this.thumbImageFile !==undefined){
-      this.putStorageItem(this.thumbImageFile);
-    }
-    }
-    else{
+    else {
       this.spinnerActive = false;
-      this.openSnackBar('Enter link to save','retry');
+      this.openSnackBar('Enter link to save', 'retry');
       return
     }
+  } export() {
+    console.log('in function');
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
   }
-  delete(id:string,type:string){
+  delete(id: string, type: string) {
     // console.log(id,type);
-     const dialogRef = this.dialog.open(DialogComponent,{
-      data:{
-        value:type,id
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        value: type, id
       }
     });
     dialogRef.componentInstance.deleted.subscribe(val => {
 
-      for(let i = 0;i<this.reelsArray.length;i++){
-        if(this.reelsArray[i].id === id){
-          console.log('deleting',this.reelsArray[i].id);
+      for (let i = 0; i < this.reelsArray.length; i++) {
+        if (this.reelsArray[i].id === id) {
+          console.log('deleting', this.reelsArray[i].id);
           this.reelsArray.splice(i, 1);
           break;
         }
       }
-    
+
     });
   }
   putStorageItem(file: any) {
@@ -129,12 +146,12 @@ export class StaffReelsComponent implements OnInit {
       duration: 2000,
     })
   }
-  resetPage(){
+  resetPage() {
     this.reel = {
       videoUrl: '',
-      id:'',
-      imageUrl:'',
-      uploadDate:Timestamp.now()
+      id: '',
+      imageUrl: '',
+      uploadDate: Timestamp.now()
     }
   }
 }

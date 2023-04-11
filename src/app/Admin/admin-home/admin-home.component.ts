@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Withdrawal } from 'src/app/models/withdrawal';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import { DialogComponent } from '../dialog/dialog.component';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-admin-home',
@@ -13,7 +14,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 export class AdminHomeComponent implements OnInit {
 
   withdrawals: Withdrawal[] =[];
-
+  fileName = 'withdrawal.xlsx';
   constructor(private firestoreService: FirestoreServiceService,
               private dialog: MatDialog) { }
 
@@ -22,18 +23,34 @@ export class AdminHomeComponent implements OnInit {
   }
 
   getWithdrawal(){
-    const withdrawalArray: Withdrawal[] = []
-    this.firestoreService.getAllWithdrawal().ref.get().then(res => {
-      console.log(res);
-      res.forEach(function(doc) {
-        withdrawalArray.push(<Withdrawal>doc.data());
-      });
+    const withdrawalArray: Withdrawal[] = [];
+    this.firestoreService.getAllWithdrawal().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        withdrawalArray.push(<Withdrawal>doc.payload.doc.data());
+      })
     });
+    // this.firestoreService.getAllWithdrawal().ref.get().then(res => {
+    //   console.log(res);
+    //   res.forEach(function(doc) {
+    //     withdrawalArray.push(<Withdrawal>doc.data());
+    //   });
+    // });
     this.withdrawals = []
     this.withdrawals = withdrawalArray;
     console.log(this.withdrawals);
   }
+  export() {
+    console.log('in function');
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+  }
   openDialog(value:string,withdrawal:Withdrawal){
     let id = withdrawal.withdrawalId;
     console.log(value);

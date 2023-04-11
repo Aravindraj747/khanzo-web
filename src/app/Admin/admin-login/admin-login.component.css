@@ -25,9 +25,9 @@
 /* eye icon */
 .span {
     position: relative;
-    left: 260px;
+    left: 390px;
     transform: translate(0, -50%);
-    top: -7.5%;
+    top: -28.5%;
     cursor: pointer;
 }
 

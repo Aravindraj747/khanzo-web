@@ -2,7 +2,9 @@
     margin-left: 250px;
     margin-top: 50px;
 }
-
+.btn{
+    margin-left: 90%;
+}
 .new h1 {
     display: flex;
     justify-content: center;
@@ -20,11 +22,14 @@
 }
 
 .topic .ThumURL {
-    margin-left: 250px;
+    margin-left: 125px;
 }
 
 .topic .ThumPic {
-    margin-left: 330px;
+    margin-left: 225px;
+}
+.topic .coupon{
+    margin-left: 310px;
 }
 .value form {
     display: flex;
@@ -42,25 +47,12 @@
     /* outline: 0; */
     border-bottom: 1px solid black;
 }
-/* .value input {
-    background-color: rgb(183, 193, 202);
-    border: none;
-} */
 
 .note {
     color: red;
     font-size: 13px;
 }
 
-/* Save button */
-/* button {
-    max-width: 65px;
-    background-color: deepskyblue;
-    border: none;
-    color: #080710;
-    border-radius: 5px;
-    cursor: pointer;
-} */
 
 .example-box.cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
@@ -81,6 +73,7 @@
 
 /*  */
 table{
+    margin-top: 10px;
     margin-left: 350px;
     width: 70%;
   }

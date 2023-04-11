@@ -17,7 +17,8 @@ body {
   z-index: 4;
   height: 50px;
   width: 100%;
-  background: #adcae7;
+  /* background: #adcae7; */
+  background-color: black;
   /* background:#dfe9f5 ; */
   position:relative;
   justify-content: space-between;
@@ -111,4 +112,23 @@ i {
   font-size: 20px;
   margin-left: 20px;
   font-weight: bold;
+}
+
+.logo{
+  text-align: center;
+  display: flex;
+  transition: all 0.5s ease;
+  margin: 10px 0 0 10p;
+}
+.logo img{
+  margin-left: 15px;
+  width:150px ;
+  height: 45px;
+  /* border-radius: 50%; */
+}
+.logo span{
+  font-weight: bold;
+  padding-left: 15px;
+  font-size: 15px;
+  text-transform: uppercase;
 }

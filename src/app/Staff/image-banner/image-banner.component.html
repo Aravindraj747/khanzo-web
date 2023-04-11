@@ -1,37 +1,42 @@
 <!-- <app-staff-side-nav></app-staff-side-nav> -->
 <app-side-nav></app-side-nav>
 <div class="container">
-    <!-- <div class="new">
+  <!-- <div class="new">
         <p style="margin-left: 20px;"><a href=""><mat-icon>add_circle_outline</mat-icon> Add NewLink</a></p>
     </div> -->
-    <div class="new">
-        <h1>Image Banner</h1>
-    </div>
-    <div class="topic">
-        <p class="ThumURL">Image URL</p>
-        <p class="ThumPic">Image Pic</p>
-        <p class="category">Email</p>
-        <p class="language">Address</p>
-        <p class="phone">PhoneNumber</p>
-        <p></p>
-    </div>
-    <div class="value">
-        <form action="" [class.spinnerOverlay]="spinnerActive">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.imageUrl"id="input"  type="text">
-            <input type="file" (change)="chooseThumb($event)" id="drop">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.email" type="text" id="input" class="pasteLink">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.address" type="text" id="input" class="pasteLink">
-            <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.phoneNumber" type="text" id="input" class="pasteLink">
-            <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
-        </form>
-    </div>
-    <br>
-    <p class="note">Note* :Choose any one of the option for adding Image</p>
-    <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+  <div class="new">
+    <h1>Image Banner</h1>
+  </div>
+  <div class="topic">
+    <p class="ThumURL">Image URL</p>
+    <p class="ThumPic">Image Pic</p>
+    <p class="category">Email</p>
+    <p class="language">Address</p>
+    <p class="phone">PhoneNumber</p>
+    <p></p>
+  </div>
+  <div class="value">
+    <form action="" [class.spinnerOverlay]="spinnerActive">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.imageUrl" id="input" type="text">
+      <input type="file" (change)="chooseThumb($event)" id="drop">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.email" type="text" id="input" class="pasteLink">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.address" type="text" id="input"
+        class="pasteLink">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="banner.phoneNumber" type="text" id="input"
+        class="pasteLink">
+      <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+    </form>
+  </div>
+  <br>
+  <p class="note">Note* :Choose any one of the option for adding Image</p>
+  <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+</div>
+<div class="btn">
+  <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
 </div>
 <div class="table-wrapper">
-    <table class="fl-table">
-      <thead>
+  <table class="fl-table" id="excel-table">
+    <thead>
       <tr>
         <th>Id</th>
         <th>Email</th>
@@ -41,8 +46,8 @@
         <th>Image</th>
         <th>Delete</th>
       </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
       <tr *ngFor="let banner of bannerArray">
         <td>{{banner?.id}}</td>
         <td>{{banner?.email}}</td>
@@ -52,6 +57,6 @@
         <td><a mat-raised-button href="{{banner.imageUrl}}" target="_blank">View</a></td>
         <td><a class="delete" (click)="delete(banner.id,'imageBanner')">X</a></td>
       </tr>
-      <tbody>
-    </table>
-  </div>
+    <tbody>
+  </table>
+</div>

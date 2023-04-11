@@ -12,23 +12,23 @@
 }
 
 .topic .pasteLink {
-    margin-left: 110px;
+    margin-left: 55px;
 }
 
 .topic .ThumURL {
-    margin-left: 150px;
+    margin-left: 160px;
 }
 
 .topic .ThumPic {
-    margin-left: 190px;
+    margin-left: 160px;
 }
 
 .topic .category {
-    margin-left: 170px;
+    margin-left: 250px;
 }
 
 .topic .language {
-    margin-left: 120px;
+    margin-left: 110px;
 }
 
 .value form {
@@ -40,7 +40,7 @@
     display: flex;
 }
 
-.delete{
+.delete {
     cursor: pointer;
 }
 
@@ -51,7 +51,7 @@
     border-bottom: 1px solid black;
 }
 
-.value #drop{
+.value #drop {
     border: 0;
     outline: 0;
 }
@@ -59,6 +59,10 @@
 .note {
     color: red;
     font-size: 13px;
+}
+
+.btn {
+    margin-left: 90%;
 }
 
 button {
@@ -96,27 +100,29 @@ button {
 }
 
 /*  */
-table{
+table {
+    margin-top: 10px;
     margin-left: 350px;
     width: 70%;
-  }
-  h2{
+}
+
+h2 {
     text-align: center;
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: white;
     padding: 30px 0;
-  }
-  
-  /* Table Styles */
-  
-  /* .table-wrapper{
+}
+
+/* Table Styles */
+
+/* .table-wrapper{
     margin: 10px 70px 70px;
     box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
   } */
-  
-  .fl-table {
+
+.fl-table {
     border-radius: 5px;
     font-size: 12px;
     font-weight: normal;
@@ -127,24 +133,26 @@ table{
     white-space: nowrap;
     /* background-color: white; */
     box-shadow: 3px 3px 5px 6px #d8d2d2;
-  }
-  
-  .fl-table th{
+}
+
+.fl-table th {
     font-weight: 800;
     font-style: bold;
-  }
-  .fl-table td, .fl-table th {
+}
+
+.fl-table td,
+.fl-table th {
     text-align: center;
     padding: 12px;
     color: #565353;
-    font-family: 'Montserrat',sans-serif;
-  }
-  
-  .fl-table td {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.fl-table td {
     border-right: 1px solid #f8f8f8;
     font-size: 12px;
-  }
-  
-  .fl-table tr:nth-child(even) {
+}
+
+.fl-table tr:nth-child(even) {
     background: #F8F8F8;
-  }
+}

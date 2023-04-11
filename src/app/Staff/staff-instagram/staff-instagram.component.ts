@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Instagram } from 'src/app/models/instagram';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-staff-instagram',
   templateUrl: './staff-instagram.component.html',
@@ -27,6 +27,7 @@ export class StaffInstagramComponent implements OnInit {
   instaLink: string = '';
   errorMessage: string = '';
   jsonFile: string = '';
+  fileName:string = 'instagram.xlsx';
   instaGramArray: Instagram[] = [];
   spinnerActive:boolean = false;
   constructor(private _snackBar: MatSnackBar,
@@ -36,12 +37,17 @@ export class StaffInstagramComponent implements OnInit {
 
   ngOnInit(): void {
     this.instagram.uploadDate = Timestamp.now();
-    const instagramArray: Instagram[] = []
-    this.firestoreService.getInstagramVideo().ref.get().then(res => {
-      res.forEach(function (doc) {
-        instagramArray.push(<Instagram>doc.data());
-      });
+    const instagramArray: Instagram[] = [];
+    this.firestoreService.getInstagramVideo().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        instagramArray.push(<Instagram>doc.payload.doc.data());
+      })
     });
+    // this.firestoreService.getInstagramVideo().ref.get().then(res => {
+    //   res.forEach(function (doc) {
+    //     instagramArray.push(<Instagram>doc.data());
+    //   });
+    // });
     this.instaGramArray = instagramArray;
     console.log(this.instaGramArray);
   }
@@ -108,6 +114,18 @@ export class StaffInstagramComponent implements OnInit {
     //   this.spinnerActive = false;
     //   this.openSnackBar('Enter Instagram Link', 'retry');
     // }
+  }
+  export() {
+    console.log('in function');
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
   }
   putStorageItem(file: any) {
     const storage = getStorage();

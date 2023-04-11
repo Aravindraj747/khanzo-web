@@ -6,4 +6,5 @@ export interface Shorts{
     imageUrl:string;
     uploadDate:Timestamp;
     id:string;
+    language:string;
 }

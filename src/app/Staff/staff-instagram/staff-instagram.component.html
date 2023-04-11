@@ -22,9 +22,11 @@
   <p class="note">Note* :Choose any one of the option for adding Image</p>
   <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
 </div>
-
+<div class="btn">
+  <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
+</div>
 <div class="table-wrapper">
-  <table class="fl-table">
+  <table class="fl-table" id="excel-table">
     <thead>
       <tr>
         <th>Id</th>

@@ -6,9 +6,9 @@ import { HttpClient } from '@angular/common/http';
 export class StaffServiceService {
 
   apiBaseUrl = 'https://localhost/';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getCountries(){
+  getCountries() {
     return this.http.get(`${this.apiBaseUrl}api/countries`);
   }
 }

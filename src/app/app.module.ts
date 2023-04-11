@@ -11,23 +11,23 @@ import { StaffYoutubeComponent } from './Staff/staff-youtube/staff-youtube.compo
 import { StaffDailyTaskComponent } from './Staff/staff-daily-task/staff-daily-task.component';
 
 // MatMlodule
-import {MatIconModule} from '@angular/material/icon';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatTableModule} from '@angular/material/table';
-import {MatButtonModule} from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 // FireBase
-import {AngularFireModule} from '@angular/fire/compat';
+import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { provideFirestore,getFirestore } from '@angular/fire/firestore';
-import { provideStorage,getStorage} from '@angular/fire/storage';
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app'; 
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideStorage, getStorage } from '@angular/fire/storage';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 
 // 
 import { environment } from 'src/environments/environment';
@@ -49,6 +49,10 @@ import { AdminauthguardGuard } from './AuthGuard/adminauthguard.guard';
 import { StaffauthguardGuard } from './AuthGuard/staffauthguard.guard';
 import { KidsComponent } from './Staff/kids/kids.component';
 import { PrivacyComponent } from './Staff/privacy/privacy.component';
+import { OnlineShopComponent } from './Staff/online-shop/online-shop.component';
+import { OfflineShopComponent } from './Staff/offline-shop/offline-shop.component';
+import { ReportComponent } from './Staff/report/report.component';
+import { LandingComponent } from './Staff/landing/landing.component';
 // import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
@@ -72,7 +76,11 @@ import { PrivacyComponent } from './Staff/privacy/privacy.component';
     ImageBannerComponent,
     MusicComponent,
     KidsComponent,
-    PrivacyComponent
+    PrivacyComponent,
+    OnlineShopComponent,
+    OfflineShopComponent,
+    ReportComponent,
+    LandingComponent
   ],
   entryComponents: [DialogComponent],
   imports: [

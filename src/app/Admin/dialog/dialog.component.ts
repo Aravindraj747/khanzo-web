@@ -5,6 +5,7 @@ import { Withdrawal } from 'src/app/models/withdrawal';
 import { StaffYoutubeComponent } from 'src/app/Staff/staff-youtube/staff-youtube.component';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import { Timestamp } from '@angular/fire/firestore';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-dialog',
@@ -16,6 +17,8 @@ export class DialogComponent implements OnInit {
   withdrawal:Withdrawal;
   value:string = '';
   id:string = '';
+  utr:string='';
+  reason:string= '';
   @Output() deleted = new EventEmitter<boolean>();
   @Output() updated = new EventEmitter<boolean>();
   
@@ -30,17 +33,23 @@ export class DialogComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  async getDetails(email: string) {
+    await this.firestoreService.getUserDetails(email);
+  }
 // For Withdrawal
   accept(val:string){
-    console.log('val',val)
+    console.log('val',val);
     console.log(this.withdrawal);
     this.saveDetails(this.withdrawal,val);
   }
+
   saveDetails(withdrawal:Withdrawal,val:string){
     if(val == 'accept'){
       let data = {
         'status': 'SUCCESS',
-        'completedDate': Timestamp.now()
+        'completedDate': Timestamp.now(),
+        'utr':this.utr,
+        'reason':this.reason
       }
       this.updated.emit(true);
       this.firestoreService.updateWithdrawal(withdrawal.withdrawalId,data).then(res=>{
@@ -64,6 +73,7 @@ export class DialogComponent implements OnInit {
   }
 // delete videos
   delete(){
+      console.log('id',this.id);
       this.firestoreService.delete(this.id,this.value);
       this.openSnackBar('Deleted Successfully','Unod');
       this.deleted.emit(true);

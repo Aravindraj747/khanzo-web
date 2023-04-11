@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { Banner } from 'src/app/models/banner';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-image-banner',
   templateUrl: './image-banner.component.html',
@@ -15,31 +15,37 @@ import { FirestoreServiceService } from 'src/app/Services/firestore-service.serv
 export class ImageBannerComponent implements OnInit {
 
   banner: Banner = {
-    email:'',
-    address:'',
-    phoneNumber:'',
-    uploadDate:Timestamp.now(),
-    id:'',
-    imageUrl:'',
+    email: '',
+    address: '',
+    phoneNumber: '',
+    uploadDate: Timestamp.now(),
+    id: '',
+    imageUrl: '',
   }
-  bannerArray: Banner[] =[];
+  bannerArray: Banner[] = [];
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
+  fileName: string = 'imagebanner.xlsx';
 
 
   constructor(private firestoreService: FirestoreServiceService,
-              private _snackBar: MatSnackBar,
-              private dialog:MatDialog) {
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
     this.banner.uploadDate = Timestamp.now();
     const youTubeArray: Banner[] = [];
-    this.firestoreService.getBanner().ref.get().then(res => {
-      res.forEach(function (doc) {
-        youTubeArray.push(<Banner>doc.data());
-      });
+    this.firestoreService.getBanner().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        youTubeArray.push(<Banner>doc.payload.doc.data());
+      })
     });
+    // this.firestoreService.getBanner().ref.get().then(res => {
+    //   res.forEach(function (doc) {
+    //     youTubeArray.push(<Banner>doc.data());
+    //   });
+    // });
     this.bannerArray = youTubeArray;
     console.log(this.bannerArray);
   }
@@ -50,8 +56,8 @@ export class ImageBannerComponent implements OnInit {
     console.log('yub');
     console.log(this.banner);
     this.spinnerActive = true;
-    if(this.thumbImageFile == undefined && this.banner.imageUrl == ''){
-      this.openSnackBar('Choose one option for upload image','retry');
+    if (this.thumbImageFile == undefined && this.banner.imageUrl == '') {
+      this.openSnackBar('Choose one option for upload image', 'retry');
       this.spinnerActive = false
     }
     console.log(this.banner.imageUrl);
@@ -74,26 +80,37 @@ export class ImageBannerComponent implements OnInit {
       this.putStorageItem(this.thumbImageFile);
     }
   }
+  export() {
+    console.log('in function');
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
-   delete(id:string,type:string){
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
+  }
+  delete(id: string, type: string) {
     // console.log(id,type);
-     const dialogRef = this.dialog.open(DialogComponent,{
-      data:{
-        value:type,id
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        value: type, id
       }
     });
     dialogRef.componentInstance.deleted.subscribe(val => {
 
-      for(let i = 0;i<this.bannerArray.length;i++){
-        if(this.bannerArray[i].id === id){
-          console.log('deleting',this.bannerArray[i].id);
+      for (let i = 0; i < this.bannerArray.length; i++) {
+        if (this.bannerArray[i].id === id) {
+          console.log('deleting', this.bannerArray[i].id);
           this.bannerArray.splice(i, 1);
           break;
         }
       }
-    
+
     });
-    
+
   }
   putStorageItem(file: any) {
     const storage = getStorage();
@@ -147,7 +164,7 @@ export class ImageBannerComponent implements OnInit {
       phoneNumber: "",
       address: "",
       id: "",
-      uploadDate:Timestamp.now()
+      uploadDate: Timestamp.now()
     }
   }
 }

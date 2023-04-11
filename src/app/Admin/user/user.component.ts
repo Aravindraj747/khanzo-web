@@ -15,26 +15,49 @@ export class UserComponent implements OnInit {
   constructor(private firestroreService: FirestoreServiceService) { }
 
   ngOnInit(): void {
-    const usersArray: User[] = []
-    this.firestroreService.getUser().ref.get().then(res => {
-      res.forEach(function (doc) {
-        usersArray.push(<User>doc.data());
-      });
+    const usersArray: User[] = [];
+    this.firestroreService.getUser().snapshotChanges().subscribe(res => {
+      res.forEach(doc => {
+        usersArray.push(<User>doc.payload.doc.data());
+      })
     });
+    // this.firestroreService.getUser().ref.get().then(res => {
+    //   res.forEach(function (doc) {
+    //     usersArray.push(<User>doc.data());
+    //   });
+    // });
     this.users = usersArray;
     console.log(this.users);
   }
 
+  // export() {
+  //   console.log('in function');
+  //   let element = document.getElementById('excel-table');
+  //   let user:User[] =[]
+  //   const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(user);
+
+  //   /* generate workbook and add the worksheet */
+  //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  //   /* save to file */
+  //   XLSX.writeFile(wb, this.fileName);
+  // }
   export() {
-    console.log('in function');
-    let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const XLSX = require('xlsx')
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // array of objects to save in Excel
+    let binary_univers = this.users;
 
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
+
+    // Create a new Workbook
+    var wb = XLSX.utils.book_new()
+
+    // Name your sheet
+    XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
+
+    // export your excel
+    XLSX.writeFile(wb, 'Binaire.xlsx');
   }
 }

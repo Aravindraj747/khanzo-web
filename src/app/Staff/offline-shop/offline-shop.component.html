@@ -1,0 +1,86 @@
+<!-- <app-staff-side-nav></app-staff-side-nav> -->
+<app-side-nav></app-side-nav>
+<div class="container">
+  <div class="new">
+    <h1>Offline Shop</h1>
+  </div>
+  <div class="topic">
+    <p class="pasteLink">Name</p>
+    <!-- <input  [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.name" type="text" id="input" class="pasteLink"> -->
+    <p class="ThumURL">Address</p>
+    <!-- <input  [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.address" type="text" id="input" class="pasteLink"> -->
+    <p class="ThumPic">Image URL</p>
+    <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.imageUrl" id="input" type="text"> -->
+    <p class="pic">Image Pic</p>
+    <!-- <input type="file" style="width:90px" (change)="chooseImage($event)" id="drop"> -->
+    <p class="start">Date and Time</p>
+    <p class="coupon">PhoneNumber</p>
+    <p></p>
+    <p class="state">Select State</p>
+    <p class="district">Select District</p>
+  </div>
+  <div class="value">
+    <form [class.spinnerOverlay]="spinnerActive" action="">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.name" type="text" id="input" class="pasteLink">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.address" type="text" id="input"
+        class="pasteLink">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.imageUrl" id="input" type="text">
+      <input type="file" style="width:90px" (change)="chooseImage($event)" id="drop">
+      <mat-form-field style="width:50px;">
+        <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="offline.openingTime" matInput
+          type="datetime-local" placeholder="start Date">
+      </mat-form-field>
+      <mat-form-field style="width:70px">
+        <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="offline.closingTime" matInput
+          type="datetime-local" placeholder="Expiry Date">
+      </mat-form-field>
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.phoneNumber" id="input" type="text">
+      <select [ngModelOptions]="{standalone: true}" (change)="getdistrict(offline.state)" [(ngModel)]="offline.state"
+        name="state" id="drop">
+        <option value="">Select</option>
+        <option *ngFor="let state of states">{{state}}</option>
+      </select>
+      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.district" name="state" id="drop">
+        <option value="">Select</option>
+        <option *ngFor="let dist of districts">{{dist}}</option>
+      </select>
+      <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+    </form>
+  </div>
+  <br>
+  <p class="note">Note* :Choose any one option to upload image.</p>
+  <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+</div>
+<div class="btn">
+  <a mat-raised-button (click)="export()" color="primary" target="_blank">Export</a>
+</div>
+<div class="table-wrapper">
+  <table class="fl-table" id="excel-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Upload Date</th>
+        <th>Address</th>
+        <th>Start Date</th>
+        <th>expiryDate</th>
+        <th>Contact</th>
+        <th>Image</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let offline of offlineShops">
+        <td>{{offline.id}}</td>
+        <td>{{offline.name}}</td>
+        <td>{{offline.uploadDate.toDate() | date:'dd-MM-yyyy'}}</td>
+        <td>{{offline.address}}</td>
+        <td>{{offline.openingTime.toDate() | date:"dd/MM/yyyy HH:mm:ss"}}</td>
+        <td>{{offline.closingTime.toDate() | date:"dd/MM/yyyy HH:mm:ss"}}</td>
+        <td>{{offline.phoneNumber}}</td>
+        <td><a mat-raised-button href="{{offline.imageUrl}}" target="_blank">View</a></td>
+        <td><a class="delete" (click)="delete(offline.id,'offline')">X</a></td>
+      </tr>
+    <tbody>
+  </table>
+</div>

@@ -9,4 +9,7 @@ export interface Withdrawal {
     accountNumber:string;  //show in table also
     status: string;
     withdrawalId: string;
+    upiId:string;
+    utr:string;
+    ifsc:string;
 }

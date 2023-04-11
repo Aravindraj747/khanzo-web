@@ -10,4 +10,5 @@ export interface DailyTask{
     taskId:string;
     uploadDate:Timestamp;
     category:string;
+    language:string;
 }

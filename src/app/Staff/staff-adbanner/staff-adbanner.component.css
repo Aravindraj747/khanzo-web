@@ -3,27 +3,33 @@
     margin-top: 50px;
 }
 
+.btn {
+    margin-left: 90%;
+    margin-top: 20px;
+}
+
 .topic p {
     font-weight: bold;
 }
+
 .topic {
     display: flex;
 }
 
 .topic .video {
-    margin-left: 110px;
+    margin-left: 70px;
 }
 
 .topic .image {
-    margin-left: 240px;
+    margin-left: 250px;
 }
 
 .topic .state {
-    margin-left: 230px;
+    margin-left: 240px;
 }
 
 .topic .district {
-    margin-left: 170px;
+    margin-left: 200px;
 }
 
 .value form {
@@ -39,8 +45,8 @@
     background-color: rgb(183, 193, 202);
     border: none;
 } */
-.value input{
-    border:1px solid bloack;
+.value input {
+    border: 1px solid bloack;
 }
 
 .note {
@@ -82,32 +88,36 @@ button {
     position: absolute;
     margin-left: 30%;
 }
-.delete{
+
+.delete {
     cursor: pointer;
 }
+
 /*  */
-table{
+table {
+    margin-top: 10px;
     margin-left: 350px;
     width: 70%;
-  }
-  h2{
+}
+
+h2 {
     text-align: center;
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: white;
     padding: 30px 0;
-  }
-  
-  /* Table Styles */
-  
-  .table-wrapper{
-    margin-top:30px;
+}
+
+/* Table Styles */
+
+.table-wrapper {
+    margin-top: 30px;
     /* margin: 10px 70px 70px;
     box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 ); */
-  }
-  
-  .fl-table {
+}
+
+.fl-table {
     border-radius: 5px;
     font-size: 12px;
     font-weight: normal;
@@ -118,24 +128,26 @@ table{
     white-space: nowrap;
     /* background-color: white; */
     box-shadow: 3px 3px 5px 6px #d8d2d2;
-  }
-  
-  .fl-table th{
+}
+
+.fl-table th {
     font-weight: 800;
     font-style: bold;
-  }
-  .fl-table td, .fl-table th {
+}
+
+.fl-table td,
+.fl-table th {
     text-align: center;
     padding: 12px;
     color: #565353;
-    font-family: 'Montserrat',sans-serif;
-  }
-  
-  .fl-table td {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.fl-table td {
     border-right: 1px solid #f8f8f8;
     font-size: 12px;
-  }
-  
-  .fl-table tr:nth-child(even) {
+}
+
+.fl-table tr:nth-child(even) {
     background: #F8F8F8;
-  }
+}

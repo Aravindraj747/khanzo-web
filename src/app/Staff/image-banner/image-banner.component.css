@@ -3,6 +3,10 @@
     margin-top: 50px;
 }
 
+.btn {
+    margin-left: 90%;
+}
+
 .topic p {
     font-weight: bold;
 }
@@ -12,7 +16,7 @@
 }
 
 .topic .ThumURL {
-    margin-left: 90px;
+    margin-left: 40px;
 }
 
 .topic .ThumPic {
@@ -26,9 +30,11 @@
 .topic .language {
     margin-left: 170px;
 }
-.topic .phone{
-    margin-left: 140px;
+
+.topic .phone {
+    margin-left: 160px;
 }
+
 .value form {
     display: flex;
     justify-content: space-evenly;
@@ -38,7 +44,7 @@
     display: flex;
 }
 
-.delete{
+.delete {
     cursor: pointer;
 }
 
@@ -49,7 +55,7 @@
     border-bottom: 1px solid black;
 }
 
-.value #drop{
+.value #drop {
     border: 0;
     outline: 0;
 }
@@ -94,27 +100,29 @@ button {
 }
 
 /*  */
-table{
+table {
+    margin-top: 10px;
     margin-left: 350px;
     width: 70%;
-  }
-  h2{
+}
+
+h2 {
     text-align: center;
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: white;
     padding: 30px 0;
-  }
-  
-  /* Table Styles */
-  
-  /* .table-wrapper{
+}
+
+/* Table Styles */
+
+/* .table-wrapper{
     margin: 10px 70px 70px;
     box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
   } */
-  
-  .fl-table {
+
+.fl-table {
     border-radius: 5px;
     font-size: 12px;
     font-weight: normal;
@@ -125,24 +133,26 @@ table{
     white-space: nowrap;
     /* background-color: white; */
     box-shadow: 3px 3px 5px 6px #d8d2d2;
-  }
-  
-  .fl-table th{
+}
+
+.fl-table th {
     font-weight: 800;
     font-style: bold;
-  }
-  .fl-table td, .fl-table th {
+}
+
+.fl-table td,
+.fl-table th {
     text-align: center;
     padding: 12px;
     color: #565353;
-    font-family: 'Montserrat',sans-serif;
-  }
-  
-  .fl-table td {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.fl-table td {
     border-right: 1px solid #f8f8f8;
     font-size: 12px;
-  }
-  
-  .fl-table tr:nth-child(even) {
+}
+
+.fl-table tr:nth-child(even) {
     background: #F8F8F8;
-  }
+}

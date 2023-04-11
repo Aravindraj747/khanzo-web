@@ -13,6 +13,7 @@ export class AuthenticationServiceService {
 
   constructor(private firestore: AngularFirestore,
               private fireauth: AngularFireAuth,
+              private adminService: AdminServiceService,
               private app: FirebaseApp) { }
 
   // Admin
@@ -21,10 +22,17 @@ export class AuthenticationServiceService {
     return signInWithEmailAndPassword(auth,email,password);
   }
   login(email: string, password: string) {
-    const auth = getAuth(this.app)
+    console.log('inlogin',email,password);
+    const auth = getAuth(this.app);
     return signInWithEmailAndPassword(auth, email, password);
   }
+  register(email: string, password: string) {
+    const auth = getAuth(this.app)
+    return createUserWithEmailAndPassword(auth, email, password);
+  }
   logout() {
+    this.adminService.isAdmin = '';
+    this.adminService.isStaff = '';
     sessionStorage.removeItem('adminLogin');
     sessionStorage.removeItem('staffLogin');
     return this.fireauth.signOut();

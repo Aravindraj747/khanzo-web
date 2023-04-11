@@ -2,6 +2,9 @@
     margin-left: 250px;
     margin-top: 50px;
 }
+.btn{
+  margin-left: 90%;
+}
 .note {
   color: red;
   font-size: 13px;
@@ -15,13 +18,13 @@
 }
 
 .topic .pasteLink {
-    margin-left: 110px;
+    margin-left: 60px;
 }
 .topic .ThumURL{
-  margin-left: 155px;
+  margin-left: 170px;
 }
 .topic .ThumPic{
-  margin-left: 190px;
+  margin-left: 160px;
 }
 .value form {
     display: flex;
@@ -88,6 +91,7 @@ button {
 
 /*  */
 table{
+    margin-top: 10px;
     margin-left: 350px;
     width: 70%;
   }

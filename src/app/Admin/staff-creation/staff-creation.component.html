@@ -1,17 +1,43 @@
 <app-side-nav></app-side-nav>
 <div class="body">
-<div class="container">
+  <div class="container">
     <div class="form-container sign-in-container">
-        <form action="#" (ngSubmit)="submit()" [class.spinnerOverlay]="spinnerActive">
-            <h1 style="margin-bottom: 30px">Agent Creation</h1>
-            <label >Email</label>
-            <input  [(ngModel)]="staff.email" type="email"  class="form-control" name="email" required/>
-            <label >Password</label>
-            <input  [(ngModel)]="staff.password" type="password"  class="form-control" name="password" required/>
-            <button type="submit">Next</button>
-            <!-- <mat-spinner class="mat-spinner" diameter="60"></mat-spinner> -->
-        </form>
-         <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
+      <form action="#" (ngSubmit)="submit()" [class.spinnerOverlay]="spinnerActive">
+        <h1 style="margin-bottom: 30px">Staff Creation</h1>
+        <label>Name</label>
+        <input [(ngModel)]="staff.name" type="email" class="form-control" name="name" required />
+        <label>Email</label>
+        <input [(ngModel)]="staff.email" type="email" class="form-control" name="email" required />
+        <label>Password</label>
+        <input [(ngModel)]="staff.password" type="password" class="form-control" name="password" required />
+        <button type="submit">Next</button>
+        <!-- <mat-spinner class="mat-spinner" diameter="60"></mat-spinner> -->
+      </form>
+      <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
     </div>
+  </div>
 </div>
+<div class="con">
+  <div class="table-wrapper">
+    <table class="fl-table" id="excel-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>password</th>
+          <th>CreationDate</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of staffArray">
+          <td>{{s?.name}}</td>
+          <td>{{s?.email}}</td>
+          <td>{{s?.password}}</td>
+          <td>{{s?.creationDate}}</td>
+          <td><a class="delete" (click)="delete(s.email,'staff')">X</a></td>
+        </tr>
+      <tbody>
+    </table>
+  </div>
 </div>

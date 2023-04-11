@@ -10,4 +10,13 @@ export interface User {
     joinedDate: Timestamp;
     level: string;
     amount:number;
+    gender:string;
+    availableCoupon:number;
+    district:string;
+    dob:Timestamp;
+    expiryDate:Timestamp;
+    language:string;
+    paymentCompleted:boolean;
+    referralCode:string;
+    referredByCode:string;
 }

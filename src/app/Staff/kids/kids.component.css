@@ -12,23 +12,23 @@
 }
 
 .topic .pasteLink {
-    margin-left: 110px;
+    margin-left: 55px;
 }
 
 .topic .ThumURL {
-    margin-left: 150px;
+    margin-left: 160px;
 }
 
 .topic .ThumPic {
-    margin-left: 190px;
+    margin-left: 155px;
 }
 
 .topic .category {
-    margin-left: 170px;
+    margin-left: 250px;
 }
 
 .topic .language {
-    margin-left: 120px;
+    margin-left: 115px;
 }
 
 .value form {
@@ -43,7 +43,9 @@
 .delete{
     cursor: pointer;
 }
-
+.btn{
+    margin-left: 90%;
+}
 .value #input {
     /* background-color: rgb(183, 193, 202); */
     /* border: 0; */
@@ -97,6 +99,7 @@ button {
 
 /*  */
 table{
+    margin-top: 10px;
     margin-left: 350px;
     width: 70%;
   }
