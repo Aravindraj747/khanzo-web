@@ -27,7 +27,7 @@ export class DialogComponent implements OnInit {
               private firestoreService: FirestoreServiceService) {
     this.id = data.id;
     this.value = data.value;
-    console.log(this.id,this.value);
+    // console.log(this.id,this.value);
     this.withdrawal = data['withdrawal'];
    }
 
@@ -38,8 +38,8 @@ export class DialogComponent implements OnInit {
   }
 // For Withdrawal
   accept(val:string){
-    console.log('val',val);
-    console.log(this.withdrawal);
+    // console.log('val',val);
+    // console.log(this.withdrawal);
     this.saveDetails(this.withdrawal,val);
   }
 
@@ -73,7 +73,7 @@ export class DialogComponent implements OnInit {
   }
 // delete videos
   delete(){
-      console.log('id',this.id);
+      // console.log('id',this.id);
       this.firestoreService.delete(this.id,this.value);
       this.openSnackBar('Deleted Successfully','Unod');
       this.deleted.emit(true);

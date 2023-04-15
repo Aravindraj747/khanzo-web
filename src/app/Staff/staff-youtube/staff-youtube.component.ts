@@ -81,28 +81,28 @@ export class StaffYoutubeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.youtube.uploadDate);
+    // console.log(this.youtube.uploadDate);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
   submit() {
     this.youtube.uploadDate = Timestamp.now();
-    console.log(this.youtube);
+    // console.log(this.youtube);
     this.spinnerActive = true;
     if (this.thumbImageFile == undefined && this.youtube.imageUrl == '') {
       this.openSnackBar('Choose one option for upload image', 'retry');
       this.spinnerActive = false
     }
-    console.log(this.youtube.imageUrl);
-    console.log(this.thumbImageFile);
+    // console.log(this.youtube.imageUrl);
+    // console.log(this.thumbImageFile);
     this.youtube.id = Timestamp.now().seconds.toString();
     // this.youtube.uploadDate = Date();
-    console.log(this.youtube.id);
+    // console.log(this.youtube.id);
     if (this.youtube.imageUrl !== '') {
       // download and push to storage and save link in database
       this.firestoreService.saveYoutube(this.youtube).then(res => {
-        console.log("youtube directlink saved");
+        // console.log("youtube directlink saved");
         this.youtubeArray.push(this.youtube);
         this.openSnackBar("Link Saved Successfully", "Close");
         this.resetPage()
@@ -111,7 +111,7 @@ export class StaffYoutubeComponent implements OnInit {
     }
     else if (this.thumbImageFile !== undefined) {
       // push to storage and save link in database
-      console.log('before', this.youtube);
+      // console.log('before', this.youtube);
       this.putStorageItem(this.thumbImageFile);
     }
   }
@@ -162,17 +162,17 @@ export class StaffYoutubeComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
+        // console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.spinnerActive = false;
           this.youtube.imageUrl = downloadURL;
-          console.log('after:', this.youtube);
+          // console.log('after:', this.youtube);
           if (this.youtube.imageUrl !== "") {
             this.firestoreService.saveYoutube(this.youtube).then(res => {
               this.youtubeArray.push(this.youtube);
-              console.log("youtube link saved from storage");
+              // console.log("youtube link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();
@@ -183,7 +183,7 @@ export class StaffYoutubeComponent implements OnInit {
             this.spinnerActive = false;
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
+            // console.log('File available at', downloadURL);
           });
         });
       });

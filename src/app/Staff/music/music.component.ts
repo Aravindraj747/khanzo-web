@@ -66,7 +66,6 @@ export class MusicComponent implements OnInit {
     //   });
     // });
     // this.musicArray = youTubeArray;
-    console.log(this.musicArray);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
@@ -81,7 +80,6 @@ export class MusicComponent implements OnInit {
     if (this.music.imageUrl !== '') {
       // download and push to storage and save link in database
       this.firestoreService.saveMusic(this.music).then(res => {
-        console.log("music directlink saved");
         this.musicArray.push(this.music);
         this.openSnackBar("Link Saved Successfully", "Close");
         this.resetPage();
@@ -91,7 +89,6 @@ export class MusicComponent implements OnInit {
     }
     else if (this.thumbImageFile !== undefined) {
       // push to storage and save link in database
-      console.log('before', this.music);
       this.putStorageItem(this.thumbImageFile);
     }
   }
@@ -107,7 +104,6 @@ export class MusicComponent implements OnInit {
 
       for (let i = 0; i < this.musicArray.length; i++) {
         if (this.musicArray[i].id === id) {
-          console.log('deleting', this.musicArray[i].id);
           this.musicArray.splice(i, 1);
           break;
         }
@@ -126,17 +122,14 @@ export class MusicComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.spinnerActive = false;
           this.music.imageUrl = downloadURL;
-          console.log('after:', this.music);
           if (this.music.imageUrl !== "") {
             this.firestoreService.saveMusic(this.music).then(res => {
               this.musicArray.push(this.music);
-              console.log("music link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();
@@ -147,7 +140,6 @@ export class MusicComponent implements OnInit {
             this.spinnerActive = false;
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
           });
         });
       });

@@ -108,7 +108,6 @@ export class FacebookComponent implements OnInit {
     }
   }
   delete(id: string, type: string) {
-    // console.log(id,type);
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         value: type, id

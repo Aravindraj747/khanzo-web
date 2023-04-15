@@ -82,7 +82,6 @@ export class StaffInstagramComponent implements OnInit {
 
       for(let i = 0;i<this.instaGramArray.length;i++){
         if(this.instaGramArray[i].id === id){
-          console.log('deleting',this.instaGramArray[i].id);
           this.instaGramArray.splice(i, 1);
           break;
         }
@@ -92,7 +91,6 @@ export class StaffInstagramComponent implements OnInit {
   }
   submit() {
     this.instagram.id = Timestamp.now().seconds.toString();
-    console.log(this.instaLink);
     this.spinnerActive = true;
     if(this.instagram.videoUrl !== ''){
       if(this.instagram.imageUrl !== ''){
@@ -159,17 +157,14 @@ export class StaffInstagramComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.spinnerActive = false;
           this.instagram.imageUrl = downloadURL;
-          console.log('after:', this.instagram);
           if (this.instagram.imageUrl !== "") {
             this.firestoreService.saveInstagram(this.instagram).then(res => {
               this.instaGramArray.push(this.instagram);
-              console.log("instagram link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();
@@ -180,7 +175,7 @@ export class StaffInstagramComponent implements OnInit {
             this.spinnerActive = false;
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
+    
           });
         });
       });

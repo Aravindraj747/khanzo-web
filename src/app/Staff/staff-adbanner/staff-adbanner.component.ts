@@ -107,12 +107,10 @@ export class StaffAdbannerComponent implements OnInit {
     this.spinnerActive = true;
     this.length = 0;
     this.adBanner.id = Timestamp.now().seconds.toString();
-    console.log(this.adBanner);
     this.files = [];
     if ((this.ImageFile !== undefined) && (this.VideoFile !== undefined)) {
       this.files.push([this.ImageFile, type.imageURL]);
       this.files.push([this.VideoFile, type.videoURL]);
-      console.log(this.files);
     }
     else {
       this.spinnerActive = false;
@@ -133,31 +131,25 @@ export class StaffAdbannerComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.length += 1
           if (type == 'image') {
             this.adBanner.imageUrl = downloadURL;
-            console.log('image:', downloadURL)
           }
           else if (type == 'video') {
             this.adBanner.videoUrl = downloadURL;
-            console.log('video:', downloadURL)
           }
           if (this.length == this.files.length) {
-            console.log('in saving');
             this.firestoreService.saveAdbanner(this.adBanner).then(res => {
               this.adbannerArray.push(this.adBanner);
-              console.log('it returned');
               this.spinnerActive = false;
               this.resetPage();
               this.openSnackBar('Saved Successfully', 'undo');
             })
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
           });
         });
       });
@@ -190,7 +182,6 @@ export class StaffAdbannerComponent implements OnInit {
 
       for (let i = 0; i < this.adbannerArray.length; i++) {
         if (this.adbannerArray[i].id === id) {
-          console.log('deleting', this.adbannerArray[i].id);
           this.adbannerArray.splice(i, 1);
           break;
         }

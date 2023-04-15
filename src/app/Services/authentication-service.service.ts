@@ -22,7 +22,7 @@ export class AuthenticationServiceService {
     return signInWithEmailAndPassword(auth,email,password);
   }
   login(email: string, password: string) {
-    console.log('inlogin',email,password);
+    // console.log('inlogin',email,password);
     const auth = getAuth(this.app);
     return signInWithEmailAndPassword(auth, email, password);
   }

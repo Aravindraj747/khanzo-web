@@ -15,7 +15,7 @@ export class AdminServiceService {
   }
 
   getAdmin(email: string) {
-    console.log('get admin')
+    // console.log('get admin')
     this.firestore.collection('admin').doc<Admin>(email).get().subscribe(res => {
       sessionStorage.setItem('adminLogin', this.isAdmin)
     })

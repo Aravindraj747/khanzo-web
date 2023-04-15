@@ -18,7 +18,7 @@ export class SideNavComponent implements OnInit {
     if(this.adminService.isAdmin == 'true'){
       this.isAdmin = true
     }
-    console.log('sidenav',this.isAdmin);
+    // console.log('sidenav',this.isAdmin);
   }
 
   logout(){

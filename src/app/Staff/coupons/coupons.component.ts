@@ -59,7 +59,6 @@ export class CouponsComponent implements OnInit {
     //   });
     // });
     // this.couponArray = couponArrays;
-    console.log(this.couponArray);
   }
 
   chooseImage(event: any) {
@@ -67,7 +66,6 @@ export class CouponsComponent implements OnInit {
   }
   submit() {
     // this.coupons.couponId = Timestamp.now().seconds.toString();
-    console.log(this.coupons.couponId);
     this.spinnerActive = true;
     if(this.coupons.imageUrl == '' && this.imageFile == undefined){
       this.openSnackBar('Choose any on option to save','retry');
@@ -75,7 +73,6 @@ export class CouponsComponent implements OnInit {
     }
     if (this.coupons.imageUrl !== "") {
       this.firestoreService.saveCoupons(this.coupons).then(res => {
-        console.log("Coupon saved as image URL");
         this.spinnerActive = false;
         this.openSnackBar('Coupon saved successfully', 'retry');
         this.resetPage();
@@ -96,16 +93,12 @@ export class CouponsComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.coupons.imageUrl = downloadURL;
-          console.log(this.coupons.imageUrl);
-          console.log('after:', this.coupons);
           if (this.coupons.imageUrl !== "") {
             this.firestoreService.saveCoupons(this.coupons).then(res => {
-              console.log('Coupon saved as imageFile')
             });
             this.openSnackBar('DailyTask Saved', 'undo');
             this.spinnerActive = false;
@@ -116,7 +109,6 @@ export class CouponsComponent implements OnInit {
             this.spinnerActive = false;
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
           });
           return;
         });
@@ -151,7 +143,6 @@ export class CouponsComponent implements OnInit {
 
       for(let i = 0;i<this.couponArray.length;i++){
         if(this.couponArray[i].couponId === id){
-          console.log('deleting',this.couponArray[i].couponId);
           this.couponArray.splice(i, 1);
           break;
         }

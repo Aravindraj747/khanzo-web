@@ -44,7 +44,6 @@ export class ReportComponent implements OnInit {
     //   });
     // });
     // this.reportArrays = reportArray;
-    console.log(this.reportArrays);
   }
   export() {
     const XLSX = require('xlsx')

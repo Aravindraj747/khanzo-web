@@ -67,7 +67,6 @@ export class OnlineShopComponent implements OnInit {
     //   });
     // });
     // this.onlineShops = onlineshops;
-    console.log(this.onlineShops);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
@@ -113,7 +112,6 @@ export class OnlineShopComponent implements OnInit {
     if (this.onlineShop.imageUrl !== '') {
       // download and push to storage and save link in database
       this.firestoreService.saveOnlineshop(this.onlineShop).then(res => {
-        console.log("youtube directlink saved");
         this.onlineShops.push(this.onlineShop);
         this.openSnackBar("Link Saved Successfully", "Close");
         this.resetPage()
@@ -135,7 +133,6 @@ export class OnlineShopComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -144,7 +141,6 @@ export class OnlineShopComponent implements OnInit {
           if (this.onlineShop.imageUrl !== "") {
             this.firestoreService.saveOnlineshop(this.onlineShop).then(res => {
               this.onlineShops.push(this.onlineShop);
-              console.log("youtube link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();
@@ -155,7 +151,6 @@ export class OnlineShopComponent implements OnInit {
             this.spinnerActive = false;
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
           });
         });
       });
@@ -195,7 +190,6 @@ export class OnlineShopComponent implements OnInit {
 
       for (let i = 0; i < this.onlineShops.length; i++) {
         if (this.onlineShops[i].id === id) {
-          console.log('deleting', this.onlineShops[i].id);
           this.onlineShops.splice(i, 1);
           break;
         }

@@ -48,17 +48,17 @@ export class AdminHomeComponent implements OnInit {
       })
     });
     // this.firestoreService.getAllWithdrawal().ref.get().then(res => {
-    //   console.log(res);
+      // console.log(res);
     //   res.forEach(function(doc) {
     //     withdrawalArray.push(<Withdrawal>doc.data());
     //   });
     // });
     this.withdrawals = []
     this.withdrawals = withdrawalArray;
-    console.log(this.withdrawals);
+    // console.log(this.withdrawals);
   }
   export() {
-    console.log('in function');
+    // console.log('in function');
     let element = document.getElementById('excel-table');
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
@@ -71,7 +71,7 @@ export class AdminHomeComponent implements OnInit {
   }
   openDialog(value:string,withdrawal:Withdrawal){
     let id = withdrawal.withdrawalId;
-    console.log(value);
+    // console.log(value);
     const dialogRef = this.dialog.open(DialogComponent,{
       data:{
         withdrawal:withdrawal,value
@@ -92,7 +92,7 @@ export class AdminHomeComponent implements OnInit {
               //   });
               //   for(let i = 0;i<userArray.length;i++){
               //     if(userArray[i].email === withdrawal.userId){
-              //       console.log(userArray);
+                    // console.log(userArray);
               //       let amt = userArray[i].amount + withdrawal.amount;
               //       let data = {
               //         'amount': amt

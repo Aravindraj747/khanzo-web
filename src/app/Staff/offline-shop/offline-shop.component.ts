@@ -81,7 +81,6 @@ export class OfflineShopComponent implements OnInit {
     //   });
     // });
     // this.offlineShops = offlineshop;
-    console.log(this.offlineShops);
   }
   chooseImage(event: any) {
     this.imageFile = event.target.files[0];
@@ -133,7 +132,6 @@ export class OfflineShopComponent implements OnInit {
     if (this.offline.imageUrl !== '') {
       // download and push to storage and save link in database
       this.firestoreService.saveOfflineshop(this.offline).then(res => {
-        console.log("youtube directlink saved");
         this.offlineShops.push(this.offline);
         this.openSnackBar("Link Saved Successfully", "Close");
         this.resetPage()
@@ -155,7 +153,6 @@ export class OfflineShopComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -174,7 +171,6 @@ export class OfflineShopComponent implements OnInit {
             this.spinnerActive = false;
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
           });
         });
       });
@@ -197,7 +193,6 @@ export class OfflineShopComponent implements OnInit {
 
       for (let i = 0; i < this.offlineShops.length; i++) {
         if (this.offlineShops[i].id === id) {
-          console.log('deleting', this.offlineShops[i].id);
           this.offlineShops.splice(i, 1);
           break;
         }

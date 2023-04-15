@@ -116,7 +116,6 @@ export class StaffReelsComponent implements OnInit {
 
       for (let i = 0; i < this.reelsArray.length; i++) {
         if (this.reelsArray[i].id === id) {
-          console.log('deleting', this.reelsArray[i].id);
           this.reelsArray.splice(i, 1);
           break;
         }
@@ -135,17 +134,14 @@ export class StaffReelsComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.spinnerActive = false;
           this.reel.imageUrl = downloadURL;
-          console.log('after:', this.reel);
           if (this.reel.imageUrl !== "") {
             this.firestoreService.saveReel(this.reel).then(res => {
               this.reelsArray.push(this.reel);
-              console.log("Reel link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();
@@ -156,7 +152,6 @@ export class StaffReelsComponent implements OnInit {
             this.spinnerActive = false;
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
           });
         });
       });

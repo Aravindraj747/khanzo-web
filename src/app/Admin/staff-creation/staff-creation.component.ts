@@ -55,15 +55,16 @@ export class StaffCreationComponent implements OnInit {
       });
     });
     this.staffArray = staffsArray;
-    console.log(this.staffArray);
+    // console.log(this.staffArray);
   }
   submit() {
     this.spinnerActive = true;
+    if (this.staff.email !== '' && this.staff.password !== ''){
     this.authService.register(this.staff.email, this.staff.password)
       .then(res => {
         this.firestoreService.createStaff(this.staff)
           .then(res => {
-            console.log("Agent Saved");
+            // console.log("Agent Saved");
             this.openSnackBar("Agent Created Successfully", "Close");
             this.spinnerActive = false;
             this.resetPage();
@@ -73,18 +74,19 @@ export class StaffCreationComponent implements OnInit {
 
           });
       }).catch(err => {
-        console.log(err);
+        // console.log(err);
         this.openSnackBar("Error Occurred while creating agent", "Retry");
         this.spinnerActive = false;
       });
-    if (this.staff.email !== '' && this.staff.password !== '') {
-
-      this.firestoreService.createStaff(this.staff).then(res => {
-        console.log(res);
-        this.openSnackBar('Staff created sucessfully', 'undo');
-        this.resetPage();
-      })
     }
+    // if (this.staff.email !== '' && this.staff.password !== '') {
+
+    //   this.firestoreService.createStaff(this.staff).then(res => {
+    //     console.log(res);
+    //     this.openSnackBar('Staff created sucessfully', 'undo');
+    //     this.resetPage();
+    //   })
+    // }
     else {
       this.openSnackBar('Enter email and password to create', 'retry')
     }

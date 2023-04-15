@@ -31,7 +31,7 @@ export class StaffShortsComponent implements OnInit {
   shortsArrays: Shorts[] = [];
 
   dataSource = new MatTableDataSource<Shorts>(this.shortsArrays);
-  displayedColumns: string[] = ['Id', 'uploadDate', 'Video', 'Image', 'Delete'];
+  displayedColumns: string[] = ['Id', 'uploadDate','Language', 'Video', 'Image', 'Delete'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -65,7 +65,7 @@ export class StaffShortsComponent implements OnInit {
     //   });
     // });
     // this.shortsArrays = shortsArray;
-    console.log(this.shortsArrays);
+    // console.log(this.shortsArrays);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
@@ -105,17 +105,17 @@ export class StaffShortsComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
+        // console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.spinnerActive = false;
           this.shorts.imageUrl = downloadURL;
-          console.log('after:', this.shorts);
+          // console.log('after:', this.shorts);
           if (this.shorts.imageUrl !== "") {
             this.firestoreService.saveShorts(this.shorts).then(res => {
               this.shortsArrays.push(this.shorts);
-              console.log("Shorts link saved from storage");
+              // console.log("Shorts link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();
@@ -126,7 +126,7 @@ export class StaffShortsComponent implements OnInit {
             this.spinnerActive = false;
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
+            // console.log('File available at', downloadURL);
           });
         });
       });
@@ -142,7 +142,7 @@ export class StaffShortsComponent implements OnInit {
 
       for (let i = 0; i < this.shortsArrays.length; i++) {
         if (this.shortsArrays[i].id === id) {
-          console.log('deleting', this.shortsArrays[i].id);
+          // console.log('deleting', this.shortsArrays[i].id);
           this.shortsArrays.splice(i, 1);
           break;
         }

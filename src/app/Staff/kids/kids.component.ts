@@ -65,27 +65,21 @@ export class KidsComponent implements OnInit {
     //   });
     // });
     // this.kidsArray = kidsArray;
-    console.log(this.kidsArray);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
   submit() {
-    console.log('yub');
     this.spinnerActive = true;
     if (this.thumbImageFile == undefined && this.kid.imageUrl == '') {
       this.openSnackBar('Choose one option for upload image', 'retry');
       this.spinnerActive = false
     }
-    console.log(this.kid.imageUrl);
-    console.log(this.thumbImageFile);
     this.kid.id = Timestamp.now().seconds.toString();
     // this.kid.uploadDate = Date();
-    console.log(this.kid.id);
     if (this.kid.imageUrl !== '') {
       // download and push to storage and save link in database
       this.firestoreService.saveKids(this.kid).then(res => {
-        console.log("music directlink saved");
         this.kidsArray.push(this.kid);
         this.openSnackBar("Link Saved Successfully", "Close");
         this.resetPage()
@@ -94,7 +88,6 @@ export class KidsComponent implements OnInit {
     }
     else if (this.thumbImageFile !== undefined) {
       // push to storage and save link in database
-      console.log('before', this.kid);
       this.putStorageItem(this.thumbImageFile);
     }
   }
@@ -110,7 +103,6 @@ export class KidsComponent implements OnInit {
 
       for (let i = 0; i < this.kidsArray.length; i++) {
         if (this.kidsArray[i].id === id) {
-          console.log('deleting', this.kidsArray[i].id);
           this.kidsArray.splice(i, 1);
           break;
         }
@@ -135,11 +127,9 @@ export class KidsComponent implements OnInit {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.spinnerActive = false;
           this.kid.imageUrl = downloadURL;
-          console.log('after:', this.kid);
           if (this.kid.imageUrl !== "") {
             this.firestoreService.saveKids(this.kid).then(res => {
               this.kidsArray.push(this.kid);
-              console.log("music link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();

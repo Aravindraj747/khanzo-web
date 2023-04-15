@@ -94,7 +94,6 @@ export class StaffDailyTaskComponent implements OnInit {
     else if (this.dailyTask.imageUrl !== "") {
       this.firestoreService.saveDailytask(this.dailyTask).then(res => {
         this.dailyTasks.push(this.dailyTask);
-        console.log("Daily task saved as image URL");
         this.openSnackBar('Daily task saved successfully', 'retry');
         this.resetDailyTask();
         return
@@ -116,18 +115,16 @@ export class StaffDailyTaskComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.spinnerActive = false;
           this.dailyTask.imageUrl = downloadURL;
-          console.log(this.dailyTask.imageUrl);
-          console.log('after:', this.dailyTask);
+          
           if (this.dailyTask.imageUrl !== "") {
             this.firestoreService.saveDailytask(this.dailyTask).then(res => {
               this.dailyTasks.push(this.dailyTask);
-              console.log('Daily task saved as imageFile')
+             
             });
             this.openSnackBar('DailyTask Saved', 'undo');
             this.resetDailyTask();
@@ -136,7 +133,7 @@ export class StaffDailyTaskComponent implements OnInit {
             this.openSnackBar('Error occured while saving daily task', 'retry');
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
+           
           });
           return;
         });
@@ -153,7 +150,7 @@ export class StaffDailyTaskComponent implements OnInit {
 
       for (let i = 0; i < this.dailyTasks.length; i++) {
         if (this.dailyTasks[i].taskId === id) {
-          console.log('deleting', this.dailyTasks[i].taskId);
+    
           this.dailyTasks.splice(i, 1);
           break;
         }

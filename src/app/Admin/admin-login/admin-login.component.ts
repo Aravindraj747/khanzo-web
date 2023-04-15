@@ -42,41 +42,41 @@ export class AdminLoginComponent implements OnInit {
     else if (password == '') {
       this.openSnackBar('Enter the password', 'undo')
     }
-    console.log(email, password);
+    // console.log(email, password);
     this.spinnerActive = true;
     this.adminService.checkIfAdmin(email!).subscribe(res => {
-      console.log(res);
+      // console.log(res);
       if (res.docs.length > 0) {
         this.authService.login(email!, password!).then((res) => {
-          console.log(res);
+          // console.log(res);
           this.getAdminDetails(email!);
           this.spinnerActive = false;
           this.adminService.isAdmin = 'true';
           this.route.navigate(['adminHome']);
         }, err => {
-          console.log('error', err);
+          // console.log('error', err);
           this.openSnackBar('Invalid Email or password', 'Undo');
           this.spinnerActive = false;
         });
-        console.log(email, password);
+        // console.log(email, password);
       }
       else {
-        console.log('staff here')
+        // console.log('staff here')
         this.adminService.checkIfStaff(email!).subscribe(res=>{
           if (res.docs.length > 0) {
             this.authService.login(email!, password!).then((res) => {
               this.route.navigate(['youtube']);
-              console.log('in login');
+              // console.log('in login');
               this.adminService.isStaff = 'true';
-              console.log(res);
+              // console.log(res);
               this.getStaffDetails(email!);
               this.spinnerActive = false;
             }, err => {
-              console.log('error', err);
+              // console.log('error', err);
               this.openSnackBar('Invalid Email or password', 'Undo');
               this.spinnerActive = false;
             });
-            console.log(email, password);
+            // console.log(email, password);
           }
           else{
             this.openSnackBar('Enter valid credential to login', 'Retry');

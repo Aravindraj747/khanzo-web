@@ -64,21 +64,16 @@ export class ImageBannerComponent implements OnInit {
     //   });
     // });
     // this.bannerArray = youTubeArray;
-    console.log(this.bannerArray);
   }
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
   submit() {
-    console.log('yub');
-    console.log(this.banner);
     this.spinnerActive = true;
     if (this.thumbImageFile == undefined && this.banner.imageUrl == '') {
       this.openSnackBar('Choose one option for upload image', 'retry');
       this.spinnerActive = false
     }
-    console.log(this.banner.imageUrl);
-    console.log(this.thumbImageFile);
     this.banner.id = Timestamp.now().seconds.toString();
     console.log(this.banner.id);
     if (this.banner.imageUrl !== '') {
@@ -93,7 +88,6 @@ export class ImageBannerComponent implements OnInit {
     }
     else if (this.thumbImageFile !== undefined) {
       // push to storage and save link in database
-      console.log('before', this.banner);
       this.putStorageItem(this.thumbImageFile);
     }
   }
@@ -125,7 +119,6 @@ export class ImageBannerComponent implements OnInit {
 
       for (let i = 0; i < this.bannerArray.length; i++) {
         if (this.bannerArray[i].id === id) {
-          console.log('deleting', this.bannerArray[i].id);
           this.bannerArray.splice(i, 1);
           break;
         }
@@ -145,17 +138,14 @@ export class ImageBannerComponent implements OnInit {
       },
       (error) => {
         this.openSnackBar('Error occurred while saving images', 'Retry')
-        console.log(error.message);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.spinnerActive = false;
           this.banner.imageUrl = downloadURL;
-          console.log('after:', this.banner);
           if (this.banner.imageUrl !== "") {
             this.firestoreService.saveBanner(this.banner).then(res => {
               this.bannerArray.push(this.banner);
-              console.log("banner link saved from storage");
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();

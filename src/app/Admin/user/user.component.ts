@@ -45,7 +45,7 @@ export class UserComponent implements OnInit {
     //   });
     // });
     this.users = usersArray;
-    console.log(this.users);
+    // console.log(this.users);
   }
 
   // export() {
