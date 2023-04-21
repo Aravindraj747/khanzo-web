@@ -54,6 +54,7 @@ import { OnlineShopComponent } from './Staff/online-shop/online-shop.component';
 import { OfflineShopComponent } from './Staff/offline-shop/offline-shop.component';
 import { ReportComponent } from './Staff/report/report.component';
 import { LandingComponent } from './Staff/landing/landing.component';
+import { ContactComponent } from './Staff/contact/contact.component';
 // import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
@@ -81,7 +82,8 @@ import { LandingComponent } from './Staff/landing/landing.component';
     OnlineShopComponent,
     OfflineShopComponent,
     ReportComponent,
-    LandingComponent
+    LandingComponent,
+    ContactComponent
   ],
   entryComponents: [DialogComponent],
   imports: [

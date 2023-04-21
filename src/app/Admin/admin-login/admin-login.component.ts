@@ -63,8 +63,10 @@ export class AdminLoginComponent implements OnInit {
       else {
         // console.log('staff here')
         this.adminService.checkIfStaff(email!).subscribe(res=>{
+          console.log('staffchecked');
           if (res.docs.length > 0) {
             this.authService.login(email!, password!).then((res) => {
+              console.log('inlogin');
               this.route.navigate(['youtube']);
               // console.log('in login');
               this.adminService.isStaff = 'true';
