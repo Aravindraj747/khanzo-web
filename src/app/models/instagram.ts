@@ -6,4 +6,5 @@ export interface Instagram{
     id:string;
     imageUrl:string;
     uploadDate:Timestamp;
+    language:string;
 }

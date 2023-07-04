@@ -8,12 +8,17 @@
         <p class="pasteLink">Video link</p>
         <p class="ThumURL">Image URL</p>
         <p class="ThumPic">Image Pic</p>
+        <p class="lang">Langugae</p>
     </div>
     <div class="value">
         <form>
             <input type="text" class="" [(ngModel)]="facebook.videoUrl" id="input" [ngModelOptions]="{standalone: true}">
             <input [ngModelOptions]="{standalone: true}" [(ngModel)]="facebook.imageUrl"id="input"  type="text">
             <input type="file" (change)="chooseThumb($event)" id="drop">
+            <select [ngModelOptions]="{standalone: true}" [(ngModel)]="facebook.language" name="select" id="drop">
+              <option value="">Select language</option>
+              <option *ngFor="let l of language">{{l}}</option>
+            </select>
             <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
         </form>
     </div>
@@ -47,7 +52,7 @@
       <!-- Position Column -->
       <ng-container matColumnDef="Id">
         <th mat-header-cell *matHeaderCellDef> Id </th>
-        <td mat-cell *matCellDef="let element"> {{element.couponId}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
       </ng-container>
   
       <!-- Symbol Column -->

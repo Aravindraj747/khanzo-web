@@ -23,8 +23,10 @@ export class StaffInstagramComponent implements OnInit {
     id:"",
     videoUrl:"",
     imageUrl:'',
+    language:'',
     uploadDate:Timestamp.now()
   }
+  language: any[] = ['English', 'Tamil', 'Kannada', 'Telugu', 'Hindi', 'Malayalam'];
   thumbImageFile: any = undefined;
   instaLink: string = '';
   errorMessage: string = '';
@@ -36,6 +38,7 @@ export class StaffInstagramComponent implements OnInit {
   dataSource = new MatTableDataSource<Instagram>(this.instaGramArray);
   @ViewChild(MatPaginator) paginator: MatPaginator;
   ngAfterViewInit() {
+    console.log('inv');
     this.dataSource = new MatTableDataSource<Instagram>(this.instaGramArray);
     this.dataSource.paginator = this.paginator;
     this.firestoreService.getInstagramVideo().snapshotChanges().subscribe(res => {
@@ -44,6 +47,7 @@ export class StaffInstagramComponent implements OnInit {
         this.instaGramArray.push(<Instagram>doc.payload.doc.data());
       });
       this.dataSource.data = this.instaGramArray;
+      console.log('data',this.dataSource.data);
     });
   }
   constructor(private _snackBar: MatSnackBar,
@@ -192,6 +196,7 @@ export class StaffInstagramComponent implements OnInit {
       id:"",
       imageUrl:'',
       videoUrl:"",
+      language:'',
       uploadDate:Timestamp.now()
     }
   }

@@ -172,7 +172,7 @@ export class StaffAdbannerComponent implements OnInit {
     XLSX.writeFile(wb, 'adbanner.xlsx');
   }
   delete(id: string, type: string) {
-    // console.log(id,type);
+    console.log(id,type);
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         value: type, id

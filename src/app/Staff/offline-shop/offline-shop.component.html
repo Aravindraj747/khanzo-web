@@ -46,6 +46,16 @@
       </select>
       <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
     </form>
+    <div class="topic">
+      <p style="margin-left: 20px;">Category</p>
+    </div>
+    <div class="value" style="margin-left: 20px;">
+      <select [ngModelOptions]="{standalone: true}"  [(ngModel)]="offline.category"
+      name="category" id="drop">
+      <option value="">Select</option>
+      <option *ngFor="let c of category">{{c}}</option>
+    </select>
+    </div>
   </div>
   <br>
   <p class="note">Note* :Choose any one option to upload image.</p>

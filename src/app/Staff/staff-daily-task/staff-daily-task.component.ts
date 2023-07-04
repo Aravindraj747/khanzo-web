@@ -23,12 +23,14 @@ export class StaffDailyTaskComponent implements OnInit {
   dailyTask: DailyTask = {
     videoUrl: "",
     imageUrl: "",
+    channelUrl: "",
     startDate: Timestamp.now(),
     expiryDate: Timestamp.now(),
     couponId: "",
     taskId: "",
     category: "",
     language: "",
+    fullVideoUrl: "",
     uploadDate: Timestamp.now()
   }
   current = 0;
@@ -140,7 +142,7 @@ export class StaffDailyTaskComponent implements OnInit {
       });
   }
   delete(id: string, type: string) {
-    // console.log(id,type);
+    console.log(id,type);
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         value: type, id
@@ -186,6 +188,8 @@ export class StaffDailyTaskComponent implements OnInit {
     this.dailyTask = {
       videoUrl: "",
       imageUrl: "",
+      fullVideoUrl: "",
+      channelUrl: "",
       startDate: Timestamp.now(),
       expiryDate: Timestamp.now(),
       couponId: "",

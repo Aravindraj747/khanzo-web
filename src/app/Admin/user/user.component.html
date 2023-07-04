@@ -67,7 +67,7 @@
     <!-- Symbol Column -->
     <ng-container matColumnDef="JoinedDate">
       <th mat-header-cell *matHeaderCellDef> JoinedDate </th>
-      <td mat-cell *matCellDef="let element">{{element?.joinedDate?.toDate() | date:'dd-MM-yyyy'}}</td>
+      <td mat-cell *matCellDef="let element">{{element?.joinedDate?.toDate() | date:'dd-MM-yyyy'}}</td> 
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

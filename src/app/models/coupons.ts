@@ -3,6 +3,8 @@ import Timestamp = firebase.firestore.Timestamp;
 
 export interface Coupons{
     imageUrl: string;
-    couponId:string;
+    couponCode:string;
     uploadDate:Timestamp;
+    couponId:string;
+    availability:string;
 }

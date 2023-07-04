@@ -22,8 +22,10 @@ export class FacebookComponent implements OnInit {
     videoUrl: '',
     imageUrl: '',
     id: '',
+    language:'',
     uploadDate: Timestamp.now()
   }
+  language: any[] = ['English', 'Tamil', 'Kannada', 'Telugu', 'Hindi', 'Malayalam'];
   fileName: string = 'facebook.xlsx';
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
@@ -41,6 +43,7 @@ export class FacebookComponent implements OnInit {
         this.faceBookArray.push(<Facebook>doc.payload.doc.data());
       });
       this.dataSource.data = this.faceBookArray;
+      console.log(this.dataSource.data);
     });
   }
   constructor(private firestoreService: FirestoreServiceService,
@@ -176,6 +179,7 @@ export class FacebookComponent implements OnInit {
     this.facebook = {
       videoUrl: '',
       imageUrl: '',
+      language:'',
       uploadDate: Timestamp.now(),
       id: ''
     }

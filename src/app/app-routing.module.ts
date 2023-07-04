@@ -25,6 +25,7 @@ import { OnlineShopComponent } from './Staff/online-shop/online-shop.component';
 import { OfflineShopComponent } from './Staff/offline-shop/offline-shop.component';
 import { LandingComponent } from './Staff/landing/landing.component';
 import { ContactComponent } from './Staff/contact/contact.component';
+import { CancelComponent } from './Staff/cancel/cancel.component';
 
 const routes: Routes = [
   {
@@ -43,7 +44,8 @@ const routes: Routes = [
   { path: 'faceBook', component: FacebookComponent, canActivate: [StaffauthguardGuard] },
   { path: 'music', component: MusicComponent, canActivate: [StaffauthguardGuard] },
   { path: 'terms', component: TermsandConditionComponent },
-  {path:'contact' ,component:ContactComponent},
+  { path: 'contact' ,component:ContactComponent},
+  { path: 'cancel', component:CancelComponent},
   { path: 'landing', component: LandingComponent },
   { path: 'imageBanner', component: ImageBannerComponent, canActivate: [StaffauthguardGuard] },
   { path: 'kids', component: KidsComponent, canActivate: [StaffauthguardGuard] },

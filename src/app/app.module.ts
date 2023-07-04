@@ -55,6 +55,7 @@ import { OfflineShopComponent } from './Staff/offline-shop/offline-shop.componen
 import { ReportComponent } from './Staff/report/report.component';
 import { LandingComponent } from './Staff/landing/landing.component';
 import { ContactComponent } from './Staff/contact/contact.component';
+import { CancelComponent } from './Staff/cancel/cancel.component';
 // import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
@@ -83,7 +84,8 @@ import { ContactComponent } from './Staff/contact/contact.component';
     OfflineShopComponent,
     ReportComponent,
     LandingComponent,
-    ContactComponent
+    ContactComponent,
+    CancelComponent
   ],
   entryComponents: [DialogComponent],
   imports: [

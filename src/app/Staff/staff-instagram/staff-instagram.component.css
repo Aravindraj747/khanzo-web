@@ -26,6 +26,9 @@
 .topic .ThumPic{
   margin-left: 160px;
 }
+.topic .lang{
+  margin-left: 190px;
+}
 .value form {
     display: flex;
 }

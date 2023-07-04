@@ -73,7 +73,7 @@ export class DialogComponent implements OnInit {
   }
 // delete videos
   delete(){
-      // console.log('id',this.id);
+      console.log('id',this.id);
       this.firestoreService.delete(this.id,this.value);
       this.openSnackBar('Deleted Successfully','Unod');
       this.deleted.emit(true);

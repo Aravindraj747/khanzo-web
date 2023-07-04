@@ -8,6 +8,7 @@
     <p class="pasteLink">Video link</p>
     <p class="ThumURL">Image URL</p>
     <p class="ThumPic">Image Pic</p>
+    <p class="lang">Language</p>
     <p></p>
   </div>
   <div class="value">
@@ -15,6 +16,10 @@
       <input type="text" class="" [(ngModel)]="instagram.videoUrl" id="input" [ngModelOptions]="{standalone: true}">
       <input [ngModelOptions]="{standalone: true}" [(ngModel)]="instagram.imageUrl"id="input"  type="text">
       <input type="file" (change)="chooseThumb($event)" id="drop">
+      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="instagram.language" name="select" id="drop">
+        <option value="">Select language</option>
+        <option *ngFor="let l of language">{{l}}</option>
+      </select>
       <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
       <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
     </form>

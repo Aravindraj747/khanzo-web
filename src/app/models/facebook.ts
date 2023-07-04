@@ -6,4 +6,5 @@ export interface Facebook{
     imageUrl:string;
     id:string;
     uploadDate:Timestamp;
+    language:string;
 }

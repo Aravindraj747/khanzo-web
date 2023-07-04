@@ -20,7 +20,9 @@
 .topic p {
     font-weight: bold;
 }
-
+.topic .ava{
+    margin-left: 165px;
+}
 .topic .ThumURL {
     margin-left: 125px;
 }
@@ -29,7 +31,7 @@
     margin-left: 225px;
 }
 .topic .coupon{
-    margin-left: 310px;
+    margin-left: 185px;
 }
 .value form {
     display: flex;

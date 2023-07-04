@@ -11,4 +11,6 @@ export interface DailyTask{
     uploadDate:Timestamp;
     category:string;
     language:string;
+    channelUrl:string;
+    fullVideoUrl:string;
 }

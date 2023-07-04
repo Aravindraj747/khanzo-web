@@ -45,7 +45,9 @@ export class StaffYoutubeComponent implements OnInit {
     {value: 'Movies', viewValue: 'Movies'},
     {value: 'Cinema', viewValue: 'Cinema'},
   ];
-  category: any[] = ["Trending Videos", "Entertainment", "Education", "Comedy", "News", "Trailers", "Movies", "Cinema"];
+  category: any[] =["Entertainment","Cooking","Unboxing","MovieReview","Gaming","Comedy","Travel","FoodReview","CinemaTalks","Trailer","Motivation","News","Live","BusinessTalks"]
+  // category: any[] = ["Trending Videos", "Entertainment","Cooking","Education", "Comedy", "News", "Trailers", "Movies", "Cinema","Live","Business talks","Motivation","Cinema talks","Food review",
+  //                     "Travel","Gaming","Movie review","Unboxing"];
   language: any[] = ['English', 'Tamil', 'Kannada', 'Telugu', 'Hindi', 'Malayalam'];
   displayedColumns: string[] = ['Id', 'Category', 'Language', 'UploadDate', 'Video', 'Image', 'Delete'];
 

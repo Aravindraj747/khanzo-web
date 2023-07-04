@@ -22,11 +22,14 @@ export class CouponsComponent implements OnInit {
   coupons: Coupons = {
     imageUrl: '',
     couponId: '',
+    couponCode:'',
+    availability:'',
     uploadDate:Timestamp.now()
   }
+  availability: any[] = ['ONLINE', 'OFFLINE'];
   fileName:string = 'coupons.xlsx';
   couponArray: Coupons[] =[];
-  displayedColumns: string[] = ['Id','uploadDate', 'Image'];
+  displayedColumns: string[] = ['Id','uploadDate', 'Image','Delete'];
   dataSource = new MatTableDataSource<Coupons>(this.couponArray);
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -65,7 +68,7 @@ export class CouponsComponent implements OnInit {
     this.imageFile = event.target.files[0];
   }
   submit() {
-    // this.coupons.couponId = Timestamp.now().seconds.toString();
+    this.coupons.couponId = Timestamp.now().seconds.toString();
     this.spinnerActive = true;
     if(this.coupons.imageUrl == '' && this.imageFile == undefined){
       this.openSnackBar('Choose any on option to save','retry');
@@ -155,6 +158,8 @@ export class CouponsComponent implements OnInit {
     this.coupons = {
       imageUrl: '',
       couponId: '',
+      couponCode:'',
+      availability:'',
       uploadDate:Timestamp.now()
     }
   }

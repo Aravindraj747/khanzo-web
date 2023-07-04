@@ -12,5 +12,6 @@ export interface OfflineShop{
     uploadDate:Timestamp;
     availability:string;
     state:string;
+    category:string;
     district:string;
 }

@@ -137,7 +137,7 @@ export class FirestoreServiceService {
 
   getInstagramVideo() {
     // return this.firestore.collection('instagram');
-    return this.firestore.collection<Instagram>('instagram', ref => ref.orderBy('uploadDate, "desc"'));
+    return this.firestore.collection<Instagram>('instagram', ref => ref.orderBy('uploadDate', "desc"));
   }
 
   getadBanner() {
@@ -177,7 +177,7 @@ export class FirestoreServiceService {
       return this.firestore.collection('coupons').doc(id).delete();
     }
     else if (type == 'adbanner') {
-      return this.firestore.collection('adBanner').doc(id).delete();
+      return this.firestore.collection('videoAdBanner').doc(id).delete();
     }
     else if (type == 'imageBanner') {
       return this.firestore.collection('imageBanner').doc(id).delete();
@@ -192,7 +192,7 @@ export class FirestoreServiceService {
     else if (type == 'reels') {
       return this.firestore.collection('reels').doc(id).delete();
     }
-    else if (type == 'facebook') {
+    else if (type == 'faceBook') {
       return this.firestore.collection('facebook').doc(id).delete();
     }
     else if (type == 'music') {

@@ -16,7 +16,9 @@
 .topic {
     display: flex;
 }
-
+.topic .lang{
+  margin-left: 190px;
+}
 .topic .pasteLink {
     margin-left: 60px;
 }

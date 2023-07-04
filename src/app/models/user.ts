@@ -19,4 +19,6 @@ export interface User {
     paymentCompleted:boolean;
     referralCode:string;
     referredByCode:string;
+    // accountNumber:string;
+    // accountHolderName:string;
 }

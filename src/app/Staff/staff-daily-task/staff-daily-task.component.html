@@ -45,6 +45,14 @@
       <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
     </form>
   </div>
+  <div class="topic">
+    <p style="margin-left: 20px;">Channel Link</p>
+    <p style="margin-left: 120px;">Full video Link</p>
+  </div>
+  <div class="value">
+    <input [(ngModel)]="dailyTask.channelUrl" type="text" id="input" style="margin-left: 20px;">
+    <input  [(ngModel)]="dailyTask.fullVideoUrl" type="text" id="input" style="margin-left: 30px;">
+  </div>
   <br>
   <p class="note">Note* :Choose any one option to upload image.</p>
   <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
@@ -135,7 +143,7 @@
     <ng-container matColumnDef="Delete">
       <th mat-header-cell *matHeaderCellDef> Delete </th>
       <td mat-cell *matCellDef="let element">
-        <a mat-stroked-button color="warn" (click)="delete(element.id, 'dailyTask')">Delete</a>
+        <a mat-stroked-button color="warn" (click)="delete(element.taskId, 'dailyTasks')">Delete</a>
       </td>
     </ng-container>
 

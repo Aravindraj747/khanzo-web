@@ -24,6 +24,7 @@ export class OfflineShopComponent implements OnInit {
     name: '',
     imageUrl: '',
     address: '',
+    category: '',
     openingTime: Timestamp.now(),
     closingTime: Timestamp.now(),
     phoneNumber: '',
@@ -41,6 +42,7 @@ export class OfflineShopComponent implements OnInit {
   offlineShops: OfflineShop[] = [];
   spinnerActive: boolean = false;
   imageFile: any = undefined;
+  category: any[] =["Supermarket","Textiles","Medicals","Hotels","Furniture","Homegoods","HomeKitchen","Salon","ToursTravel","Electrical","Photography","Hardware","SteelCements","Jewellery"]
   displayedColumns: string[] = ['Id','Name','Address', 'UploadDate','StartDate','ExpiryDate','Contact','Image','Delete'];
   dataSource = new MatTableDataSource<OfflineShop>(this.offlineShops);
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -209,6 +211,7 @@ export class OfflineShopComponent implements OnInit {
       phoneNumber: '',
       id: '',
       state: '',
+      category:'',
       district: '',
       availability: '',
       uploadDate: Timestamp.now(),
