@@ -5,13 +5,13 @@ export interface User {
     name: string;
     email: string;
     phoneNumber: string;
-    pinCode: string;
+    pincode: string;
     address: string;
     joinedDate: Timestamp;
     level: string;
     amount:number;
     gender:string;
-    availableCoupon:number;
+    availableCoupons:number;
     district:string;
     dob:Timestamp;
     expiryDate:Timestamp;
@@ -21,4 +21,24 @@ export interface User {
     referredByCode:string;
     // accountNumber:string;
     // accountHolderName:string;
+}
+
+export interface UserExportData{
+    name: string;
+    email: string;
+    phoneNumber: string;
+    pincode: string;
+    address: string;
+    joinedDate: string;
+    level: string;
+    amount:string;
+    gender:string;
+    availableCoupons:number;
+    district:string;
+    dob:string;
+    expiryDate:string;
+    language:string;
+    paymentCompleted:string;
+    referralCode:string;
+    referredByCode:string;
 }
