@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Shorts } from 'src/app/models/shorts';
+import { Shorts, ShortsExportArray } from 'src/app/models/shorts';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
 @Component({
@@ -26,6 +26,7 @@ export class StaffShortsComponent implements OnInit {
     imageUrl: '',
     uploadDate: Timestamp.now()
   }
+  shortExportArray: ShortsExportArray[] =[];
   fileName: string = 'shorts.xlsx';
   thumbImageFile: any = undefined;
   shortsArrays: Shorts[] = [];
@@ -151,10 +152,25 @@ export class StaffShortsComponent implements OnInit {
     });
   }
   export() {
+    this.shortsArrays.forEach(res=>{
+      const short: ShortsExportArray = {
+        videoUrl: '',
+        id: '',
+        language:'',
+        imageUrl: '',
+        uploadDate: '',
+      }
+      short.videoUrl = res.videoUrl;
+      short.id = res.id;
+      short.language = res.language;
+      short.imageUrl = res.imageUrl;
+      short.uploadDate = res.uploadDate.toDate().toString();
+      this.shortExportArray.push(short);
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.shortsArrays;
+    let binary_univers = this.shortExportArray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 

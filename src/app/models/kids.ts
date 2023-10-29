@@ -9,3 +9,12 @@ export interface Kids{
     language: string;
     id:string;
 }
+
+export interface KidsExportArray{
+    videoUrl: string;
+    imageUrl: string;
+    category: string;
+    uploadDate:string;
+    language: string;
+    id:string;
+}

@@ -8,3 +8,11 @@ export interface Coupons{
     couponId:string;
     availability:string;
 }
+
+export interface CouponsExportArray{
+    imageUrl: string;
+    couponCode:string;
+    uploadDate:string;
+    couponId:string;
+    availability:string;
+}

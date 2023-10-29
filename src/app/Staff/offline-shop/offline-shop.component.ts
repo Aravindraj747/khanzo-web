@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-import { OfflineShop } from 'src/app/models/offline';
+import { OfflineShop, OfflineShopExportArray } from 'src/app/models/offline';
 import * as XLSX from 'xlsx';
 import data from '../../../assets/district.json';
 import { StaffServiceService } from 'src/app/Services/staff-service.service';
@@ -33,8 +33,8 @@ export class OfflineShopComponent implements OnInit {
     state: '',
     district: '',
     uploadDate: Timestamp.now(),
-
   }
+  offlineShopExportedArray:OfflineShopExportArray[]= [];
   states: any = []
   districts: any = []
   countries = {};
@@ -98,10 +98,39 @@ export class OfflineShopComponent implements OnInit {
     }
   }
   export() {
+    this.offlineShops.forEach(res=>{
+      const offline: OfflineShopExportArray = {
+        name: '',
+        imageUrl: '',
+        address: '',
+        category: '',
+        openingTime: '',
+        closingTime: '',
+        phoneNumber: '',
+        availability: '',
+        id: '',
+        state: '',
+        district: '',
+        uploadDate: '',
+      }
+      offline.name = res.name;
+      offline.imageUrl = res.imageUrl ;
+      offline.address = res.address ;
+      offline.category = res.category ;
+      offline.openingTime = res.openingTime.toDate().toString();
+      offline.closingTime = res.closingTime.toDate().toString();
+      offline.phoneNumber = res.phoneNumber;
+      offline.availability = res.availability;
+      offline.id = res.id;
+      offline.state = res.state;
+      offline.district = res.district;
+      offline.uploadDate = res.uploadDate.toDate().toString();
+      this.offlineShopExportedArray.push(offline);
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.offlineShops;
+    let binary_univers = this.offlineShopExportedArray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 

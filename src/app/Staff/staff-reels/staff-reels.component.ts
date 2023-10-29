@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Reels } from 'src/app/models/reels';
+import { Reels, ReelsExportArray } from 'src/app/models/reels';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
 @Component({
@@ -23,6 +23,7 @@ export class StaffReelsComponent implements OnInit {
     imageUrl: '',
     uploadDate: Timestamp.now()
   }
+  reelExportArray:ReelsExportArray []= [];
   thumbImageFile: any = undefined;
   reels: string = '';
   spinnerActive: boolean = false;
@@ -89,10 +90,23 @@ export class StaffReelsComponent implements OnInit {
       return
     }
   } export() {
+    this.reelsArray.forEach(res=>{
+      const reelArray: ReelsExportArray = {
+        videoUrl: "",
+        id: "",
+        imageUrl: "",
+        uploadDate: ""
+      }
+      reelArray.videoUrl = res.videoUrl;
+      reelArray.id = res.id;
+      reelArray.id = res.imageUrl;
+      reelArray.uploadDate = res.uploadDate.toDate().toString();
+      this.reelExportArray.push(reelArray);
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.reelsArray;
+    let binary_univers = this.reelExportArray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-import { Report } from 'src/app/models/report';
+import { Report, ReportExportArray } from 'src/app/models/report';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx';
 export class ReportComponent implements OnInit {
 
   reportArrays: Report[] = [];
+  resportExportArray : ReportExportArray[] =[];
   fileName: string = 'report.xlsx';
   displayedColumns: string[] = ['User Id', 'Message', 'Subject', 'ReportedDate'];
   dataSource = new MatTableDataSource<Report>(this.reportArrays);
@@ -46,10 +47,23 @@ export class ReportComponent implements OnInit {
     // this.reportArrays = reportArray;
   }
   export() {
+    this.reportArrays.forEach(res=>{
+      const exportArray: ReportExportArray = {
+        message: '',
+        subject: '',
+        userId: '',
+        reportedDate:'',
+    }
+    exportArray.message = res.message;
+    exportArray.subject = res.subject;
+    exportArray.userId = res.userId;
+    exportArray.reportedDate = res.reportedDate.toDate().toString();
+    this.resportExportArray.push(exportArray);
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.reportArrays;
+    let binary_univers = this.resportExportArray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 

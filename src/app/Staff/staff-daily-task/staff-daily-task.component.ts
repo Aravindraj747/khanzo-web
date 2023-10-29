@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DailyTask } from 'src/app/models/dailyTask';
+import { DailyTask, DailyTaskExportArray } from 'src/app/models/dailyTask';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
@@ -33,6 +33,7 @@ export class StaffDailyTaskComponent implements OnInit {
     fullVideoUrl: "",
     uploadDate: Timestamp.now()
   }
+  dailyTaskExportArray :DailyTaskExportArray[]= [];
   current = 0;
   fileName = 'dailyTask.xlsx';
   dailyTasks: DailyTask[] = [];
@@ -161,10 +162,37 @@ export class StaffDailyTaskComponent implements OnInit {
     });
   }
   export() {
+    this.dailyTasks.forEach(res=>{
+      const dailyTask:DailyTaskExportArray = {
+        videoUrl: "",
+        imageUrl: "",
+        channelUrl: "",
+        startDate: '',
+        expiryDate: '',
+        couponId: "",
+        taskId: "",
+        category: "",
+        language: "",
+        fullVideoUrl: "",
+        uploadDate: ''
+      }
+      dailyTask.videoUrl = res.videoUrl;
+      dailyTask.imageUrl = res.imageUrl;
+      dailyTask.channelUrl = res.channelUrl;
+      dailyTask.startDate = res.startDate.toDate().toString();
+      dailyTask.expiryDate = res.expiryDate.toDate().toString();
+      dailyTask.couponId = res.couponId;
+      dailyTask.taskId = res.taskId;
+      dailyTask.category = res.category;
+      dailyTask.language = res.language;
+      dailyTask.fullVideoUrl = res.fullVideoUrl;
+      dailyTask.uploadDate = res.uploadDate.toDate().toString();
+      this.dailyTaskExportArray.push(dailyTask);
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.dailyTasks;
+    let binary_univers = this.dailyTaskExportArray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 

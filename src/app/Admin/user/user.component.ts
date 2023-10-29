@@ -14,28 +14,8 @@ import * as XLSX from 'xlsx';
 export class UserComponent implements OnInit {
 
   users: User[] = [];
-  // exported: Userexport[] = [];
-  exportUser: UserExportData[] =[];
   fileName = 'UserExcel.xlsx';
-  earray:UserExportData = {
-    name: '',
-    email: '',
-    phoneNumber: '',
-    pincode: '',
-    address: '',
-    joinedDate: '',
-    level: '',
-    amount:'',
-    gender:'',
-    availableCoupons:0,
-    district:'',
-    dob:'',
-    expiryDate:'',
-    language:'',
-    paymentCompleted:'',
-    referralCode:'',
-    referredByCode:'',
-  }
+  exportUser: UserExportData[] =[];
   displayedColumns: string[] = ['Email', 'PhoneNumber', 'JoinedDate','Address','Level'];
   dataSource = new MatTableDataSource<User>(this.users);
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -76,31 +56,51 @@ export class UserComponent implements OnInit {
     //   });
     // });
     this.users = usersArray;
-    console.log(this.users);
+    // console.log(this.users);
   }
 
   export() {
     this.users.forEach(res=>{
-      this.earray.address = res.address;
-      this.earray.amount = res.amount.toString();
-      this.earray.availableCoupons = res.availableCoupons;
-      this.earray.district = res.district;
-      this.earray.joinedDate = res.joinedDate.toDate().toString();
-      this.earray.expiryDate = res.expiryDate.toDate().toString();
-      this.earray.dob = res.dob.toDate().toString();
-      this.earray.phoneNumber = res.phoneNumber;
-      this.earray.name = res.name;
-      this.earray.email = res.email;
-      this.earray.pincode = res.pincode;
-      this.earray.level = res.level;
-      this.earray.language = res.language;
-      this.earray.referredByCode = res.referredByCode;
-      this.earray.referralCode = res.referralCode;
-      this.earray.gender = res.gender;
-      this.earray.paymentCompleted = res.paymentCompleted.toString();
-      this.earray.address = res.address;
-      this.exportUser.push(this.earray);
-    });
+      const earray:UserExportData = {
+        name: '',
+        email: '',
+        phoneNumber: '',
+        pincode: '',
+        address: '',
+        joinedDate: '',
+        level: '',
+        amount:'',
+        gender:'',
+        availableCoupons:0,
+        district:'',
+        dob:'',
+        expiryDate:'',
+        language:'',
+        paymentCompleted:'',
+        referralCode:'',
+        referredByCode:'',
+      }
+      earray.address = res.address;
+      earray.amount = res.amount.toString();
+      earray.availableCoupons = res.availableCoupons;
+      earray.district = res.district;
+      earray.joinedDate = res.joinedDate.toDate().toString();
+      earray.expiryDate = res.expiryDate.toDate().toString();
+      earray.dob = res.dob.toDate().toString();
+      earray.phoneNumber = res.phoneNumber;
+      earray.name = res.name;
+      earray.email = res.email;
+      earray.pincode = res.pincode;
+      earray.level = res.level;
+      earray.language = res.language;
+      earray.referredByCode = res.referredByCode;
+      earray.referralCode = res.referralCode;
+      earray.gender = res.gender;
+      earray.paymentCompleted = res.paymentCompleted.toString();
+      earray.address = res.address;
+      this.exportUser.push(earray);
+    })
+
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
@@ -108,7 +108,6 @@ export class UserComponent implements OnInit {
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 
-    console.log(binaryWS);
     // Create a new Workbook
     var wb = XLSX.utils.book_new()
 
@@ -116,6 +115,6 @@ export class UserComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
 
     // export your excel
-    XLSX.writeFile(wb, 'Binaire.xlsx');
+    XLSX.writeFile(wb, 'UserExcel.xlsx');
   }
 }

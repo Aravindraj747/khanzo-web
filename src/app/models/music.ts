@@ -9,3 +9,12 @@ export interface Music{
     language: string;
     id:string;
 }
+
+export interface MusicExportArray{
+    videoUrl: string;
+    imageUrl: string;
+    category: string;
+    uploadDate:string;
+    language: string;
+    id:string;
+}

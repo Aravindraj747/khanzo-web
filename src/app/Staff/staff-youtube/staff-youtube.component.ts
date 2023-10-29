@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Youtube } from '../../models/youTube';
+import { Youtube, YoutubeExportData } from '../../models/youTube';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
@@ -59,6 +59,7 @@ export class StaffYoutubeComponent implements OnInit {
     id: "",
     uploadDate: Timestamp.now()
   }
+  youTubeExport:YoutubeExportData[]=[];
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
   fileName: string = 'youtube.xlsx';
@@ -137,10 +138,27 @@ export class StaffYoutubeComponent implements OnInit {
     });
   }
   export() {
+    this.youtubeArray.forEach(res=>{
+      const youArray: YoutubeExportData={
+        videoUrl: '',
+        imageUrl: '',
+        category: '',
+        uploadDate:'',
+        language: '',
+        id:''
+    }
+    youArray.category = res.category;
+    youArray.id = res.id;
+    youArray.imageUrl = res.imageUrl;
+    youArray.language = res.language;
+    youArray.uploadDate = res.uploadDate.toDate().toString();
+    youArray.videoUrl = res.videoUrl;
+    this.youTubeExport.push(youArray);
+    })
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.youtubeArray;
+    let binary_univers = this.youTubeExport;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 

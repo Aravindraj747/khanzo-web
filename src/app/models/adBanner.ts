@@ -10,3 +10,13 @@ export interface AdBanner{
     district:string;
     views:number;
 }
+
+export interface AdBannerExportData{
+    videoUrl: string;
+    imageUrl: string;
+    id:string;
+    uploadDate:string;
+    state:string;
+    district:string;
+    views:number;
+}

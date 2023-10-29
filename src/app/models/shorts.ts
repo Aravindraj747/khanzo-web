@@ -8,3 +8,11 @@ export interface Shorts{
     id:string;
     language:string;
 }
+
+export interface ShortsExportArray{
+    videoUrl: string;
+    imageUrl:string;
+    uploadDate:string;
+    id:string;
+    language:string;
+}

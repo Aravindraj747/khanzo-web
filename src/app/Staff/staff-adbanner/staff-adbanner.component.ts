@@ -4,7 +4,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { AdBanner } from 'src/app/models/adBanner';
+import { AdBanner, AdBannerExportData } from 'src/app/models/adBanner';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import { StaffServiceService } from 'src/app/Services/staff-service.service';
 import data from '../../../assets/district.json';
@@ -32,6 +32,7 @@ export class StaffAdbannerComponent implements OnInit {
     district: '',
     views: 0
   }
+  exportAdBanner: AdBannerExportData[]=[];
   states: any = []
   districts: any = []
   countries = {};
@@ -155,10 +156,29 @@ export class StaffAdbannerComponent implements OnInit {
       });
   }
   export() {
+    this.adbannerArray.forEach(res=>{
+      const adBanner: AdBannerExportData = {
+        imageUrl: '',
+        videoUrl: '',
+        id: '',
+        uploadDate: '',
+        state: '',
+        district: '',
+        views: 0
+      }
+      adBanner.imageUrl = res.imageUrl;
+      adBanner.videoUrl = res.videoUrl;
+      adBanner.id = res.id;
+      adBanner.uploadDate = res.uploadDate.toDate().toString();
+      adBanner.state = res.state;
+      adBanner.district = res.district;
+      adBanner.views = res.views;
+      this.exportAdBanner.push(adBanner);
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.adbannerArray;
+    let binary_univers = this.exportAdBanner;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 
@@ -169,7 +189,7 @@ export class StaffAdbannerComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
 
     // export your excel
-    XLSX.writeFile(wb, 'adbanner.xlsx');
+    XLSX.writeFile(wb, 'AdbannerExcel.xlsx');
   }
   delete(id: string, type: string) {
     console.log(id,type);

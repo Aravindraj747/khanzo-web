@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Banner } from 'src/app/models/banner';
+import { Banner, BannerExportArray } from 'src/app/models/banner';
 import { Report } from 'src/app/models/report';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
@@ -25,6 +25,7 @@ export class ImageBannerComponent implements OnInit {
     id: '',
     imageUrl: '',
   }
+  bannerExportedArray:BannerExportArray[]= [];
   bannerArray: Banner[] = [];
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
@@ -92,10 +93,26 @@ export class ImageBannerComponent implements OnInit {
     }
   }
   export() {
+    this.bannerArray.forEach(res=>{
+      const banner: BannerExportArray = {
+        email: '',
+        address: '',
+        phoneNumber: '',
+        uploadDate: '',
+        id: '',
+        imageUrl: '',
+      }
+      banner.email = res.email;
+      banner.address = res.address;
+      banner.phoneNumber = res.phoneNumber;
+      banner.uploadDate = res.uploadDate.toDate().toString();
+      banner.id = res.id;
+      banner.imageUrl = res.imageUrl;
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.bannerArray;
+    let binary_univers = this.bannerExportedArray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 

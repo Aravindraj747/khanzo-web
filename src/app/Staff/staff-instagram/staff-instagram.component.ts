@@ -8,7 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Instagram } from 'src/app/models/instagram';
+import { Instagram, InstagramExportArray } from 'src/app/models/instagram';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
 @Component({
@@ -26,6 +26,7 @@ export class StaffInstagramComponent implements OnInit {
     language:'',
     uploadDate:Timestamp.now()
   }
+  instaExpotArrray: InstagramExportArray [] =[] ;
   language: any[] = ['English', 'Tamil', 'Kannada', 'Telugu', 'Hindi', 'Malayalam'];
   thumbImageFile: any = undefined;
   instaLink: string = '';
@@ -134,10 +135,25 @@ export class StaffInstagramComponent implements OnInit {
     // }
   }
   export() {
+    this.instaGramArray.forEach(res=>{
+      const insta: InstagramExportArray = {
+        id:"",
+        videoUrl:"",
+        imageUrl:"",
+        language:"",
+        uploadDate:""
+      }
+      insta.id = res.id;
+      insta.videoUrl = res.videoUrl;
+      insta.imageUrl = res.imageUrl;
+      insta.language = res.language;
+      insta.uploadDate = res.uploadDate.toDate().toString();
+      this.instaExpotArrray.push(insta);
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.instaGramArray;
+    let binary_univers = this.instaExpotArrray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 

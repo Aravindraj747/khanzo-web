@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-import { OnlineShop } from 'src/app/models/online';
+import { OnlineShop, OnlineShopExportArray } from 'src/app/models/online';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -27,6 +27,7 @@ export class OnlineShopComponent implements OnInit {
     imageUrl: '',
     category: ''
   }
+  onlineShopExportedArray:OnlineShopExportArray[] = [];
   category: any[] = ["Grocery", "Mobiles", "Fashion", "Electronics", "Home", "Personal Care", "Appliances", "Toys & Baby", "Furniture", "Fight & Hotels", "Sports", "Nutrition & more", "Bikes & Cars", "Medicines"];
   fileName: string = 'onlineShop.xlsx';
   onlineShops: OnlineShop[] = [];
@@ -156,10 +157,31 @@ export class OnlineShopComponent implements OnInit {
       });
   }
   export() {
+    this.onlineShops.forEach(res=>{
+      const online: OnlineShopExportArray = {
+        name: '',
+        availability: '',
+        websiteName: '',
+        uploadDate: '',
+        buyLink: '',
+        id: '',
+        imageUrl: '',
+        category: ''
+      }
+      online.name = res.name;
+      online.availability = res.availability;
+      online.websiteName = res.websiteName;
+      online.uploadDate = res.uploadDate.toDate().toString();
+      online.buyLink = res.buyLink;
+      online.id = res.id;
+      online.imageUrl = res.imageUrl;
+      online.category = res.category;
+      this.onlineShopExportedArray.push(online);
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.onlineShops;
+    let binary_univers = this.onlineShopExportedArray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 

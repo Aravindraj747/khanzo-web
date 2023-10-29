@@ -11,3 +11,14 @@ export interface OnlineShop{
     websiteName:string;
     category:string;
 }
+
+export interface OnlineShopExportArray{
+    imageUrl: string;
+    name: string;
+    buyLink: string;
+    id: string;
+    uploadDate:string;
+    availability:string;
+    websiteName:string;
+    category:string;
+}

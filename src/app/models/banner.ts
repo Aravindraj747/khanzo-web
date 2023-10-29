@@ -9,3 +9,12 @@ export interface Banner{
     phoneNumber:string;
     address:string;
 }
+
+export interface BannerExportArray{
+    email: string;
+    imageUrl: string;
+    id:string;
+    uploadDate:string;
+    phoneNumber:string;
+    address:string;
+}

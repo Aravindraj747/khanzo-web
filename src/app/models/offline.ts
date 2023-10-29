@@ -15,3 +15,18 @@ export interface OfflineShop{
     category:string;
     district:string;
 }
+
+export interface OfflineShopExportArray{
+    imageUrl: string;
+    name: string;
+    address: string;
+    openingTime: string;
+    closingTime: string;
+    phoneNumber: string;
+    id: string;
+    uploadDate:string;
+    availability:string;
+    state:string;
+    category:string;
+    district:string;
+}

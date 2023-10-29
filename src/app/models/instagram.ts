@@ -8,3 +8,11 @@ export interface Instagram{
     uploadDate:Timestamp;
     language:string;
 }
+
+export interface InstagramExportArray{
+    videoUrl: string;
+    id:string;
+    imageUrl:string;
+    uploadDate:string;
+    language:string;
+}

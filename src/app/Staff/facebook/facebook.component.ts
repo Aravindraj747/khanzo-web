@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Facebook } from 'src/app/models/facebook';
+import { Facebook, FacebookExportArray } from 'src/app/models/facebook';
 import { Report } from 'src/app/models/report';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
@@ -25,6 +25,7 @@ export class FacebookComponent implements OnInit {
     language:'',
     uploadDate: Timestamp.now()
   }
+  facbookExportArray:FacebookExportArray[]=[];
   language: any[] = ['English', 'Tamil', 'Kannada', 'Telugu', 'Hindi', 'Malayalam'];
   fileName: string = 'facebook.xlsx';
   thumbImageFile: any = undefined;
@@ -70,6 +71,20 @@ export class FacebookComponent implements OnInit {
     this.thumbImageFile = event.target.files[0];
   }
   export() {
+    this.faceBookArray.forEach(res=>{
+      const facebook: FacebookExportArray = {
+        videoUrl: '',
+        imageUrl: '',
+        id: '',
+        language:'',
+        uploadDate: ''
+      }
+      facebook.videoUrl = res.videoUrl;
+      facebook.imageUrl = res.imageUrl;
+      facebook.id = res.id;
+      facebook.language = res.language;
+      facebook.uploadDate = res.uploadDate.toDate().toString();
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel

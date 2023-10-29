@@ -9,3 +9,12 @@ export interface Youtube{
     language: string;
     id:string;
 }
+
+export interface YoutubeExportData{
+    videoUrl: string;
+    imageUrl: string;
+    category: string;
+    uploadDate:string;
+    language: string;
+    id:string;
+}

@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Kids } from 'src/app/models/kids';
+import { Kids, KidsExportArray } from 'src/app/models/kids';
 import { Report } from 'src/app/models/report';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
@@ -24,6 +24,7 @@ export class KidsComponent implements OnInit {
     category: '',
     id: '',
   }
+  kidsExportedArray:KidsExportArray[]= [];
   fileName: string = 'kid.xlsx';
   kidsArray: Kids[] = [];
   language: any[] = ['English', 'Tamil', 'Kanada', 'Telugu', 'Hindi', 'Malayalam'];
@@ -153,10 +154,27 @@ export class KidsComponent implements OnInit {
     });
   }
   export() {
+    this.kidsArray.forEach(res=>{
+    const kid: KidsExportArray = {
+      videoUrl: '',
+      imageUrl: '',
+      uploadDate: '',
+      language: '',
+      category: '',
+      id: '',
+    }
+    kid.videoUrl = res.videoUrl;
+    kid.category = res.category;
+    kid.id = res.id;
+    kid.uploadDate = res.uploadDate.toDate().toString();
+    kid.language = res.language;
+    kid.imageUrl = res.imageUrl;
+    this.kidsExportedArray.push(kid);
+  });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.kidsArray;
+    let binary_univers = this.kidsExportedArray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 

@@ -8,3 +8,11 @@ export interface Facebook{
     uploadDate:Timestamp;
     language:string;
 }
+
+export interface FacebookExportArray{
+    videoUrl: string;
+    imageUrl:string;
+    id:string;
+    uploadDate:string;
+    language:string;
+}

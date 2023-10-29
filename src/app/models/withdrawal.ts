@@ -13,3 +13,16 @@ export interface Withdrawal {
     utr:string;
     ifsc:string;
 }
+
+export interface WithdrawalExportArray {
+    amount: number;
+    userId: string;
+    requestedDate: string;
+    completedDate: string;
+    accountNumber:string;  //show in table also
+    status: string;
+    withdrawalId: string;
+    upiId:string;
+    utr:string;
+    ifsc:string;
+}

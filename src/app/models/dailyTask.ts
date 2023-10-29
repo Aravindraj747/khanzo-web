@@ -14,3 +14,17 @@ export interface DailyTask{
     channelUrl:string;
     fullVideoUrl:string;
 }
+
+export interface DailyTaskExportArray{
+    videoUrl: string;
+    imageUrl: string;
+    startDate: string;
+    expiryDate: string;
+    couponId: string;
+    taskId:string;
+    uploadDate:string;
+    category:string;
+    language:string;
+    channelUrl:string;
+    fullVideoUrl:string;
+}

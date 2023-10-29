@@ -7,3 +7,10 @@ export interface Report{
     userId: string;
     reportedDate:Timestamp;
 }
+
+export interface ReportExportArray{
+    message: string;
+    subject: string;
+    userId: string;
+    reportedDate:string;
+}

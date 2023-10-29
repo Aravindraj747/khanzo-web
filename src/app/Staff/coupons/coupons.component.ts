@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
@@ -7,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Coupons } from 'src/app/models/coupons';
+import { Coupons, CouponsExportArray } from 'src/app/models/coupons';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
 @Component({
@@ -17,19 +16,20 @@ import * as XLSX from 'xlsx';
 })
 export class CouponsComponent implements OnInit {
 
-  spinnerActive:boolean = false;
+  spinnerActive: boolean = false;
   imageFile: any = undefined;
   coupons: Coupons = {
     imageUrl: '',
     couponId: '',
-    couponCode:'',
-    availability:'',
-    uploadDate:Timestamp.now()
+    couponCode: '',
+    availability: '',
+    uploadDate: Timestamp.now()
   }
+  couponsExportedArray: CouponsExportArray[] = [];
   availability: any[] = ['ONLINE', 'OFFLINE'];
-  fileName:string = 'coupons.xlsx';
-  couponArray: Coupons[] =[];
-  displayedColumns: string[] = ['Id','uploadDate', 'Image','Delete'];
+  fileName: string = 'coupons.xlsx';
+  couponArray: Coupons[] = [];
+  displayedColumns: string[] = ['Id', 'uploadDate', 'Image', 'Delete'];
   dataSource = new MatTableDataSource<Coupons>(this.couponArray);
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -45,8 +45,8 @@ export class CouponsComponent implements OnInit {
     });
   }
   constructor(private _snackBar: MatSnackBar,
-              private firestoreService: FirestoreServiceService,
-              private dialog: MatDialog) { }
+    private firestoreService: FirestoreServiceService,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     // this.coupons.uploadDate = Timestamp.now();
@@ -70,8 +70,8 @@ export class CouponsComponent implements OnInit {
   submit() {
     this.coupons.couponId = Timestamp.now().seconds.toString();
     this.spinnerActive = true;
-    if(this.coupons.imageUrl == '' && this.imageFile == undefined){
-      this.openSnackBar('Choose any on option to save','retry');
+    if (this.coupons.imageUrl == '' && this.imageFile == undefined) {
+      this.openSnackBar('Choose any on option to save', 'retry');
       // this.spinnerActive = false;
     }
     if (this.coupons.imageUrl !== "") {
@@ -118,10 +118,25 @@ export class CouponsComponent implements OnInit {
       });
   }
   export() {
+    this.couponArray.forEach(res => {
+      const carray: CouponsExportArray = {
+        imageUrl: '',
+        couponId: '',
+        couponCode: '',
+        availability: '',
+        uploadDate: ''
+      }
+      carray.imageUrl = res.imageUrl;
+      carray.couponCode = res.couponCode;
+      carray.couponId = res.couponId;
+      carray.uploadDate = res.uploadDate.toDate().toString();
+      carray.availability = res.availability;
+      this.couponsExportedArray.push(carray);
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.couponArray;
+    let binary_univers = this.couponsExportedArray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 
@@ -132,35 +147,35 @@ export class CouponsComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, binaryWS, 'Binary values')
 
     // export your excel
-    XLSX.writeFile(wb, 'coupons.xlsx');
+    XLSX.writeFile(wb, 'couponsExcel.xlsx');
   }
 
-  delete(id:string,type:string){
+  delete(id: string, type: string) {
     // console.log(id,type);
-     const dialogRef = this.dialog.open(DialogComponent,{
-      data:{
-        value:type,id
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        value: type, id
       }
     });
     dialogRef.componentInstance.deleted.subscribe(val => {
 
-      for(let i = 0;i<this.couponArray.length;i++){
-        if(this.couponArray[i].couponId === id){
+      for (let i = 0; i < this.couponArray.length; i++) {
+        if (this.couponArray[i].couponId === id) {
           this.couponArray.splice(i, 1);
           break;
         }
       }
-    
+
     });
-    
+
   }
   resetPage() {
     this.coupons = {
       imageUrl: '',
       couponId: '',
-      couponCode:'',
-      availability:'',
-      uploadDate:Timestamp.now()
+      couponCode: '',
+      availability: '',
+      uploadDate: Timestamp.now()
     }
   }
   openSnackBar(message: string, action: string) {

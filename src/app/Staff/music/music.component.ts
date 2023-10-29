@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Music } from 'src/app/models/music';
+import { Music, MusicExportArray } from 'src/app/models/music';
 import { Report } from 'src/app/models/report';
 import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
@@ -25,6 +25,7 @@ export class MusicComponent implements OnInit {
     category: '',
     id: '',
   }
+  musicExportedArray:MusicExportArray[]= [];
   fileName: string = 'music.xlsx';
   musicArray: Music[] = [];
   language: any[] = ['English', 'Tamil', 'Kanada', 'Telugu', 'Hindi', 'Malayalam'];
@@ -145,10 +146,27 @@ export class MusicComponent implements OnInit {
       });
   }
   export() {
+    this.musicArray.forEach(res=>{
+      const music: MusicExportArray = {
+        videoUrl: '',
+        imageUrl: '',
+        uploadDate: '',
+        language: '',
+        category: '',
+        id: '',
+      }
+      music.videoUrl = res.videoUrl;
+      music.imageUrl = res.imageUrl;
+      music.uploadDate = res.uploadDate.toDate().toString();
+      music.language = res.language;
+      music.category = res.language;
+      music.id = res.id;
+      this.musicExportedArray.push(music);
+    });
     const XLSX = require('xlsx')
 
     // array of objects to save in Excel
-    let binary_univers = this.musicArray;
+    let binary_univers = this.musicExportedArray;
 
     let binaryWS = XLSX.utils.json_to_sheet(binary_univers);
 
