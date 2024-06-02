@@ -35,6 +35,8 @@ export class AuthenticationServiceService {
     this.adminService.isStaff = '';
     sessionStorage.removeItem('adminLogin');
     sessionStorage.removeItem('staffLogin');
+    sessionStorage.removeItem('staffRole');
+    sessionStorage.removeItem('email');
     return this.fireauth.signOut();
   }
 }

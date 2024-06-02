@@ -7,55 +7,80 @@
   <div class="new">
     <h1>Youtube video</h1>
   </div>
-  <div class="topic">
-    <p class="pasteLink">Paste link</p>
-    <p class="ThumURL">Image URL</p>
-    <p class="ThumPic">Image Pic</p>
-    <p class="category">Category</p>
-    <p class="language">Language</p>
-    <p></p>
-  </div>
+
   <div class="value">
-    <form action="" [class.spinnerOverlay]="spinnerActive">
-      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.videoUrl" type="text" id="input">
-      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.imageUrl" id="input" type="text">
-      <!-- <mat-form-field class="example-full-width">
-        <mat-label>Video Url</mat-label>
-        <input matInput [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.videoUrl">
+    <form action="" [class.spinnerOverlay]="spinnerActive" style="height: 60px; margin-right: 90px; margin-left: 20px">
+      <mat-form-field appearance="outline">
+        <mat-label>Video URL</mat-label>
+        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.videoUrl" type="text" matInput
+               placeholder="Video Link">
       </mat-form-field>
-      <mat-form-field class="example-full-width">
+
+      <mat-form-field appearance="outline">
         <mat-label>Image Url</mat-label>
-        <input matInput [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.imageUrl">
-      </mat-form-field> -->
-      <input type="file" (change)="chooseThumb($event)" id="drop">
-      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.category" name="select" id="drop">
-        <option value="">Select Category</option>
-        <option *ngFor="let c of category">{{c}}</option>
-      </select>
-      <!-- <mat-form-field appearance="fill">
-        <mat-label>Category</mat-label>
-        <mat-select [(ngModel)]="youtube.category" name="food">
-          <mat-option *ngFor="let food of foodss" [value]="food.value">
-            {{food.viewValue}}
+        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.imageUrl" type="text" matInput
+               placeholder="Image URL">
+      </mat-form-field>
+
+<!--      <button mat-button color="primary" type="file" (change)="chooseThumb($event)" id="drop">Image</button>-->
+
+      <button type="button" (click)="fileInput.click()">
+        <span>Image Upload</span>
+        <input #fileInput type="file" (change)="chooseThumb($event)" style="display:none;" />
+      </button>
+
+      <mat-form-field>
+        <mat-label>State</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.state">
+          <mat-option (onSelectionChange)="getdistrict(state, $event)" *ngFor="let state of states" [value]="state">
+            {{state}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Langugae</mat-label>
-        <mat-select [(ngModel)]="youtube.language" name="food">
-          <mat-option *ngFor="let food of foods" [value]="food.value">
-            {{food.viewValue}}
+
+      <mat-form-field>
+        <mat-label>District</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.districts" multiple>
+          <mat-option *ngFor="let d of districts" [value]="d">
+            {{d}}
           </mat-option>
         </mat-select>
-      </mat-form-field> -->
-      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.language" name="select" id="drop">
-        <option value="">Select language</option>
-        <option *ngFor="let l of language">{{l}}</option>
-      </select>
-      <a mat-flat-button (click)="submit()" type="submit" color="primary">Save</a>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Category</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.category">
+          <mat-option *ngFor="let c of category" [value]="c">
+            {{c}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Language</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.language">
+          <mat-option *ngFor="let c of language" [value]="c">
+            {{c}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="submit()">Save</button>
     </form>
   </div>
   <br>
+  <mat-form-field appearance="outline" style="margin-left: 20px">
+    <mat-label>Channel URL</mat-label>
+    <input [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.channelUrl" type="text" matInput
+           placeholder="Channel URL">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" style="margin-left: 20px">
+    <mat-label>Full Video URL</mat-label>
+    <input [ngModelOptions]="{standalone: true}" [(ngModel)]="youtube.fullVideoUrl" type="text" matInput
+           placeholder="FullVideo URL">
+  </mat-form-field>
+
   <p class="note">Note* :Choose any one of the option for adding Image</p>
   <mat-spinner *ngIf="spinnerActive" class="mat-spinner" diameter="60"></mat-spinner>
 </div>
@@ -97,47 +122,56 @@
   <table id="excel-table" mat-table [dataSource]="dataSource">
     <!-- Position Column -->
     <ng-container matColumnDef="Id">
-      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <th mat-header-cell *matHeaderCellDef> Id</th>
       <td mat-cell *matCellDef="let element"> {{element.id}} </td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="Category">
-      <th mat-header-cell *matHeaderCellDef> Category </th>
+      <th mat-header-cell *matHeaderCellDef> Category</th>
       <td mat-cell *matCellDef="let element"> {{element.category}} </td>
     </ng-container>
 
     <!-- Weight Column -->
     <ng-container matColumnDef="Language">
-      <th mat-header-cell *matHeaderCellDef> Language </th>
+      <th mat-header-cell *matHeaderCellDef> Language</th>
       <td mat-cell *matCellDef="let element"> {{element.language}} </td>
     </ng-container>
 
     <!-- Symbol Column -->
     <ng-container matColumnDef="UploadDate">
-      <th mat-header-cell *matHeaderCellDef> UploadDate </th>
+      <th mat-header-cell *matHeaderCellDef> UploadDate</th>
       <td mat-cell *matCellDef="let element">{{element?.uploadDate?.toDate() | date:'dd-MM-yyyy'}}</td>
     </ng-container>
 
     <!-- Symbol Column -->
     <ng-container matColumnDef="Video">
-      <th mat-header-cell *matHeaderCellDef> Video </th>
+      <th mat-header-cell *matHeaderCellDef> Video</th>
       <td mat-cell *matCellDef="let element">
-        <a mat-stroked-button color="primary" href="https://www.youtube.com/watch?v={{element.videoUrl}}" target="_blank">View</a>
+        <a mat-stroked-button color="primary" href="https://www.youtube.com/watch?v={{element.videoUrl}}"
+           target="_blank">View</a>
       </td>
     </ng-container>
 
     <!-- Symbol Column -->
     <ng-container matColumnDef="Image">
-      <th mat-header-cell *matHeaderCellDef> Image </th>
+      <th mat-header-cell *matHeaderCellDef> Image</th>
       <td mat-cell *matCellDef="let element">
         <a mat-stroked-button color="primary" href="{{element.imageUrl}}" target="_blank">View</a>
       </td>
     </ng-container>
 
+
+    <ng-container matColumnDef="Ad">
+      <th mat-header-cell *matHeaderCellDef>Ads</th>
+      <td mat-cell *matCellDef="let element">
+        <a mat-stroked-button color="primary" (click)=addAd(element)>Add Ad</a>
+      </td>
+    </ng-container>
+
     <!-- Symbol Column -->
     <ng-container matColumnDef="Delete">
-      <th mat-header-cell *matHeaderCellDef> Delete </th>
+      <th mat-header-cell *matHeaderCellDef> Delete</th>
       <td mat-cell *matCellDef="let element">
         <a mat-stroked-button color="warn" (click)="delete(element.id, 'youtube')">Delete</a>
       </td>

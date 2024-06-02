@@ -1,0 +1,73 @@
+<app-side-nav></app-side-nav>
+<div class="content">
+
+  <div class="row">
+    <div class="column">
+      <div class="card">
+        <h3 class="card-title">User</h3>
+        <p ngDefaultControl class="card-value">{{todayJoinedUser}}</p>
+        <p class="card-subtext">Joined Today</p>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="card">
+        <h3 class="card-title">Payment</h3>
+        <p ngDefaultControl class="card-value">{{todayPaymentCompleted}}</p>
+        <p class="card-subtext">Payments completed Today</p>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="card">
+        <h3>Total Users</h3>
+        <p ngDefaultControl class="card-value">{{totalUsers}}</p>
+        <p class="card-subtext">Lifetime Users</p>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="card">
+        <h3>Total Payments</h3>
+        <p ngDefaultControl class="card-value">{{totalPaymentCompleted}}</p>
+        <p class="card-subtext">Payments Completed</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 100px">
+    <div class="column">
+      <div class="card">
+        <h3 class="card-title">Withdrawal</h3>
+        <p ngDefaultControl class="card-value">{{withdrawalPending}}</p>
+        <p class="card-subtext">Pending Count</p>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="card">
+        <h3 class="card-title">Withdrawal</h3>
+        <p ngDefaultControl class="card-value">{{withdrawalPendingAmount}}</p>
+        <p class="card-subtext">Pending Amount</p>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="card">
+        <h3>Withdrawal</h3>
+        <p ngDefaultControl class="card-value">{{withdrawalCompleted}}</p>
+        <p class="card-subtext">Completed Count</p>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="card">
+        <h3>Withdrawals</h3>
+        <p ngDefaultControl class="card-value">{{withdrawalCompletedAmount}}</p>
+        <p class="card-subtext">Completed Amount</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+

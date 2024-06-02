@@ -5,32 +5,38 @@
     <h1>Add Banner</h1>
   </div>
   <br>
-  <br>
-  <div class="topic">
-    <p class="video">Select Video</p>
-    <p class="image">Select Image</p>
-    <p class="state">Select State</p>
-    <p class="district">Select District</p>
-  </div>
   <div class="value">
     <form action="">
-      <input type="file" (change)="chooseVideo($event)">
-      <input type="file" (change)="chooseImage($event)">
-      <select [ngModelOptions]="{standalone: true}" (change)="getdistrict(adBanner.state)" [(ngModel)]="adBanner.state"
-        name="state" id="drop">
-        <option value="">Select</option>
-        <option *ngFor="let state of states">{{state}}</option>
-      </select>
-      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="adBanner.district" name="state" id="drop">
-        <option value="">Select</option>
-        <option *ngFor="let dist of districts">{{dist}}</option>
-      </select>
+      <button type="button" (click)="fileInput.click()">
+        <span>Video</span>
+        <input #fileInput type="file" (change)="chooseVideo($event)" style="display:none;" />
+      </button>
+      <button type="button" (click)="fileInput1.click()">
+        <span>Image Upload</span>
+        <input #fileInput1 type="file" (change)="chooseImage($event)" style="display:none;" />
+      </button>
+      <mat-form-field>
+        <mat-label>State</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="adBanner.state">
+          <mat-option (onSelectionChange)="getdistrict(state, $event)" *ngFor="let state of states" [value]="state">
+            {{state}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>District</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="adBanner.districts" multiple>
+          <mat-option *ngFor="let d of districts" [value]="d">
+            {{d}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
       <!-- <select name="" id="">
               <ng-container *ngFor="let state of states">
                   <option>state</option>
               </ng-container>
             </select> -->
-      <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+      <button mat-raised-button (click)="submit()" type="submit" color="primary">Save</button>
       <!-- <button type="submit"><span style="color:white ;">Save</span></button> -->
     </form>
   </div>

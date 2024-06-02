@@ -4,57 +4,87 @@
   <div class="new">
     <h1>Offline Shop</h1>
   </div>
-  <div class="topic">
-    <p class="pasteLink">Name</p>
-    <!-- <input  [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.name" type="text" id="input" class="pasteLink"> -->
-    <p class="ThumURL">Address</p>
-    <!-- <input  [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.address" type="text" id="input" class="pasteLink"> -->
-    <p class="ThumPic">Image URL</p>
-    <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.imageUrl" id="input" type="text"> -->
-    <p class="pic">Image Pic</p>
-    <!-- <input type="file" style="width:90px" (change)="chooseImage($event)" id="drop"> -->
-    <p class="start">Date and Time</p>
-    <p class="coupon">PhoneNumber</p>
-    <p></p>
-    <p class="state">Select State</p>
-    <p class="district">Select District</p>
-  </div>
   <div class="value">
     <form [class.spinnerOverlay]="spinnerActive" action="">
-      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.name" type="text" id="input" class="pasteLink">
-      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.address" type="text" id="input"
-        class="pasteLink">
-      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.imageUrl" id="input" type="text">
-      <input type="file" style="width:90px" (change)="chooseImage($event)" id="drop">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Shop Name</mat-label>
+        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.name" type="text" matInput
+               placeholder="Shop Name">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Address</mat-label>
+        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.address" type="text" matInput
+               placeholder="Address">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Image Url</mat-label>
+        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.imageUrl" type="text" matInput
+               placeholder="Image URL">
+      </mat-form-field>
+
+      <button type="button" (click)="fileInput.click()">
+        <span>Image Upload</span>
+        <input #fileInput type="file" (change)="chooseImage($event)" style="display:none;" />
+      </button>
+
       <mat-form-field style="width:50px;">
         <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="offline.openingTime" matInput
-          type="datetime-local" placeholder="start Date">
+          type="datetime-local" placeholder="Opening Time">
       </mat-form-field>
+
       <mat-form-field style="width:70px">
         <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="offline.closingTime" matInput
-          type="datetime-local" placeholder="Expiry Date">
+          type="datetime-local" placeholder="Closing Time">
       </mat-form-field>
-      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.phoneNumber" id="input" type="text">
-      <select [ngModelOptions]="{standalone: true}" (change)="getdistrict(offline.state)" [(ngModel)]="offline.state"
-        name="state" id="drop">
-        <option value="">Select</option>
-        <option *ngFor="let state of states">{{state}}</option>
-      </select>
-      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.district" name="state" id="drop">
-        <option value="">Select</option>
-        <option *ngFor="let dist of districts">{{dist}}</option>
-      </select>
-      <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.phoneNumber" type="text" matInput
+               placeholder="Phone Number">
+      </mat-form-field>
+
+      <button mat-raised-button (click)="submit()" type="submit" color="primary">Save</button>
     </form>
-    <div class="topic">
-      <p style="margin-left: 20px;">Category</p>
-    </div>
-    <div class="value" style="margin-left: 20px;">
-      <select [ngModelOptions]="{standalone: true}"  [(ngModel)]="offline.category"
-      name="category" id="drop">
-      <option value="">Select</option>
-      <option *ngFor="let c of category">{{c}}</option>
-    </select>
+
+    <div class="value" style="margin-left: 20px; margin-top: 30px">
+
+      <mat-form-field appearance="outline" style="margin-left: 30px;">
+        <mat-label>Map Url</mat-label>
+        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.mapUrl" type="text" matInput
+               placeholder="Map URL">
+      </mat-form-field>
+
+
+      <mat-form-field style="margin-left: 30px">
+        <mat-label>State</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.state">
+          <mat-option (onSelectionChange)="getdistrict(state, $event)" *ngFor="let state of states" [value]="state">
+            {{state}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field style="margin-left: 20px">
+        <mat-label>District</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.districts" multiple>
+          <mat-option *ngFor="let d of districts" [value]="d">
+            {{d}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+      <mat-form-field style="margin-left: 20px">
+        <mat-label>Category</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="offline.category">
+          <mat-option *ngFor="let d of category" [value]="d.category">
+            {{d.title}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
   <br>
@@ -110,19 +140,14 @@
     <!-- Position Column -->
     <ng-container matColumnDef="Address">
       <th mat-header-cell *matHeaderCellDef> Address </th>
-      <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      <td style="inline-size: 150px;" mat-cell *matCellDef="let element"> {{element.address}} </td>
     </ng-container>
     <!-- Position Column -->
     <ng-container matColumnDef="Contact">
       <th mat-header-cell *matHeaderCellDef> Contact </th>
-      <td mat-cell *matCellDef="let element"> {{element.contact}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
     </ng-container>
 
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="UploadDate">
-      <th mat-header-cell *matHeaderCellDef> UploadDate </th>
-      <td mat-cell *matCellDef="let element">{{element?.uploadDate?.toDate() | date:'dd-MM-yyyy'}}</td>
-    </ng-container>
     <!-- Symbol Column -->
     <ng-container matColumnDef="StartDate">
       <th mat-header-cell *matHeaderCellDef> StartDate </th>
@@ -132,6 +157,16 @@
     <ng-container matColumnDef="ExpiryDate">
       <th mat-header-cell *matHeaderCellDef> ExpiryDate </th>
       <td mat-cell *matCellDef="let element">{{element?.closingTime?.toDate() | date:'dd-MM-yyyy'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Category">
+      <th mat-header-cell *matHeaderCellDef> Category </th>
+      <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="State">
+      <th mat-header-cell *matHeaderCellDef> State </th>
+      <td mat-cell *matCellDef="let element"> {{element.state}} </td>
     </ng-container>
 
     <!-- Symbol Column -->

@@ -1,0 +1,29 @@
+<mat-form-field appearance="outline">
+  <mat-label>Image Banner ID</mat-label>
+  <input matInput placeholder="AD ID" [(ngModel)]="bannerId">
+</mat-form-field>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()" style="overflow-x: scroll; min-height: 100px; max-height: 600px">
+  <table class="table table-bordered" formArrayName="adIds">
+    <tr>
+      <th colspan="2" style="text-align: start">Slide AD ID</th>
+      <th width="150px">
+        <button mat-raised-button type="button" class="btn btn-primary" (click)="addAdID()">Add More</button>
+      </th>
+    </tr>
+    <tr *ngFor="let ad of adIds().controls; let i=index" [formGroupName]="i">
+      <td>
+        <mat-form-field appearance="outline">
+          <mat-label>AD ID</mat-label>
+          <input matInput placeholder="AD Id" formControlName="adId" class="form-control">
+        </mat-form-field>
+      </td>
+      <td>
+        <button mat-raised-button class="btn btn-danger" color="warn" (click)="removeAdID(i)">Remove</button>
+      </td>
+    </tr>
+  </table>
+</form>
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close class="reject">Cancel</button>
+  <button mat-flat-button color="primary" class="accept" mat-dialog-close (click)="onSubmit()">Save</button>
+</mat-dialog-actions>

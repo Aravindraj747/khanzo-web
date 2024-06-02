@@ -1,83 +1,102 @@
 <nav class="navbar" style="position: fixed;top: 0;">
-    <div class="logo">
-        <img src="../../../assets/logo khanzo1.png" alt="logo">
-        <!-- <p class="name">Khanzo Play</p> -->
-    </div>
-    <!-- <a class="logout" (click)="logout()">Logout</a> -->
-    <!-- <button mat-raised-button class="logout" (click)="logout()" >Logout</button> -->
+  <div class="logo">
+    <img src="../../../assets/khanzo_play_1.png" alt="logo">
+    <!-- <p class="name">Khanzo Play</p> -->
+  </div>
+  <!-- <a class="logout" (click)="logout()">Logout</a> -->
+  <!-- <button mat-raised-button class="logout" (click)="logout()" >Logout</button> -->
 </nav>
 <div class="class" style="flex-direction: column;position: fixed;">
-    <ul>
-        <div *ngIf="isAdmin">
-            <li>
-                <span class="heads">Dashboard</span>
-            </li>
-            <li><a href="user">
-                    <span class="nav-item">User</span>
-                </a></li>
-            <li><a href="adminHome">
-                    <span class="nav-item">Withdrawl</span>
-                </a></li>
-            <li><a href="staffCreation">
-                    <span class="nav-item">Staff</span>
-                </a></li>
-            <li><a href="report">
-                    <span class="nav-item">Report</span>
-                </a></li>
-        </div>
-        <li>
-            <span class="heads">Home</span>
-        </li>
-        <li><a href="youtube">
-                <span class="nav-item">YouTube</span>
-            </a></li>
-        <li><a href="music">
-                <span class="nav-item">Music</span>
-            </a></li>
-        <li><a href="faceBook">
-                <span class="nav-item">FaceBook</span>
-            </a></li>
-        <li><a href="instagram">
-                <span class="nav-item">Instagram</span>
-            </a></li>
-        <li><a href="shorts">
-                <span class="nav-item">Shorts</span>
-            </a></li>
-        <li><a href="reels">
-                <span class="nav-item">Reels</span>
-            </a></li>
-        <li><a href="kids">
-                <span class="nav-item">Kids</span>
-            </a></li>
-        <li>
-            <span class="heads">DailyTask</span>
-        </li>
-        <li><a href="dailyTask">
-                <span class="nav-item">Videos</span>
-            </a></li>
-        <li><a href="coupons">
-                <span class="nav-item">Coupons</span>
-            </a></li>
-        <li>
-            <span class="heads">Ads</span>
-        </li>
-        <li><a href="adbanner">
-                <span class="nav-item">VideoBanner</span>
-            </a>
-        </li>
-        <li><a href="imageBanner">
-                <span class="nav-item">ImageBanner</span>
-            </a></li>
-        <li><a href="online">
-                <span class="nav-item">OnlineShop</span>
-            </a>
-        </li>
-        <li><a href="offline">
-                <span class="nav-item">OfflineShop</span>
-            </a></li>
-        <li><a>
-                <span (click)=logout() class="logout">Logout</span>
-            </a></li>
+  <ul>
+    <div *ngIf="isAdmin">
+      <li>
+        <span class="heads">Dashboard</span>
+      </li>
+      <li><a href="dashboard">
+        <span class="nav-item">Home</span>
+      </a></li>
 
-    </ul>
+      <li><a href="staffCreation">
+        <span class="nav-item">Staff</span>
+      </a></li>
+      <li><a href="report">
+        <span class="nav-item">Report</span>
+      </a></li>
+    </div>
+
+    <div *ngIf="hasPermission('Withdraw')">
+      <li><a href="withdrawal">
+        <span class="nav-item">Withdrawal</span>
+      </a></li>
+    </div>
+    <div *ngIf="hasPermission('User')">
+      <li><a href="user">
+        <span class="nav-item">User</span>
+      </a></li>
+    </div>
+    <div *ngIf="hasPermission('YoutubeVideo')">
+      <li>
+        <span class="heads">Home</span>
+      </li>
+
+      <li><a href="youtube">
+        <span class="nav-item">YouTube</span>
+      </a></li>
+
+      <li><a href="shorts">
+        <span class="nav-item">Shorts</span>
+      </a></li>
+    </div>
+    <div *ngIf="hasPermission('DailyTask')">
+      <li>
+        <span class="heads">DailyTask</span>
+      </li>
+      <li><a href="dailyTask">
+        <span class="nav-item">Videos</span>
+      </a></li>
+      <li><a href="coupons">
+        <span class="nav-item">Coupons</span>
+      </a></li>
+    </div>
+
+    <div *ngIf="hasPermission('Ads')">
+      <li>
+        <span class="heads">Ads</span>
+      </li>
+      <li><a href="adbanner">
+        <span class="nav-item">VideoBanner</span>
+      </a>
+      </li>
+      <li><a href="imageBanner">
+        <span class="nav-item">ImageBanner</span>
+      </a></li>
+
+      <li><a href="home-ad">
+        <span class="nav-item">HomeAd</span>
+      </a></li>
+
+      <li><a href="ads">
+        <span class="nav-item">Ads</span>
+      </a></li>
+    </div>
+    <div *ngIf="hasPermission('Shop')">
+      <li>
+        <span class="heads">Shop</span>
+      </li>
+      <li><a href="online">
+        <span class="nav-item">OnlineShop</span>
+      </a>
+      </li>
+      <li><a href="offline">
+        <span class="nav-item">OfflineShop</span>
+      </a></li>
+      <li><a href="shop-category">
+        <span class="nav-item">ShopCategory</span>
+      </a></li>
+    </div>
+    <li><a>
+      <span (click)=logout() class="logout">Logout</span>
+    </a></li>
+
+  </ul>
 </div>

@@ -18,7 +18,7 @@ body {
   height: 50px;
   width: 100%;
   /* background: #adcae7; */
-  background-color: black;
+  background-color: whitesmoke;
   /* background:#dfe9f5 ; */
   position:relative;
   justify-content: space-between;
@@ -61,7 +61,7 @@ body {
   overflow-x:hidden;
   top: 30px;
   /* top: 0;*/
-  bottom: 0; 
+  bottom: 0;
   /* height: 100vh; */
   /* background: #d3d5d7; */
   width: 240px;

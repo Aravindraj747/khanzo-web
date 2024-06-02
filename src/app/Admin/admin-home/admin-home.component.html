@@ -19,7 +19,7 @@
       <tbody>
       <tr *ngFor="let withdrawal of withdrawals">
         <td>{{withdrawal.userId}}</td>
-        <td>{{withdrawal.amount}}</td>
+        <td>{{withdrawal.amount - withdrawal.serviceCharge}}</td>
         <td>{{withdrawal.requestedDate.toDate() | date:'dd-MM-yyyy'}}</td>
         <td><a (click)="openDialog('details',withdrawal)" mat-raised-button>View</a></td>
         <td>
@@ -42,12 +42,12 @@
           <!-- <button class="Reject" (click)="openDialog('reject',withdrawal)" value="reject">Reject</button> -->
         </td>
         </ng-template>
-        <ng-template [ngIf]="withdrawal.status === 'success'">
+        <ng-template [ngIf]="withdrawal.status === 'SUCCESS'">
           <td>
             <p style="color:green;border: none;">Accepted</p>
           </td>
         </ng-template>
-        <ng-template [ngIf]="withdrawal.status === 'reject'">
+        <ng-template [ngIf]="withdrawal.status === 'REJECT'">
           <td>
             <p style="color:red;">Rejected</p>
           </td>

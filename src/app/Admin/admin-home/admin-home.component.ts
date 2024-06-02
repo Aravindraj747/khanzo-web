@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { User } from '@angular/fire/auth';
-import { MatDialog } from '@angular/material/dialog';
-import { Withdrawal } from 'src/app/models/withdrawal';
-import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-import { DialogComponent } from '../dialog/dialog.component';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {User} from '@angular/fire/auth';
+import {MatDialog} from '@angular/material/dialog';
+import {Withdrawal} from 'src/app/models/withdrawal';
+import {FirestoreServiceService} from 'src/app/Services/firestore-service.service';
+import {DialogComponent} from '../dialog/dialog.component';
 import * as XLSX from 'xlsx';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-admin-home',
@@ -15,7 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class AdminHomeComponent implements OnInit {
 
-  withdrawals: Withdrawal[] =[];
+  withdrawals: Withdrawal[] = [];
   fileName = 'withdrawal.xlsx';
 
   // displayedColumns: string[] = ['Id', 'Name', 'BuyLink', 'UploadDate','WebsiteName','Image','Delete'];
@@ -34,13 +34,14 @@ export class AdminHomeComponent implements OnInit {
   //   });
   // }
   constructor(private firestoreService: FirestoreServiceService,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     this.getWithdrawal();
   }
 
-  getWithdrawal(){
+  getWithdrawal() {
     const withdrawalArray: Withdrawal[] = [];
     this.firestoreService.getAllWithdrawal().snapshotChanges().subscribe(res => {
       res.forEach(doc => {
@@ -48,7 +49,7 @@ export class AdminHomeComponent implements OnInit {
       })
     });
     // this.firestoreService.getAllWithdrawal().ref.get().then(res => {
-      // console.log(res);
+    // console.log(res);
     //   res.forEach(function(doc) {
     //     withdrawalArray.push(<Withdrawal>doc.data());
     //   });
@@ -57,6 +58,7 @@ export class AdminHomeComponent implements OnInit {
     this.withdrawals = withdrawalArray;
     // console.log(this.withdrawals);
   }
+
   export() {
     // console.log('in function');
     let element = document.getElementById('excel-table');
@@ -69,45 +71,46 @@ export class AdminHomeComponent implements OnInit {
     /* save to file */
     XLSX.writeFile(wb, this.fileName);
   }
-  openDialog(value:string,withdrawal:Withdrawal){
+
+  openDialog(value: string, withdrawal: Withdrawal) {
     let id = withdrawal.withdrawalId;
     // console.log(value);
-    const dialogRef = this.dialog.open(DialogComponent,{
-      data:{
-        withdrawal:withdrawal,value
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        withdrawal: withdrawal, value
       }
     })
-      dialogRef.componentInstance.updated.subscribe(val => {
-        const rejectedUser: User []= [];
-        for(let i = 0;i<this.withdrawals.length;i++){
-          if(this.withdrawals[i].withdrawalId === id){
-            if (value == 'accept'){
-              this.withdrawals[i].status = 'SUCCESS';
-            }else{
-              this.withdrawals[i].status = 'REJECT';
-              this.firestoreService.getrejectedUser(withdrawal.userId,withdrawal.amount);
-              // this.firestoreService.getUser().ref.get().then(res=>{
-              //   res.forEach(function (doc) {
-              //     userArray.push(<User>doc.data());
-              //   });
-              //   for(let i = 0;i<userArray.length;i++){
-              //     if(userArray[i].email === withdrawal.userId){
-                    // console.log(userArray);
-              //       let amt = userArray[i].amount + withdrawal.amount;
-              //       let data = {
-              //         'amount': amt
-              //       }
-              //       this.firestoreService.updateUser(withdrawal.userId,data).then(res=>{
-              //         return;
-              //       })
-              //       break;
-              //     }
-              //   }
-              // })
-            }
-            break;
+    dialogRef.componentInstance.updated.subscribe(val => {
+      const rejectedUser: User [] = [];
+      for (let i = 0; i < this.withdrawals.length; i++) {
+        if (this.withdrawals[i].withdrawalId === id) {
+          if (value == 'accept') {
+            this.withdrawals[i].status = 'SUCCESS';
+          } else {
+            this.withdrawals[i].status = 'REJECT';
+            this.firestoreService.getrejectedUser(withdrawal.userId, withdrawal.amount);
+            // this.firestoreService.getUser().ref.get().then(res=>{
+            //   res.forEach(function (doc) {
+            //     userArray.push(<User>doc.data());
+            //   });
+            //   for(let i = 0;i<userArray.length;i++){
+            //     if(userArray[i].email === withdrawal.userId){
+            // console.log(userArray);
+            //       let amt = userArray[i].amount + withdrawal.amount;
+            //       let data = {
+            //         'amount': amt
+            //       }
+            //       this.firestoreService.updateUser(withdrawal.userId,data).then(res=>{
+            //         return;
+            //       })
+            //       break;
+            //     }
+            //   }
+            // })
           }
+          break;
         }
-      });
-    }
+      }
+    });
   }
+}

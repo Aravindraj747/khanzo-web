@@ -30,7 +30,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 
-// 
+//
 import { environment } from 'src/environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -56,6 +56,16 @@ import { ReportComponent } from './Staff/report/report.component';
 import { LandingComponent } from './Staff/landing/landing.component';
 import { ContactComponent } from './Staff/contact/contact.component';
 import { CancelComponent } from './Staff/cancel/cancel.component';
+import { DashboardComponent } from './Staff/dashboard/dashboard.component';
+import {MatMenuModule} from "@angular/material/menu";
+import { HomeAdComponent } from './Staff/home-ad/home-ad.component';
+import { AddAdDialogComponent } from './Staff/add-ad-dialog/add-ad-dialog.component';
+import { WithdrawComponent } from './Staff/withdraw/withdraw.component';
+import { ShopCategoryComponent } from './Staff/shop-category/shop-category.component';
+import { OtherAdsComponent } from './Staff/other-ads/other-ads.component';
+import { EditShopCategoryDailogComponent } from './Staff/edit-shop-category-dailog/edit-shop-category-dailog.component';
+import { ShippingPolicyComponent } from './Staff/shipping-policy/shipping-policy.component';
+import { InstructionsComponent } from './Staff/instructions/instructions.component';
 // import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
@@ -85,7 +95,16 @@ import { CancelComponent } from './Staff/cancel/cancel.component';
     ReportComponent,
     LandingComponent,
     ContactComponent,
-    CancelComponent
+    CancelComponent,
+    DashboardComponent,
+    HomeAdComponent,
+    AddAdDialogComponent,
+    WithdrawComponent,
+    ShopCategoryComponent,
+    OtherAdsComponent,
+    EditShopCategoryDailogComponent,
+    ShippingPolicyComponent,
+    InstructionsComponent
   ],
   entryComponents: [DialogComponent],
   imports: [
@@ -111,7 +130,8 @@ import { CancelComponent } from './Staff/cancel/cancel.component';
     provideStorage(() => getStorage()),
     BrowserAnimationsModule,
     MatProgressSpinnerModule,
-    HttpClientModule
+    HttpClientModule,
+    MatMenuModule
   ],
   providers: [
     AdminauthguardGuard,

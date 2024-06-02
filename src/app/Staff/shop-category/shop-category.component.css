@@ -1,0 +1,32 @@
+.new {
+  display: flex;
+}
+
+.container {
+  margin-left: 250px;
+  margin-top: 50px;
+}
+
+.table {
+  width: 100%;
+}
+
+.youtube-table {
+  margin-left: 20%;
+  margin-right: 5%;
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+}
+
+
+.new {
+  display: flex;
+}
+
+.value form {
+  display:flex;
+  justify-content:space-between;
+}

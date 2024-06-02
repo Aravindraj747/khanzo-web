@@ -1,0 +1,19 @@
+.container {
+  margin-left: 250px;
+  margin-top: 50px;
+}
+
+.value form {
+  display:flex;
+  justify-content:space-between;
+}
+
+table {
+  width: 100%;
+}
+
+.youtube-table {
+  margin-left: 20%;
+  margin-right: 5%;
+  margin-top: 20px;
+}

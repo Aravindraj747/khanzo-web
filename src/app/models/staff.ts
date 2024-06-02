@@ -6,4 +6,5 @@ export interface Staff{
     password: string;
     name:string;
     creationDate: Timestamp;
+    role: string;
 }

@@ -22,7 +22,7 @@
     </mat-dialog-actions>
 </div>
 
-<div *ngIf="value == 'youtube' || value == 'shorts' || value == 'staff' || value == 'reels' || value == 'instagram' || value == 'kid' || value == 'dailyTasks' || value == 'adbanner' || value == 'coupon' || value == 'faceBook' || value == 'music' || value == 'imageBanner'|| value == 'online' || value == 'offline'">
+<div *ngIf="value == 'youtube' || value == 'shorts' || value == 'staff' || value == 'reels' || value == 'instagram' || value == 'kid' || value == 'dailyTasks' || value == 'adbanner' || value == 'coupon' || value == 'faceBook' || value == 'music' || value == 'imageBanner'|| value == 'online' || value == 'offline' || value == 'homeAds' || value == 'shopCategory' || value == 'ads'">
     <h3>Are you sure to delete?</h3>
     <mat-dialog-actions>
         <button mat-flat-button mat-dialog-close class="reject">Cancel</button>
@@ -33,7 +33,7 @@
 <div *ngIf="value == 'details'">
     <h3>Account Details</h3>
     <h3>Account Number: {{withdrawal.accountNumber}}</h3>
-    <h3>IFSC: {{withdrawal.ifsc}}</h3>
+    <h3>IFSC: {{withdrawal.ifscCode}}</h3>
     <h3>Upi id: {{withdrawal.upiId}}</h3>
     <mat-dialog-actions>
         <button mat-flat-button mat-dialog-close color="primary" class="reject">Ok</button>

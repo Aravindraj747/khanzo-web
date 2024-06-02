@@ -4,6 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthenticationServiceService } from 'src/app/Services/authentication-service.service';
 import { AdminServiceService } from 'src/app/Services/Service/admin-service.service';
+import {User} from "../../models/user";
+import {Staff} from "../../models/staff";
 
 @Component({
   selector: 'app-admin-login',
@@ -13,6 +15,9 @@ import { AdminServiceService } from 'src/app/Services/Service/admin-service.serv
 export class AdminLoginComponent implements OnInit {
 
   spinnerActive: boolean = false;
+
+  routingMap = new Map();
+
   adminForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
@@ -21,7 +26,13 @@ export class AdminLoginComponent implements OnInit {
   constructor(private _snackBar: MatSnackBar,
     private adminService: AdminServiceService,
     private authService: AuthenticationServiceService,
-    private route: Router) { }
+    private route: Router) {
+    this.routingMap.set('WITHDRAW_MANAGEMENT', 'withdrawal');
+    this.routingMap.set('YOUTUBE_VIDEOS_MANAGEMENT', 'youtube');
+    this.routingMap.set('DAILY_TASK_MANAGEMENT', 'dailyTask');
+    this.routingMap.set('SHOP_MANAGEMENT', 'offline');
+    this.routingMap.set('ADS_MANAGEMENT', 'home-ad');
+}
 
   ngOnInit(): void {
   }
@@ -49,10 +60,10 @@ export class AdminLoginComponent implements OnInit {
       if (res.docs.length > 0) {
         this.authService.login(email!, password!).then((res) => {
           // console.log(res);
-          this.getAdminDetails(email!);
+          this.saveAdminDetails(email!);
           this.spinnerActive = false;
           this.adminService.isAdmin = 'true';
-          this.route.navigate(['adminHome']);
+          this.route.navigate(['dashboard']);
         }, err => {
           // console.log('error', err);
           this.openSnackBar('Invalid Email or password', 'Undo');
@@ -62,17 +73,18 @@ export class AdminLoginComponent implements OnInit {
       }
       else {
         // console.log('staff here')
-        this.adminService.checkIfStaff(email!).subscribe(res=>{
-          console.log('staffchecked');
-          if (res.docs.length > 0) {
+        this.adminService.checkIfStaff(email!).subscribe(data=>{
+          let staff: Staff = <Staff>data.docs[0].data();
+
+          if (data.docs.length > 0) {
             this.authService.login(email!, password!).then((res) => {
-              console.log('inlogin');
-              this.route.navigate(['youtube']);
-              // console.log('in login');
               this.adminService.isStaff = 'true';
               // console.log(res);
-              this.getStaffDetails(email!);
+              this.saveStaffDetails(staff);
               this.spinnerActive = false;
+
+              this.route.navigate([this.routingMap.get(staff.role)]);
+
             }, err => {
               // console.log('error', err);
               this.openSnackBar('Invalid Email or password', 'Undo');
@@ -89,12 +101,14 @@ export class AdminLoginComponent implements OnInit {
       }
     });
   }
-  async getAdminDetails(email: string) {
-    await this.adminService.getAdmin(email);
+  saveAdminDetails(email: string) {
+    this.adminService.saveAdmin(email);
   }
-  async getStaffDetails(email: string) {
-    await this.adminService.getStaff(email!);
+
+  saveStaffDetails(staff: Staff) {
+    this.adminService.saveStaff(staff);
   }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,

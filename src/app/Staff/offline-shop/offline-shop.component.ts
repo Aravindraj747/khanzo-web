@@ -1,17 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Timestamp } from '@angular/fire/firestore';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-import { OfflineShop, OfflineShopExportArray } from 'src/app/models/offline';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Timestamp} from '@angular/fire/firestore';
+import {getDownloadURL, getStorage, ref, uploadBytesResumable} from '@angular/fire/storage';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {DialogComponent} from 'src/app/Admin/dialog/dialog.component';
+import {FirestoreServiceService} from 'src/app/Services/firestore-service.service';
+import {OfflineShop, OfflineShopExportArray} from 'src/app/models/offline';
 import * as XLSX from 'xlsx';
 import data from '../../../assets/district.json';
-import { StaffServiceService } from 'src/app/Services/staff-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { Report } from 'src/app/models/report';
+import {StaffServiceService} from 'src/app/Services/staff-service.service';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {Report} from 'src/app/models/report';
+import {off} from "@angular/fire/database";
+import {state} from "@angular/animations";
+import {ShopCategoryComponent} from "../shop-category/shop-category.component";
+import {ShopCategory} from "../../models/shopCategory";
+import {AdminServiceService} from "../../Services/Service/admin-service.service";
+import {of} from "rxjs";
 
 @Component({
   selector: 'app-offline-shop',
@@ -31,10 +37,12 @@ export class OfflineShopComponent implements OnInit {
     availability: '',
     id: '',
     state: '',
-    district: '',
+    districts: [],
     uploadDate: Timestamp.now(),
+    mapUrl: '',
+    addedBy: ''
   }
-  offlineShopExportedArray:OfflineShopExportArray[]= [];
+  offlineShopExportedArray: OfflineShopExportArray[] = [];
   states: any = []
   districts: any = []
   countries = {};
@@ -42,8 +50,8 @@ export class OfflineShopComponent implements OnInit {
   offlineShops: OfflineShop[] = [];
   spinnerActive: boolean = false;
   imageFile: any = undefined;
-  category: any[] =["Supermarket","Textiles","Medicals","Hotels","Furniture","Homegoods","HomeKitchen","Salon","ToursTravel","Electrical","Photography","Hardware","SteelCements","Jewellery"]
-  displayedColumns: string[] = ['Id','Name','Address', 'UploadDate','StartDate','ExpiryDate','Contact','Image','Delete'];
+  category: ShopCategory[] = [];
+  displayedColumns: string[] = ['Id', 'Name', 'Address', 'State', 'Category', 'StartDate', 'ExpiryDate', 'Contact', 'Image', 'Delete'];
   dataSource = new MatTableDataSource<OfflineShop>(this.offlineShops);
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -57,48 +65,33 @@ export class OfflineShopComponent implements OnInit {
       });
       this.dataSource.data = this.offlineShops;
     });
+    this.firestoreService.getShopCategoriesByAvailability('OFFLINE').subscribe(res => {
+      this.category = [];
+      res.forEach(doc => {
+        this.category.push(<ShopCategory>doc.data());
+      })
+    })
   }
+
   constructor(private _snackBar: MatSnackBar,
-    private firestoreService: FirestoreServiceService,
-    private dialog: MatDialog,
-    private service: StaffServiceService) { }
+              private firestoreService: FirestoreServiceService,
+              private dialog: MatDialog,
+              private service: StaffServiceService,
+              private adminService: AdminServiceService) {
+  }
 
   ngOnInit(): void {
     for (var state of data) {
       this.states.push(state.name);
     }
-    this.service.getCountries().subscribe(
-      data => this.countries = data
-    );
-    // this.offline.uploadDate = Timestamp.now();
-    // const offlineshop: OfflineShop[] = [];
-    // this.firestoreService.getOfflineShop().snapshotChanges().subscribe(res => {
-    //   res.forEach(doc => {
-    //     offlineshop.push(<OfflineShop>doc.payload.doc.data());
-    //   })
-    // });
-    // this.firestoreService.getOfflineShop().ref.get().then(res => {
-    //   res.forEach(function (doc) {
-    //     offlineshop.push(<OfflineShop>doc.data());
-    //   });
-    // });
-    // this.offlineShops = offlineshop;
   }
+
   chooseImage(event: any) {
     this.imageFile = event.target.files[0];
   }
-  getdistrict(state: string) {
-    this.districts = [];
-    for (var dist of data) {
-      if (dist.name == state) {
-        for (let i: number = 0; i < dist.districts.length; i++) {
-          this.districts.push(dist.districts[i])
-        }
-      }
-    }
-  }
+
   export() {
-    this.offlineShops.forEach(res=>{
+    this.offlineShops.forEach(res => {
       const offline: OfflineShopExportArray = {
         name: '',
         imageUrl: '',
@@ -110,20 +103,25 @@ export class OfflineShopComponent implements OnInit {
         availability: '',
         id: '',
         state: '',
-        district: '',
+        districts: '',
         uploadDate: '',
+        mapUrl: '',
+        addedBy: ''
       }
       offline.name = res.name;
-      offline.imageUrl = res.imageUrl ;
-      offline.address = res.address ;
-      offline.category = res.category ;
+      offline.imageUrl = res.imageUrl;
+      offline.address = res.address;
+      offline.category = res.category;
       offline.openingTime = res.openingTime.toDate().toString();
       offline.closingTime = res.closingTime.toDate().toString();
       offline.phoneNumber = res.phoneNumber;
       offline.availability = res.availability;
       offline.id = res.id;
       offline.state = res.state;
-      offline.district = res.district;
+      offline.mapUrl = res.mapUrl;
+      offline.addedBy = res.addedBy;
+      if (res.districts !== undefined)
+        offline.districts = res.districts.join(",");
       offline.uploadDate = res.uploadDate.toDate().toString();
       this.offlineShopExportedArray.push(offline);
     });
@@ -143,8 +141,10 @@ export class OfflineShopComponent implements OnInit {
     // export your excel
     XLSX.writeFile(wb, 'offlineShop.xlsx');
   }
+
   submit() {
     this.offline.availability = 'OFFLINE';
+    this.offline.addedBy = this.adminService.getEmail();
     const startDateString: string = String(this.offline.openingTime);
     const startDate = new Date(startDateString);
     this.offline.openingTime = Timestamp.fromDate(startDate);
@@ -162,17 +162,20 @@ export class OfflineShopComponent implements OnInit {
     }
     if (this.offline.imageUrl !== '') {
       // download and push to storage and save link in database
+      if (this.offline!.districts?.includes("ALL")) {
+        this.offline.districts = this.districts;
+      }
       this.firestoreService.saveOfflineshop(this.offline).then(res => {
         this.offlineShops.push(this.offline);
         this.openSnackBar("Link Saved Successfully", "Close");
         this.resetPage()
         this.spinnerActive = false;
       });
-    }
-    else if (this.imageFile !== undefined) {
+    } else if (this.imageFile !== undefined) {
       this.putStorageItem(this.imageFile);
     }
   }
+
   putStorageItem(file: any) {
     const storage = getStorage();
     const storageRef = ref(storage, 'youtubethumbNail/' + file.name);
@@ -190,15 +193,17 @@ export class OfflineShopComponent implements OnInit {
           this.spinnerActive = false;
           this.offline.imageUrl = downloadURL;
           if (this.offline.imageUrl !== "") {
+            if (this.offline!.districts?.includes("ALL")) {
+              this.offline.districts = this.districts;
+            }
             this.firestoreService.saveOfflineshop(this.offline).then(res => {
               this.offlineShops.push(this.offline);
               this.openSnackBar("Link Saved Successfully", "close");
               this.spinnerActive = false;
               this.resetPage();
             });
-          }
-          else {
-            this.openSnackBar('Error occured', 'retry');
+          } else {
+            this.openSnackBar('Error occurred', 'retry');
             this.spinnerActive = false;
           }
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -206,6 +211,7 @@ export class OfflineShopComponent implements OnInit {
         });
       });
   }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       verticalPosition: 'bottom',
@@ -213,6 +219,7 @@ export class OfflineShopComponent implements OnInit {
       duration: 2000,
     });
   }
+
   delete(id: string, type: string) {
     // console.log(id,type);
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -230,6 +237,7 @@ export class OfflineShopComponent implements OnInit {
       }
     });
   }
+
   resetPage() {
     this.offline = {
       name: '',
@@ -240,10 +248,32 @@ export class OfflineShopComponent implements OnInit {
       phoneNumber: '',
       id: '',
       state: '',
-      category:'',
-      district: '',
+      category: '',
+      districts: [],
       availability: '',
       uploadDate: Timestamp.now(),
+      mapUrl: '',
+      addedBy: ''
     }
   }
+
+  getdistrict(state: string, event: any) {
+    if (!event.isUserInput) {
+      return;
+    }
+    this.districts = [];
+    for (var dist of data) {
+      if (dist.name == state) {
+        this.districts.push('ALL')
+        for (let i: number = 0; i < dist.districts.length; i++) {
+          this.districts.push(dist.districts[i])
+        }
+
+        console.log(this.districts);
+      }
+    }
+  }
+
+  protected readonly off = off;
+  protected readonly state = state;
 }

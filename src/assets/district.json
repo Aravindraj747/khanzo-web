@@ -587,7 +587,7 @@
         ]
     },
     {
-        "name": "Tamil Nadu",
+        "name": "Tamilnadu",
         "districts": [
             "Ariyalur",
             "Chengalpattu",
@@ -824,10 +824,7 @@
     {
         "name": "Puducherry",
         "districts": [
-            "Karaikal",
-            "Mahe",
-            "Puducherry",
-            "Yanam"
+            "Puducherry"
         ]
     },
     {

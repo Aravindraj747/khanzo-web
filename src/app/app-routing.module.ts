@@ -26,6 +26,13 @@ import { OfflineShopComponent } from './Staff/offline-shop/offline-shop.componen
 import { LandingComponent } from './Staff/landing/landing.component';
 import { ContactComponent } from './Staff/contact/contact.component';
 import { CancelComponent } from './Staff/cancel/cancel.component';
+import { DashboardComponent } from './Staff/dashboard/dashboard.component';
+import { HomeAdComponent } from "./Staff/home-ad/home-ad.component";
+import {WithdrawComponent} from "./Staff/withdraw/withdraw.component";
+import {ShopCategoryComponent} from "./Staff/shop-category/shop-category.component";
+import {OtherAdsComponent} from "./Staff/other-ads/other-ads.component";
+import {ShippingPolicyComponent} from "./Staff/shipping-policy/shipping-policy.component";
+import {InstructionsComponent} from "./Staff/instructions/instructions.component";
 
 const routes: Routes = [
   {
@@ -38,11 +45,12 @@ const routes: Routes = [
   { path: 'dailyTask', component: StaffDailyTaskComponent, canActivate: [StaffauthguardGuard] },
   { path: 'instagram', component: StaffInstagramComponent, canActivate: [StaffauthguardGuard] },
   { path: 'shorts', component: StaffShortsComponent, canActivate: [StaffauthguardGuard] },
-  { path: 'reels', component: StaffReelsComponent, canActivate: [StaffauthguardGuard] },
+  // { path: 'reels', component: StaffReelsComponent, canActivate: [StaffauthguardGuard] },
   { path: 'adbanner', component: StaffAdbannerComponent, canActivate: [StaffauthguardGuard] },
   { path: 'coupons', component: CouponsComponent, canActivate: [StaffauthguardGuard] },
   { path: 'faceBook', component: FacebookComponent, canActivate: [StaffauthguardGuard] },
   { path: 'music', component: MusicComponent, canActivate: [StaffauthguardGuard] },
+  { path: 'home-ad', component: HomeAdComponent, canActivate: [StaffauthguardGuard] },
   { path: 'terms', component: TermsandConditionComponent },
   { path: 'contact' ,component:ContactComponent},
   { path: 'cancel', component:CancelComponent},
@@ -50,6 +58,8 @@ const routes: Routes = [
   { path: 'imageBanner', component: ImageBannerComponent, canActivate: [StaffauthguardGuard] },
   { path: 'kids', component: KidsComponent, canActivate: [StaffauthguardGuard] },
   { path: 'privacy-policy', component: PrivacyComponent },
+  { path: 'shipping-policy', component: ShippingPolicyComponent },
+  { path: 'instructions', component: InstructionsComponent },
   { path: 'adminLogin', component: AdminLoginComponent },
   { path: 'online', component: OnlineShopComponent, canActivate: [StaffauthguardGuard] },
   { path: 'offline', component: OfflineShopComponent, canActivate: [StaffauthguardGuard] },
@@ -57,8 +67,12 @@ const routes: Routes = [
   { path: 'adminHome', component: AdminHomeComponent, canActivate: [AdminauthguardGuard] },
   { path: 'report', component: ReportComponent, canActivate: [AdminauthguardGuard] },
   { path: 'adminSideNav', component: SideNavComponent, canActivate: [StaffauthguardGuard] },
-  { path: 'user', component: UserComponent, canActivate: [AdminauthguardGuard] },
+  { path: 'user', component: UserComponent, canActivate: [StaffauthguardGuard] },
   { path: 'staffCreation', component: StaffCreationComponent, canActivate: [AdminauthguardGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AdminauthguardGuard]},
+  { path: 'withdrawal', component: WithdrawComponent, canActivate: [StaffauthguardGuard]},
+  { path: 'shop-category', component: ShopCategoryComponent, canActivate: [StaffauthguardGuard]},
+  { path: 'ads', component: OtherAdsComponent, canActivate: [StaffauthguardGuard]}
 ];
 
 @NgModule({

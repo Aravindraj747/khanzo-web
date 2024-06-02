@@ -1,21 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Timestamp } from '@angular/fire/firestore';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { AdBanner, AdBannerExportData } from 'src/app/models/adBanner';
-import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-import { StaffServiceService } from 'src/app/Services/staff-service.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Timestamp} from '@angular/fire/firestore';
+import {getDownloadURL, getStorage, ref, uploadBytesResumable} from '@angular/fire/storage';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {DialogComponent} from 'src/app/Admin/dialog/dialog.component';
+import {AdBanner, AdBannerExportData} from 'src/app/models/adBanner';
+import {FirestoreServiceService} from 'src/app/Services/firestore-service.service';
+import {StaffServiceService} from 'src/app/Services/staff-service.service';
 import data from '../../../assets/district.json';
 import * as XLSX from 'xlsx';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {AdminServiceService} from "../../Services/Service/admin-service.service";
 
 enum type {
   imageURL = 'image',
   videoURL = 'video'
 }
+
 @Component({
   selector: 'app-staff-adbanner',
   templateUrl: './staff-adbanner.component.html',
@@ -29,10 +31,11 @@ export class StaffAdbannerComponent implements OnInit {
     id: '',
     uploadDate: Timestamp.now(),
     state: '',
-    district: '',
-    views: 0
+    districts: [],
+    views: 0,
+    addedBy: ''
   }
-  exportAdBanner: AdBannerExportData[]=[];
+  exportAdBanner: AdBannerExportData[] = [];
   states: any = []
   districts: any = []
   countries = {};
@@ -59,10 +62,12 @@ export class StaffAdbannerComponent implements OnInit {
       this.dataSource.data = this.adbannerArray;
     });
   }
+
   constructor(private _snackBar: MatSnackBar,
-    private firestoreService: FirestoreServiceService,
-    private dialog: MatDialog,
-    private service: StaffServiceService) {
+              private firestoreService: FirestoreServiceService,
+              private dialog: MatDialog,
+              private service: StaffServiceService,
+              private adminService: AdminServiceService) {
   }
 
   ngOnInit(): void {
@@ -87,14 +92,21 @@ export class StaffAdbannerComponent implements OnInit {
     // });
     // this.adbannerArray = adBannerArray;
   }
+
   chooseImage(event: any) {
     this.ImageFile = event.target.files[0];
   }
+
   chooseVideo(event: any) {
     this.VideoFile = event.target.files[0];
   }
-  getdistrict(state: string) {
+
+  getdistrict(state: string, event: any) {
+    if (!event.isUserInput) {
+      return;
+    }
     this.districts = [];
+    this.districts.push('ALL')
     for (var dist of data) {
       if (dist.name == state) {
         for (let i: number = 0; i < dist.districts.length; i++) {
@@ -106,14 +118,14 @@ export class StaffAdbannerComponent implements OnInit {
 
   submit() {
     this.spinnerActive = true;
+    this.adBanner.addedBy = this.adminService.getEmail();
     this.length = 0;
     this.adBanner.id = Timestamp.now().seconds.toString();
     this.files = [];
     if ((this.ImageFile !== undefined) && (this.VideoFile !== undefined)) {
       this.files.push([this.ImageFile, type.imageURL]);
       this.files.push([this.VideoFile, type.videoURL]);
-    }
-    else {
+    } else {
       this.spinnerActive = false;
       this.openSnackBar('Upload ImageFile or VideoFile to continue', 'retry');
     }
@@ -121,6 +133,7 @@ export class StaffAdbannerComponent implements OnInit {
       this.files.map((item) => this.putStorageItem(item[0], item[1]))
     )
   }
+
   putStorageItem(file: any, type: type) {
     const storage = getStorage();
     const storageRef = ref(storage, 'adBanner/' + file.name);
@@ -138,11 +151,13 @@ export class StaffAdbannerComponent implements OnInit {
           this.length += 1
           if (type == 'image') {
             this.adBanner.imageUrl = downloadURL;
-          }
-          else if (type == 'video') {
+          } else if (type == 'video') {
             this.adBanner.videoUrl = downloadURL;
           }
           if (this.length == this.files.length) {
+            if (this.adBanner!.districts?.includes("ALL")) {
+              this.adBanner.districts = this.districts;
+            }
             this.firestoreService.saveAdbanner(this.adBanner).then(res => {
               this.adbannerArray.push(this.adBanner);
               this.spinnerActive = false;
@@ -155,8 +170,9 @@ export class StaffAdbannerComponent implements OnInit {
         });
       });
   }
+
   export() {
-    this.adbannerArray.forEach(res=>{
+    this.adbannerArray.forEach(res => {
       const adBanner: AdBannerExportData = {
         imageUrl: '',
         videoUrl: '',
@@ -164,15 +180,17 @@ export class StaffAdbannerComponent implements OnInit {
         uploadDate: '',
         state: '',
         district: '',
-        views: 0
+        views: 0,
+        addedBy: ''
       }
       adBanner.imageUrl = res.imageUrl;
       adBanner.videoUrl = res.videoUrl;
       adBanner.id = res.id;
       adBanner.uploadDate = res.uploadDate.toDate().toString();
       adBanner.state = res.state;
-      adBanner.district = res.district;
+      adBanner.district = res.districts!.join(",");
       adBanner.views = res.views;
+      adBanner.addedBy = res.addedBy;
       this.exportAdBanner.push(adBanner);
     });
     const XLSX = require('xlsx')
@@ -191,8 +209,9 @@ export class StaffAdbannerComponent implements OnInit {
     // export your excel
     XLSX.writeFile(wb, 'AdbannerExcel.xlsx');
   }
+
   delete(id: string, type: string) {
-    console.log(id,type);
+    console.log(id, type);
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         value: type, id
@@ -209,6 +228,7 @@ export class StaffAdbannerComponent implements OnInit {
 
     });
   }
+
   resetPage() {
     this.adBanner = {
       videoUrl: '',
@@ -216,10 +236,12 @@ export class StaffAdbannerComponent implements OnInit {
       id: '',
       uploadDate: Timestamp.now(),
       state: '',
-      district: '',
-      views: 0
+      districts: [],
+      views: 0,
+      addedBy: ''
     }
   }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       verticalPosition: 'bottom',

@@ -1,15 +1,17 @@
-import { formatDate } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Firestore, Timestamp } from '@angular/fire/firestore';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
-import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Shorts, ShortsExportArray } from 'src/app/models/shorts';
-import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
+import {formatDate} from '@angular/common';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Firestore, Timestamp} from '@angular/fire/firestore';
+import {getDownloadURL, getStorage, ref, uploadBytesResumable} from '@angular/fire/storage';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatTableDataSource} from '@angular/material/table';
+import {DialogComponent} from 'src/app/Admin/dialog/dialog.component';
+import {Shorts, ShortsExportArray} from 'src/app/models/shorts';
+import {FirestoreServiceService} from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
+import {AdminServiceService} from "../../Services/Service/admin-service.service";
+
 @Component({
   selector: 'app-staff-shorts',
   templateUrl: './staff-shorts.component.html',
@@ -22,17 +24,18 @@ export class StaffShortsComponent implements OnInit {
   shorts: Shorts = {
     videoUrl: '',
     id: '',
-    language:'',
+    language: '',
     imageUrl: '',
-    uploadDate: Timestamp.now()
+    uploadDate: Timestamp.now(),
+    addedBy: ''
   }
-  shortExportArray: ShortsExportArray[] =[];
+  shortExportArray: ShortsExportArray[] = [];
   fileName: string = 'shorts.xlsx';
   thumbImageFile: any = undefined;
   shortsArrays: Shorts[] = [];
 
   dataSource = new MatTableDataSource<Shorts>(this.shortsArrays);
-  displayedColumns: string[] = ['Id', 'uploadDate','Language', 'Video', 'Image', 'Delete'];
+  displayedColumns: string[] = ['Id', 'uploadDate', 'Language', 'Video', 'Image', 'Delete'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -49,8 +52,10 @@ export class StaffShortsComponent implements OnInit {
   }
 
   constructor(private _snackBar: MatSnackBar,
-    private firestoreService: FirestoreServiceService,
-    private dialog: MatDialog) { }
+              private firestoreService: FirestoreServiceService,
+              private dialog: MatDialog,
+              private adminService: AdminServiceService) {
+  }
 
   ngOnInit(): void {
     // this.shorts.uploadDate = Timestamp.now();
@@ -68,12 +73,15 @@ export class StaffShortsComponent implements OnInit {
     // this.shortsArrays = shortsArray;
     // console.log(this.shortsArrays);
   }
+
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
+
   submit() {
     this.shorts.uploadDate = Timestamp.now();
     this.shorts.id = Timestamp.now().seconds.toString();
+    this.shorts.addedBy = this.adminService.getEmail();
     this.spinnerActive = true;
     if (this.shorts.videoUrl !== '') {
       if (this.shorts.imageUrl !== '') {
@@ -84,17 +92,16 @@ export class StaffShortsComponent implements OnInit {
           this.resetPage();
         });
         return
-      }
-      else if (this.thumbImageFile !== undefined) {
+      } else if (this.thumbImageFile !== undefined) {
         this.putStorageItem(this.thumbImageFile);
       }
-    }
-    else {
+    } else {
       this.spinnerActive = false;
       this.openSnackBar('Enter link to save', 'retry');
       return
     }
   }
+
   putStorageItem(file: any) {
     const storage = getStorage();
     const storageRef = ref(storage, 'youtubethumbNail/' + file.name);
@@ -121,8 +128,7 @@ export class StaffShortsComponent implements OnInit {
               this.spinnerActive = false;
               this.resetPage();
             });
-          }
-          else {
+          } else {
             this.openSnackBar('Error occured', 'retry');
             this.spinnerActive = false;
           }
@@ -132,6 +138,7 @@ export class StaffShortsComponent implements OnInit {
         });
       });
   }
+
   delete(id: string, type: string) {
     // console.log(id,type);
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -151,20 +158,23 @@ export class StaffShortsComponent implements OnInit {
 
     });
   }
+
   export() {
-    this.shortsArrays.forEach(res=>{
+    this.shortsArrays.forEach(res => {
       const short: ShortsExportArray = {
         videoUrl: '',
         id: '',
-        language:'',
+        language: '',
         imageUrl: '',
         uploadDate: '',
+        addedBy: ''
       }
       short.videoUrl = res.videoUrl;
       short.id = res.id;
       short.language = res.language;
       short.imageUrl = res.imageUrl;
       short.uploadDate = res.uploadDate.toDate().toString();
+      short.addedBy = res.addedBy;
       this.shortExportArray.push(short);
     });
     const XLSX = require('xlsx')
@@ -183,6 +193,7 @@ export class StaffShortsComponent implements OnInit {
     // export your excel
     XLSX.writeFile(wb, 'shorts.xlsx');
   }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       verticalPosition: 'bottom',
@@ -190,13 +201,15 @@ export class StaffShortsComponent implements OnInit {
       duration: 2000,
     })
   }
+
   resetPage() {
     this.shorts = {
       videoUrl: '',
-      language:'',
+      language: '',
       id: '',
       imageUrl: '',
-      uploadDate: Timestamp.now()
+      uploadDate: Timestamp.now(),
+      addedBy: ''
     }
   }
 }

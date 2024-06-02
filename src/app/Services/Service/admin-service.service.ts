@@ -21,10 +21,22 @@ export class AdminServiceService {
     })
   }
 
+  saveAdmin(email: string) {
+    sessionStorage.setItem('adminLogin', "true");
+    sessionStorage.setItem('email', email);
+  }
+
   getStaff(email: string) {
     this.firestore.collection('staff').doc<Staff>(email).get().subscribe(res => {
       sessionStorage.setItem('staffLogin', this.isStaff)
+      sessionStorage.setItem('staffRole', res.data()?.role!)
     })
+  }
+
+  saveStaff(staff: Staff) {
+    sessionStorage.setItem('staffLogin', 'true')
+    sessionStorage.setItem('staffRole', staff.role);
+    sessionStorage.setItem('email', staff.email);
   }
 
   getAdminLogin() {
@@ -32,6 +44,10 @@ export class AdminServiceService {
       this.isAdmin = sessionStorage.getItem('adminLogin')!;
     }
     return this.isAdmin;
+  }
+
+  getStaffRole() {
+    return sessionStorage.getItem('staffRole');
   }
 
   getStaffLogin() {
@@ -47,5 +63,9 @@ export class AdminServiceService {
 
   checkIfStaff(id: string) {
     return this.firestore.collection('staff', ref => ref.where("email", "==", id)).get();
+  }
+
+  getEmail(): string {
+    return sessionStorage.getItem('email')!;
   }
 }

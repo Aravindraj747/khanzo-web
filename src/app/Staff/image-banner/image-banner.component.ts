@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Timestamp } from '@angular/fire/firestore';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
-import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Banner, BannerExportArray } from 'src/app/models/banner';
-import { Report } from 'src/app/models/report';
-import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Timestamp} from '@angular/fire/firestore';
+import {getDownloadURL, getStorage, ref, uploadBytesResumable} from '@angular/fire/storage';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatTableDataSource} from '@angular/material/table';
+import {DialogComponent} from 'src/app/Admin/dialog/dialog.component';
+import {Banner, BannerExportArray} from 'src/app/models/banner';
+import {Report} from 'src/app/models/report';
+import {FirestoreServiceService} from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
+import {AdminServiceService} from "../../Services/Service/admin-service.service";
+
 @Component({
   selector: 'app-image-banner',
   templateUrl: './image-banner.component.html',
@@ -24,13 +26,15 @@ export class ImageBannerComponent implements OnInit {
     uploadDate: Timestamp.now(),
     id: '',
     imageUrl: '',
+    state: '',
+    addedBy: ''
   }
-  bannerExportedArray:BannerExportArray[]= [];
+  bannerExportedArray: BannerExportArray[] = [];
   bannerArray: Banner[] = [];
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
   fileName: string = 'imagebanner.xlsx';
-  displayedColumns: string[] = ['Id', 'Address', 'Email', 'uploadDate','PhoneNumber','Image','Delete'];
+  displayedColumns: string[] = ['Id', 'uploadDate', 'Link', 'Image', 'Delete'];
   dataSource = new MatTableDataSource<Banner>(this.bannerArray);
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -47,8 +51,9 @@ export class ImageBannerComponent implements OnInit {
   }
 
   constructor(private firestoreService: FirestoreServiceService,
-    private _snackBar: MatSnackBar,
-    private dialog: MatDialog) {
+              private _snackBar: MatSnackBar,
+              private dialog: MatDialog,
+              private adminService: AdminServiceService) {
   }
 
   ngOnInit(): void {
@@ -66,11 +71,14 @@ export class ImageBannerComponent implements OnInit {
     // });
     // this.bannerArray = youTubeArray;
   }
+
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
+
   submit() {
     this.spinnerActive = true;
+    this.banner.addedBy = this.adminService.getEmail();
     if (this.thumbImageFile == undefined && this.banner.imageUrl == '') {
       this.openSnackBar('Choose one option for upload image', 'retry');
       this.spinnerActive = false
@@ -86,14 +94,14 @@ export class ImageBannerComponent implements OnInit {
         this.resetPage()
         this.spinnerActive = false;
       });
-    }
-    else if (this.thumbImageFile !== undefined) {
+    } else if (this.thumbImageFile !== undefined) {
       // push to storage and save link in database
       this.putStorageItem(this.thumbImageFile);
     }
   }
+
   export() {
-    this.bannerArray.forEach(res=>{
+    this.bannerArray.forEach(res => {
       const banner: BannerExportArray = {
         email: '',
         address: '',
@@ -101,12 +109,17 @@ export class ImageBannerComponent implements OnInit {
         uploadDate: '',
         id: '',
         imageUrl: '',
+        state: '',
+        addedBy: ''
       }
       banner.email = res.email;
       banner.address = res.address;
       banner.phoneNumber = res.phoneNumber;
       banner.uploadDate = res.uploadDate.toDate().toString();
       banner.id = res.id;
+      banner.adType = res.adType;
+      banner.addedBy = res.addedBy;
+      banner.link = res.link;
       banner.imageUrl = res.imageUrl;
     });
     const XLSX = require('xlsx')
@@ -125,6 +138,7 @@ export class ImageBannerComponent implements OnInit {
     // export your excel
     XLSX.writeFile(wb, 'imagebanner.xlsx');
   }
+
   delete(id: string, type: string) {
     // console.log(id,type);
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -144,6 +158,7 @@ export class ImageBannerComponent implements OnInit {
     });
 
   }
+
   putStorageItem(file: any) {
     const storage = getStorage();
     const storageRef = ref(storage, 'Imagebanner/' + file.name);
@@ -167,8 +182,7 @@ export class ImageBannerComponent implements OnInit {
               this.spinnerActive = false;
               this.resetPage();
             });
-          }
-          else {
+          } else {
             this.openSnackBar('Error occured', 'retry');
             this.spinnerActive = false;
           }
@@ -178,6 +192,7 @@ export class ImageBannerComponent implements OnInit {
         });
       });
   }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       verticalPosition: 'bottom',
@@ -193,7 +208,9 @@ export class ImageBannerComponent implements OnInit {
       phoneNumber: "",
       address: "",
       id: "",
-      uploadDate: Timestamp.now()
+      uploadDate: Timestamp.now(),
+      state: '',
+      addedBy: ''
     }
   }
 }

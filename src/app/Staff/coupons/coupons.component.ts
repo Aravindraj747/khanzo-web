@@ -1,14 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Timestamp } from '@angular/fire/firestore';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
-import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { Coupons, CouponsExportArray } from 'src/app/models/coupons';
-import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Timestamp} from '@angular/fire/firestore';
+import {getDownloadURL, getStorage, ref, uploadBytesResumable} from '@angular/fire/storage';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatTableDataSource} from '@angular/material/table';
+import {DialogComponent} from 'src/app/Admin/dialog/dialog.component';
+import {Coupons, CouponsExportArray} from 'src/app/models/coupons';
+import {FirestoreServiceService} from 'src/app/Services/firestore-service.service';
 import * as XLSX from 'xlsx';
+import {D} from "@angular/cdk/keycodes";
+import {AdminServiceService} from "../../Services/Service/admin-service.service";
+
 @Component({
   selector: 'app-coupons',
   templateUrl: './coupons.component.html',
@@ -23,13 +26,14 @@ export class CouponsComponent implements OnInit {
     couponId: '',
     couponCode: '',
     availability: '',
-    uploadDate: Timestamp.now()
+    uploadDate: Timestamp.now(),
+    addedBy: ''
   }
   couponsExportedArray: CouponsExportArray[] = [];
   availability: any[] = ['ONLINE', 'OFFLINE'];
   fileName: string = 'coupons.xlsx';
   couponArray: Coupons[] = [];
-  displayedColumns: string[] = ['Id', 'uploadDate', 'Image', 'Delete'];
+  displayedColumns: string[] = ['Id', 'uploadDate', 'ShopName', 'Availability', 'PhoneNumber', 'ProductName', 'Image', 'Delete'];
   dataSource = new MatTableDataSource<Coupons>(this.couponArray);
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -44,9 +48,12 @@ export class CouponsComponent implements OnInit {
       this.dataSource.data = this.couponArray;
     });
   }
+
   constructor(private _snackBar: MatSnackBar,
-    private firestoreService: FirestoreServiceService,
-    private dialog: MatDialog) { }
+              private firestoreService: FirestoreServiceService,
+              private dialog: MatDialog,
+              private adminService: AdminServiceService) {
+  }
 
   ngOnInit(): void {
     // this.coupons.uploadDate = Timestamp.now();
@@ -67,7 +74,9 @@ export class CouponsComponent implements OnInit {
   chooseImage(event: any) {
     this.imageFile = event.target.files[0];
   }
+
   submit() {
+    this.coupons.addedBy = this.adminService.getEmail();
     this.coupons.couponId = Timestamp.now().seconds.toString();
     this.spinnerActive = true;
     if (this.coupons.imageUrl == '' && this.imageFile == undefined) {
@@ -75,16 +84,19 @@ export class CouponsComponent implements OnInit {
       // this.spinnerActive = false;
     }
     if (this.coupons.imageUrl !== "") {
+      const expiryDateString: string = String(this.coupons.expiryDate);
+      const expiryDate = new Date(expiryDateString);
+      this.coupons.expiryDate = Timestamp.fromDate(expiryDate);
       this.firestoreService.saveCoupons(this.coupons).then(res => {
         this.spinnerActive = false;
         this.openSnackBar('Coupon saved successfully', 'retry');
         this.resetPage();
       });
-    }
-    else if (this.imageFile !== undefined) {
+    } else if (this.imageFile !== undefined) {
       this.putStorageItem(this.imageFile);
     }
   }
+
   putStorageItem(file: any) {
     const storage = getStorage();
     const storageRef = ref(storage, 'coupon/' + file.name);
@@ -101,13 +113,15 @@ export class CouponsComponent implements OnInit {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.coupons.imageUrl = downloadURL;
           if (this.coupons.imageUrl !== "") {
+            const expiryDateString: string = String(this.coupons.expiryDate);
+            const expiryDate = new Date(expiryDateString);
+            this.coupons.expiryDate = Timestamp.fromDate(expiryDate);
             this.firestoreService.saveCoupons(this.coupons).then(res => {
             });
             this.openSnackBar('DailyTask Saved', 'undo');
             this.spinnerActive = false;
             this.resetPage();
-          }
-          else {
+          } else {
             this.openSnackBar('Error occured while saving Coupon', 'retry');
             this.spinnerActive = false;
           }
@@ -117,6 +131,7 @@ export class CouponsComponent implements OnInit {
         });
       });
   }
+
   export() {
     this.couponArray.forEach(res => {
       const carray: CouponsExportArray = {
@@ -124,13 +139,23 @@ export class CouponsComponent implements OnInit {
         couponId: '',
         couponCode: '',
         availability: '',
-        uploadDate: ''
+        uploadDate: '',
+        productName: '',
+        productLink: '',
+        expiryDate: '',
+        discount: '',
+        addedBy: ''
       }
       carray.imageUrl = res.imageUrl;
       carray.couponCode = res.couponCode;
       carray.couponId = res.couponId;
       carray.uploadDate = res.uploadDate.toDate().toString();
       carray.availability = res.availability;
+      carray.productName = res.productName;
+      carray.productLink = res.productLink;
+      carray.expiryDate = res.expiryDate?.toDate().toString();
+      carray.discount = res.discount;
+      carray.addedBy = res.addedBy;
       this.couponsExportedArray.push(carray);
     });
     const XLSX = require('xlsx')
@@ -169,15 +194,21 @@ export class CouponsComponent implements OnInit {
     });
 
   }
+
   resetPage() {
     this.coupons = {
       imageUrl: '',
       couponId: '',
       couponCode: '',
       availability: '',
-      uploadDate: Timestamp.now()
+      uploadDate: Timestamp.now(),
+      mapUrl: '',
+      productName: '',
+      phoneNumber: '',
+      addedBy: ''
     }
   }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,

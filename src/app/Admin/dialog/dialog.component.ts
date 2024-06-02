@@ -21,7 +21,7 @@ export class DialogComponent implements OnInit {
   reason:string= '';
   @Output() deleted = new EventEmitter<boolean>();
   @Output() updated = new EventEmitter<boolean>();
-  
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private _snackBar: MatSnackBar,
               private firestoreService: FirestoreServiceService) {
@@ -55,13 +55,15 @@ export class DialogComponent implements OnInit {
       this.firestoreService.updateWithdrawal(withdrawal.withdrawalId,data).then(res=>{
         this.openSnackBar('Withdrawal updated','undo');
       }).then(err=>{
+        console.log(err);
         this.openSnackBar('Withdrawal Updated','retry');
       })
     }
     else if(val == 'reject'){
       let data = {
         'status': 'REJECT',
-        'completedDate': Timestamp.now()
+        'completedDate': Timestamp.now(),
+        'reason':this.reason
       }
       this.updated.emit(true);
       this.firestoreService.updateWithdrawal(withdrawal.withdrawalId,data).then(res=>{

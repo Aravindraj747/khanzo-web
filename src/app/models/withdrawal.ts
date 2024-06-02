@@ -10,8 +10,8 @@ export interface Withdrawal {
     status: string;
     withdrawalId: string;
     upiId:string;
-    utr:string;
-    ifsc:string;
+    ifscCode:string;
+    serviceCharge: number;
 }
 
 export interface WithdrawalExportArray {
@@ -23,6 +23,6 @@ export interface WithdrawalExportArray {
     status: string;
     withdrawalId: string;
     upiId:string;
-    utr:string;
-    ifsc:string;
+    ifscCode:string;
+    serviceCharge: number;
 }

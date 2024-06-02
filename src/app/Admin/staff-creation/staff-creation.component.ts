@@ -23,11 +23,13 @@ export class StaffCreationComponent implements OnInit {
     email: '',
     password: '',
     name: '',
-    creationDate: Timestamp.now()
+    creationDate: Timestamp.now(),
+    role: ''
   }
 
+  roles: string[] = ['WITHDRAW_MANAGEMENT', 'YOUTUBE_VIDEOS_MANAGEMENT', 'DAILY_TASK_MANAGEMENT', 'SHOP_MANAGEMENT', 'ADS_MANAGEMENT']
   staffArray: Staff[] = [];
-  displayedColumns: string[] = ['Name','Email', 'Password', 'CreationDate','Delete'];
+  displayedColumns: string[] = ['Name','Email', 'Password', 'Role', 'CreationDate','Delete'];
   dataSource = new MatTableDataSource<Staff>(this.staffArray);
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -89,6 +91,7 @@ export class StaffCreationComponent implements OnInit {
     // }
     else {
       this.openSnackBar('Enter email and password to create', 'retry')
+      this.spinnerActive = false;
     }
   }
   delete(id: string, type: string) {
@@ -121,7 +124,8 @@ export class StaffCreationComponent implements OnInit {
       email: '',
       password: '',
       name: '',
-      creationDate: Timestamp.now()
+      creationDate: Timestamp.now(),
+      role: ''
     }
   }
 }

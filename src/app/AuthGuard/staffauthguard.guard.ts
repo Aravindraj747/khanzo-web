@@ -9,9 +9,7 @@ import { AdminServiceService } from '../Services/Service/admin-service.service';
 export class StaffauthguardGuard implements CanActivate {
   constructor(private adminService: AdminServiceService, private route: Router) { }
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    console.log('instaffauth')
     if( (this.adminService.getStaffLogin() == 'true') || ( this.adminService.getAdminLogin() == 'true')){
-      console.log('inside staffauth');
       return true;
     }
     this.route.navigate(['adminLogin']);

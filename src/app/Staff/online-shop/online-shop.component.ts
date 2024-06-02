@@ -1,14 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Timestamp } from '@angular/fire/firestore';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from '@angular/fire/storage';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
-import { DialogComponent } from 'src/app/Admin/dialog/dialog.component';
-import { FirestoreServiceService } from 'src/app/Services/firestore-service.service';
-import { OnlineShop, OnlineShopExportArray } from 'src/app/models/online';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Timestamp} from '@angular/fire/firestore';
+import {getDownloadURL, getStorage, ref, uploadBytesResumable} from '@angular/fire/storage';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatTableDataSource} from '@angular/material/table';
+import {DialogComponent} from 'src/app/Admin/dialog/dialog.component';
+import {FirestoreServiceService} from 'src/app/Services/firestore-service.service';
+import {OnlineShop, OnlineShopExportArray} from 'src/app/models/online';
 import * as XLSX from 'xlsx';
+import {of} from "rxjs";
+import {ShopCategory} from "../../models/shopCategory";
+import {Admin} from "../../models/admin";
+import {AdminServiceService} from "../../Services/Service/admin-service.service";
 
 @Component({
   selector: 'app-online-shop',
@@ -25,16 +29,19 @@ export class OnlineShopComponent implements OnInit {
     buyLink: '',
     id: '',
     imageUrl: '',
-    category: ''
+    category: '',
+    price: '',
+    rating: '',
+    addedBy: ''
   }
-  onlineShopExportedArray:OnlineShopExportArray[] = [];
-  category: any[] = ["Grocery", "Mobiles", "Fashion", "Electronics", "Home", "Personal Care", "Appliances", "Toys & Baby", "Furniture", "Fight & Hotels", "Sports", "Nutrition & more", "Bikes & Cars", "Medicines"];
+  onlineShopExportedArray: OnlineShopExportArray[] = [];
+  category: ShopCategory[] = [];
   fileName: string = 'onlineShop.xlsx';
   onlineShops: OnlineShop[] = [];
   thumbImageFile: any = undefined;
   spinnerActive: boolean = false;
 
-  displayedColumns: string[] = ['Id', 'Name', 'UploadDate','WebsiteName', 'BuyLink','Image','Delete'];
+  displayedColumns: string[] = ['Id', 'Name', 'UploadDate', 'WebsiteName', 'BuyLink', 'Image', 'Delete'];
   dataSource = new MatTableDataSource<OnlineShop>(this.onlineShops);
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -47,11 +54,21 @@ export class OnlineShopComponent implements OnInit {
         this.onlineShops.push(<OnlineShop>doc.payload.doc.data());
       });
       this.dataSource.data = this.onlineShops;
+      console.log(this.dataSource.data);
+    });
+    this.firestoreService.getShopCategoriesByAvailability('ONLINE').subscribe(res => {
+      this.category = [];
+      res.forEach(doc => {
+        this.category.push(<ShopCategory>doc.data());
+      });
     });
   }
+
   constructor(private firestoreService: FirestoreServiceService,
-    private _snackBar: MatSnackBar,
-    private dialog: MatDialog) { }
+              private _snackBar: MatSnackBar,
+              private dialog: MatDialog,
+              private adminService: AdminServiceService) {
+  }
 
   ngOnInit(): void {
     // this.onlineShop.uploadDate = Timestamp.now();
@@ -69,39 +86,42 @@ export class OnlineShopComponent implements OnInit {
     // });
     // this.onlineShops = onlineshops;
   }
+
   chooseThumb(event: any) {
     this.thumbImageFile = event.target.files[0];
   }
+
   submit() {
-    if (this.onlineShop.category == "Grocery") {
-      this.onlineShop.category = "Grocery"
-    } else if (this.onlineShop.category == "Mobiles") {
-      this.onlineShop.category = "mobiles"
-    } else if (this.onlineShop.category == "Fashion") {
-      this.onlineShop.category = "fashion"
-    } else if (this.onlineShop.category == "Electronics") {
-      this.onlineShop.category = "electronics"
-    } else if (this.onlineShop.category == "Home") {
-      this.onlineShop.category = "home"
-    } else if (this.onlineShop.category == "Personal Care") {
-      this.onlineShop.category = "personalcare"
-    } else if (this.onlineShop.category == "Appliances") {
-      this.onlineShop.category = "appliances"
-    } else if (this.onlineShop.category == "Toys & Baby") {
-      this.onlineShop.category = "toys"
-    } else if (this.onlineShop.category == "Furniture") {
-      this.onlineShop.category = "furniture"
-    } else if (this.onlineShop.category == "Fight & Hotels") {
-      this.onlineShop.category = "flights"
-    } else if (this.onlineShop.category == "Sports") {
-      this.onlineShop.category = "sports"
-    } else if (this.onlineShop.category == "Nutrition & more") {
-      this.onlineShop.category = "nutrition"
-    } else if (this.onlineShop.category == "Bikes & Cars") {
-      this.onlineShop.category = "bikes"
-    } else if (this.onlineShop.category == "Medicines") {
-      this.onlineShop.category = "medicines"
-    }
+    this.onlineShop.addedBy = this.adminService.getEmail();
+    // if (this.onlineShop.category == "Grocery") {
+    //   this.onlineShop.category = "Grocery"
+    // } else if (this.onlineShop.category == "Mobiles") {
+    //   this.onlineShop.category = "mobiles"
+    // } else if (this.onlineShop.category == "Fashion") {
+    //   this.onlineShop.category = "fashion"
+    // } else if (this.onlineShop.category == "Electronics") {
+    //   this.onlineShop.category = "electronics"
+    // } else if (this.onlineShop.category == "Home") {
+    //   this.onlineShop.category = "home"
+    // } else if (this.onlineShop.category == "Personal Care") {
+    //   this.onlineShop.category = "personalcare"
+    // } else if (this.onlineShop.category == "Appliances") {
+    //   this.onlineShop.category = "appliances"
+    // } else if (this.onlineShop.category == "Toys & Baby") {
+    //   this.onlineShop.category = "toys"
+    // } else if (this.onlineShop.category == "Furniture") {
+    //   this.onlineShop.category = "furniture"
+    // } else if (this.onlineShop.category == "Fight & Hotels") {
+    //   this.onlineShop.category = "flights"
+    // } else if (this.onlineShop.category == "Sports") {
+    //   this.onlineShop.category = "sports"
+    // } else if (this.onlineShop.category == "Nutrition & more") {
+    //   this.onlineShop.category = "nutrition"
+    // } else if (this.onlineShop.category == "Bikes & Cars") {
+    //   this.onlineShop.category = "bikes"
+    // } else if (this.onlineShop.category == "Medicines") {
+    //   this.onlineShop.category = "medicines"
+    // }
     this.onlineShop.availability = 'ONLINE';
     this.onlineShop.uploadDate = Timestamp.now();
     this.onlineShop.id = Timestamp.now().seconds.toString();
@@ -118,11 +138,11 @@ export class OnlineShopComponent implements OnInit {
         this.resetPage()
         this.spinnerActive = false;
       });
-    }
-    else if (this.thumbImageFile !== undefined) {
+    } else if (this.thumbImageFile !== undefined) {
       this.putStorageItem(this.thumbImageFile);
     }
   }
+
   putStorageItem(file: any) {
     const storage = getStorage();
     const storageRef = ref(storage, 'youtubethumbNail/' + file.name);
@@ -146,8 +166,7 @@ export class OnlineShopComponent implements OnInit {
               this.spinnerActive = false;
               this.resetPage();
             });
-          }
-          else {
+          } else {
             this.openSnackBar('Error occured', 'retry');
             this.spinnerActive = false;
           }
@@ -156,8 +175,9 @@ export class OnlineShopComponent implements OnInit {
         });
       });
   }
+
   export() {
-    this.onlineShops.forEach(res=>{
+    this.onlineShops.forEach(res => {
       const online: OnlineShopExportArray = {
         name: '',
         availability: '',
@@ -166,7 +186,10 @@ export class OnlineShopComponent implements OnInit {
         buyLink: '',
         id: '',
         imageUrl: '',
-        category: ''
+        category: '',
+        rating: '',
+        price: '',
+        addedBy: ''
       }
       online.name = res.name;
       online.availability = res.availability;
@@ -176,6 +199,9 @@ export class OnlineShopComponent implements OnInit {
       online.id = res.id;
       online.imageUrl = res.imageUrl;
       online.category = res.category;
+      online.rating = res.rating;
+      online.price = res.price;
+      online.addedBy = res.addedBy;
       this.onlineShopExportedArray.push(online);
     });
     const XLSX = require('xlsx')
@@ -194,6 +220,7 @@ export class OnlineShopComponent implements OnInit {
     // export your excel
     XLSX.writeFile(wb, 'onlineShops.xlsx');
   }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       verticalPosition: 'bottom',
@@ -201,6 +228,7 @@ export class OnlineShopComponent implements OnInit {
       duration: 2000,
     });
   }
+
   delete(id: string, type: string) {
     // console.log(id,type);
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -218,6 +246,7 @@ export class OnlineShopComponent implements OnInit {
       }
     });
   }
+
   resetPage() {
     this.onlineShop = {
       name: '',
@@ -227,7 +256,12 @@ export class OnlineShopComponent implements OnInit {
       buyLink: '',
       id: '',
       imageUrl: '',
-      category: ''
+      category: '',
+      price: '',
+      rating: '',
+      addedBy: ''
     }
   }
+
+  protected readonly of = of;
 }

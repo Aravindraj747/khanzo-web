@@ -13,7 +13,7 @@ export class TermsandConditionComponent implements OnInit {
 
   terms: any = undefined;
   ngOnInit(): void {
-    this.http.get('assets/TnC.html', { responseType: 'text' }).subscribe(
+    this.http.get('assets/termsandconditions.html', { responseType: 'text' }).subscribe(
       data => this.terms = this.sanitizer.bypassSecurityTrustHtml(data)
     );
   }

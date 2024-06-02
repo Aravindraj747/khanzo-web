@@ -4,54 +4,98 @@
   <div class="new">
     <h1>Daily Task Video</h1>
   </div>
-  <div class="topic">
-    <p class="pasteLink">Video URL</p>
-    <p class="ThumURL">Image URL</p>
-    <p class="ThumPic">Image Pic</p>
-    <p class="start">Date and Time</p>
-    <!-- <p class="StartTime">start time</p> -->
-    <!-- <p class="Expiry">Expiry Date and Time</p> -->
-    <p class="coupon">Coupon ID</p>
-    <p class="lang">Language</p>
-    <p class="category">Category</p>
-    <!--dropdown shorts or video -->
-    <p></p>
-  </div>
+
   <div class="value">
     <form [class.spinnerOverlay]="spinnerActive" action="">
-      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.videoUrl" type="text" id="input"
-        class="pasteLink">
-      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.imageUrl" id="input" type="text">
-      <input type="file" style="width:90px" (change)="chooseImage($event)" id="drop">
+      <mat-form-field appearance="outline">
+        <mat-label>Video URL</mat-label>
+        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.videoUrl" type="text" matInput
+               placeholder="Video Link">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Image URL</mat-label>
+        <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.imageUrl" type="text" matInput
+               placeholder="Image Link">
+      </mat-form-field>
+
+<!--      <button mat-button type="file" style="width:90px" (change)="chooseImage($event)" id="drop">Choose Image</button>-->
+
+      <button type="button" (click)="fileInput.click()">
+        <span>Image Upload</span>
+        <input #fileInput type="file" (change)="chooseImage($event)" style="display:none;" />
+      </button>
+
       <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.startDate" id="drop" type="date"> -->
       <!-- <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.expiryDate" id="drop" type="date"> -->
       <mat-form-field style="width:50px;">
         <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="dailyTask.startDate" matInput
-          type="datetime-local" placeholder="start Date">
+               type="datetime-local" placeholder="start Date">
       </mat-form-field>
       <mat-form-field style="width:70px">
         <input [ngModelOptions]="{standalone: true}" id="drop" [(ngModel)]="dailyTask.expiryDate" matInput
-          type="datetime-local" placeholder="Expiry Date">
+               type="datetime-local" placeholder="Expiry Date">
       </mat-form-field>
-      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.couponId" id="input" type="text">
-      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.language" name="select" id="drop">
-        <option value="">Select language</option>
-        <option *ngFor="let l of language">{{l}}</option>
-      </select>
-      <select [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.category" name="select" id="drop">
-        <option value="">Select Category</option>
-        <option *ngFor="let c of category">{{c}}</option>
-      </select>
-      <a mat-raised-button (click)="submit()" type="submit" color="primary">Save</a>
+
+      <mat-form-field>
+        <mat-label>Language</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.language">
+          <mat-option *ngFor="let c of language" [value]="c">
+            {{c}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Category</mat-label>
+        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.category">
+          <mat-option *ngFor="let c of category" [value]="c">
+            {{c}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button (click)="submit()" type="submit" color="primary">Save</button>
     </form>
   </div>
-  <div class="topic">
-    <p style="margin-left: 20px;">Channel Link</p>
-    <p style="margin-left: 120px;">Full video Link</p>
-  </div>
+
   <div class="value">
-    <input [(ngModel)]="dailyTask.channelUrl" type="text" id="input" style="margin-left: 20px;">
-    <input  [(ngModel)]="dailyTask.fullVideoUrl" type="text" id="input" style="margin-left: 30px;">
+    <mat-form-field appearance="outline" style="margin-left: 40px">
+      <mat-label>Channel URL</mat-label>
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.channelUrl" type="text" matInput
+             placeholder="Channel Url">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="margin-left: 40px">
+      <mat-label>Full Video URL</mat-label>
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.fullVideoUrl" type="text" matInput
+             placeholder="Full Video Link">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="margin-left: 40px">
+      <mat-label>Coupon ID</mat-label>
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.couponId" type="text" matInput
+             placeholder="Coupon ID">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>State</mat-label>
+      <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.state">
+        <mat-option (onSelectionChange)="getdistrict(state, $event)" *ngFor="let state of states" [value]="state">
+          {{state}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>District</mat-label>
+      <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="dailyTask.districts" multiple>
+        <mat-option *ngFor="let d of districts" [value]="d">
+          {{d}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
   </div>
   <br>
   <p class="note">Note* :Choose any one option to upload image.</p>
@@ -94,54 +138,62 @@
   <table id="excel-table" mat-table [dataSource]="dataSource">
     <!-- Position Column -->
     <ng-container matColumnDef="Id">
-      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <th mat-header-cell *matHeaderCellDef> Id</th>
       <td mat-cell *matCellDef="let element"> {{element.taskId}} </td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="Category">
-      <th mat-header-cell *matHeaderCellDef> Category </th>
+      <th mat-header-cell *matHeaderCellDef> Category</th>
       <td mat-cell *matCellDef="let element"> {{element.category}} </td>
     </ng-container>
 
     <!-- Symbol Column -->
     <ng-container matColumnDef="UploadDate">
-      <th mat-header-cell *matHeaderCellDef> UploadDate </th>
+      <th mat-header-cell *matHeaderCellDef> UploadDate</th>
       <td mat-cell *matCellDef="let element">{{element?.uploadDate?.toDate() | date:'dd-MM-yyyy'}}</td>
     </ng-container>
-          <!-- Weight Column -->
-          <ng-container matColumnDef="StartDate">
-            <th mat-header-cell *matHeaderCellDef> StartDate </th>
-            <td mat-cell *matCellDef="let element"> {{element.startDate?.toDate() | date:'dd-MM-yyyy'}} </td>
-          </ng-container>
-            <!-- Weight Column -->
+    <!-- Weight Column -->
+    <ng-container matColumnDef="StartDate">
+      <th mat-header-cell *matHeaderCellDef> StartDate</th>
+      <td mat-cell *matCellDef="let element"> {{element.startDate?.toDate() | date:'dd-MM-yyyy'}} </td>
+    </ng-container>
+    <!-- Weight Column -->
     <ng-container matColumnDef="ExpiryDate">
-      <th mat-header-cell *matHeaderCellDef> ExpiryDate </th>
+      <th mat-header-cell *matHeaderCellDef> ExpiryDate</th>
       <td mat-cell *matCellDef="let element"> {{element.expiryDate?.toDate() | date:'dd-MM-yyyy'}} </td>
     </ng-container>
     <!-- Symbol Column -->
     <ng-container matColumnDef="Video">
-      <th mat-header-cell *matHeaderCellDef> Video </th>
+      <th mat-header-cell *matHeaderCellDef> Video</th>
       <td mat-cell *matCellDef="let element">
-        <a mat-stroked-button color="primary" href="https://www.youtube.com/watch?v={{element.videoUrl}}" target="_blank">View</a>
+        <a mat-stroked-button color="primary" href="https://www.youtube.com/watch?v={{element.videoUrl}}"
+           target="_blank">View</a>
       </td>
     </ng-container>
-          <!-- Weight Column -->
-          <ng-container matColumnDef="CouponId">
-            <th mat-header-cell *matHeaderCellDef> CouponId </th>
-            <td mat-cell *matCellDef="let element"> {{element.couponId}} </td>
-          </ng-container>
+    <!-- Weight Column -->
+    <ng-container matColumnDef="CouponId">
+      <th mat-header-cell *matHeaderCellDef> CouponId</th>
+      <td mat-cell *matCellDef="let element"> {{element.couponId}} </td>
+    </ng-container>
     <!-- Symbol Column -->
     <ng-container matColumnDef="Image">
-      <th mat-header-cell *matHeaderCellDef> Image </th>
+      <th mat-header-cell *matHeaderCellDef> Image</th>
       <td mat-cell *matCellDef="let element">
         <a mat-stroked-button color="primary" href="{{element.imageUrl}}" target="_blank">View</a>
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="Ad">
+      <th mat-header-cell *matHeaderCellDef>Ads</th>
+      <td mat-cell *matCellDef="let element">
+        <a mat-stroked-button color="primary" (click)=addAd(element)>Add Ad</a>
+      </td>
+    </ng-container>
+
     <!-- Symbol Column -->
     <ng-container matColumnDef="Delete">
-      <th mat-header-cell *matHeaderCellDef> Delete </th>
+      <th mat-header-cell *matHeaderCellDef> Delete</th>
       <td mat-cell *matCellDef="let element">
         <a mat-stroked-button color="warn" (click)="delete(element.taskId, 'dailyTasks')">Delete</a>
       </td>
